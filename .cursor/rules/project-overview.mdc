@@ -1,0 +1,65 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Claxon Project Overview
+
+## 🔷 Project Description
+Claxon is a mobile app for Moldova that allows users to send predefined messages to car owners using just their license plates. Built with Expo/React Native frontend and NestJS backend.
+
+## 🏗️ Architecture Overview
+
+### Frontend - Mobile App ([mobile-app/](mdc:mobile-app))
+- **Framework**: Expo/React Native with TypeScript
+- **Styling**: TailwindCSS + NativeWind
+- **State Management**: Zustand stores in [mobile-app/src/stores/](mdc:mobile-app/src/stores)
+- **Database**: Drizzle ORM with PostgreSQL schema in [mobile-app/src/db/schema.ts](mdc:mobile-app/src/db/schema.ts)
+- **Authentication**: Clerk for phone-based auth
+- **Navigation**: Expo Router with tab-based navigation
+
+### Backend - NestJS API ([backend/](mdc:backend))
+- **Framework**: NestJS with TypeScript
+- **Runtime**: Bun (see [backend/package.json](mdc:backend/package.json))
+- **Code Quality**: Biome for linting and formatting
+- **Status**: 🚧 **MIGRATION IN PROGRESS** - Moving logic from Expo API routes to dedicated backend
+
+## 📱 App Flow
+
+### Unauthenticated Flow
+1. **Onboarding**: 3-slide introduction
+2. **Welcome Screen**: Sign in or create account options
+3. **Authentication**: Phone-based auth via Clerk
+4. **OTP Verification**: SMS verification
+5. **Post-auth Welcome**: Option to explore or register car
+
+### Authenticated Flow
+- **Search Tab**: Find license plates and send messages
+- **Inbox Tab**: Receive messages about your registered cars
+- **My Cars Tab**: Manage registered vehicles
+- **Account Tab**: Profile and preferences
+
+## 🗃️ Database Schema
+Core entities defined in [mobile-app/src/db/schema.ts](mdc:mobile-app/src/db/schema.ts):
+- **Users**: Clerk-integrated user profiles
+- **Vehicles**: Car registrations with license plate details
+- **Claxons**: Messages sent between users
+- **ClaxonTemplates**: Predefined message templates
+
+## 🔄 Migration Strategy
+**Current State**: Backend logic exists in Expo API routes at [mobile-app/app/api/](mdc:mobile-app/app/api)
+**Target State**: Move all backend logic to [backend/src/](mdc:backend/src)
+
+### API Routes to Migrate:
+- [mobile-app/app/api/claxons+api.ts](mdc:mobile-app/app/api/claxons+api.ts) - Message operations
+- [mobile-app/app/api/vehicles+api.ts](mdc:mobile-app/app/api/vehicles+api.ts) - Vehicle management
+- [mobile-app/app/api/users+api.ts](mdc:mobile-app/app/api/users+api.ts) - User operations
+- [mobile-app/app/api/claxon-templates+api.ts](mdc:mobile-app/app/api/claxon-templates+api.ts) - Template management
+- [mobile-app/app/api/uploadthing+api.ts](mdc:mobile-app/app/api/uploadthing+api.ts) - File uploads
+
+## 🎯 Key Features
+- **Privacy-First**: No contact info exchange, plate-based messaging only
+- **Multi-language**: Support for English, Romanian, Russian
+- **Push Notifications**: Expo push notifications for message alerts
+- **Template-Based**: Predefined safe message templates
+- **Optional Registration**: Car registration optional but required for receiving messages
