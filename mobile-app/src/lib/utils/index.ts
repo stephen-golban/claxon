@@ -1,0 +1,60 @@
+import { clsx } from "clsx";
+import { cssInterop } from "nativewind";
+import { twMerge } from "tailwind-merge";
+
+import type { ValidateMessageObject } from "@/typings/validation";
+import type { ClassValue } from "clsx";
+import type { LucideIcon } from "lucide-react-native";
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
+
+export function iconWithClassName(icon: LucideIcon) {
+  cssInterop(icon, {
+    className: {
+      target: "style",
+      nativeStyleToProp: {
+        color: true,
+        opacity: true,
+      },
+    },
+  });
+}
+
+export const ellipsisString = (text: string, maxLength = 10) => {
+  if (!text) return "";
+
+  return text.length > maxLength ? `${text.substring(0, maxLength)}...` : text;
+};
+
+export const stringifyObjectValidate = ({ keyT, options, optionsTx }: ValidateMessageObject) => {
+  return JSON.stringify({
+    keyT,
+    options,
+    optionsTx,
+  });
+};
+
+export const formatPhoneNumber = (phone: string | { code: string; number: string; format?: string }) => {
+  let digits: string;
+
+  if (typeof phone === "string") {
+    // Remove any non-digit characters
+    digits = phone.replace(/\D/g, "");
+  } else {
+    // Combine code and number for object input
+    const fullNumber = phone.code + phone.number;
+    digits = fullNumber.replace(/\D/g, "");
+
+    if (phone.format) {
+      // Use custom format if provided
+      const formatted = phone.format;
+      let digitIndex = 0;
+      return formatted.replace(/X/g, () => digits[digitIndex++] || "");
+    }
+  }
+
+  // Default format: +373 XXX XX XXX
+  return digits.replace(/^(\d{3})(\d{3})(\d{2})(\d{3})$/, "+$1 $2 $3 $4");
+};

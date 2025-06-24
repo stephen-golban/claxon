@@ -1,0 +1,51 @@
+{
+  "expo": {
+    "name": "claxon",
+    "slug": "claxon",
+    "scheme": "claxon",
+    "version": "1.0.0",
+    "newArchEnabled": true,
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "automatic",
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.claxon.app"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "edgeToEdgeEnabled": true,
+      "package": "com.claxon.app"
+    },
+    "plugins": [
+      [
+        "expo-router",
+        {
+          "origin": "http://localhost:8081"
+        }
+      ],
+      "expo-secure-store",
+      "react-native-edge-to-edge",
+      "expo-web-browser",
+      "expo-image-picker",
+      "expo-localization",
+      [
+        "expo-splash-screen",
+        {
+          "resizeMode": "contain",
+          "backgroundColor": "#000000",
+          "image": "./assets/splash-icon.png"
+        }
+      ]
+    ],
+    "web": {
+      "output": "server"
+    },
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}
