@@ -1,8 +1,8 @@
 import { useAuth } from "@clerk/clerk-expo";
 import type { Claxon, ClaxonTemplate, User, Vehicle } from "../db/schema";
 
-// Use local Expo API routes
-const API_BASE_URL = "/api";
+// Use backend API or fallback to local Expo API routes  
+const API_BASE_URL = process.env.EXPO_PUBLIC_API_BASE_URL || "/api";
 
 // Extended types for API responses with relations
 export type ClaxonWithRelations = Claxon & {
