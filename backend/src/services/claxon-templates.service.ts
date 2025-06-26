@@ -1,12 +1,12 @@
+import { asc, eq } from "drizzle-orm";
 import { db } from "../db";
 import {
-	type NewClaxonTemplate,
-	type UpdateClaxonTemplate,
 	claxonTemplates,
 	insertClaxonTemplateSchema,
+	type NewClaxonTemplate,
+	type UpdateClaxonTemplate,
 	updateClaxonTemplateSchema,
 } from "../db/schema";
-import { asc, eq } from "drizzle-orm";
 
 export interface QueryClaxonTemplate {
 	category?: string;

@@ -1,5 +1,5 @@
-import { createUploadthing, type FileRouter } from "uploadthing/fastify";
 import { getAuth } from "@clerk/fastify";
+import { createUploadthing, type FileRouter } from "uploadthing/fastify";
 
 const f = createUploadthing();
 
@@ -14,7 +14,7 @@ export const uploadRouter = {
 		.middleware(async ({ req }) => {
 			// Use Clerk to get auth from the request
 			const { userId } = getAuth(req);
-			
+
 			if (!userId) {
 				throw new Error("Unauthorized");
 			}
@@ -41,7 +41,7 @@ export const uploadRouter = {
 	})
 		.middleware(async ({ req }) => {
 			const { userId } = getAuth(req);
-			
+
 			if (!userId) {
 				throw new Error("Unauthorized");
 			}

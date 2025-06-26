@@ -1,10 +1,23 @@
 import type { FastifyInstance } from "fastify";
-import { z } from "zod";
-import { claxonsService, type QueryClaxon, type PaginationDto } from "../services/claxons.service";
-import { requireAuth, getCurrentUserId } from "../middleware/auth.middleware";
-import { validateBody, validateParams, validateQuery } from "../utils/validation";
+import { type AnyZodObject, z } from "zod";
+import {
+	insertClaxonSchema,
+	type NewClaxon,
+	type UpdateClaxon,
+	updateClaxonSchema,
+} from "../db/schema";
+import { getCurrentUserId, requireAuth } from "../middleware/auth.middleware";
+import {
+	claxonsService,
+	type PaginationDto,
+	type QueryClaxon,
+} from "../services/claxons.service";
 import { ResponseHelper } from "../utils/responses";
-import { insertClaxonSchema, updateClaxonSchema } from "../db/schema";
+import {
+	validateBody,
+	validateParams,
+	validateQuery,
+} from "../utils/validation";
 
 // Validation schemas
 const createClaxonBodySchema = insertClaxonSchema.omit({
@@ -33,12 +46,15 @@ export async function claxonsRoutes(fastify: FastifyInstance) {
 	fastify.post(
 		"/claxons",
 		{
-			preHandler: [requireAuth, validateBody(createClaxonBodySchema)],
+			preHandler: [
+				requireAuth,
+				validateBody(createClaxonBodySchema as unknown as AnyZodObject),
+			],
 		},
 		async (request, reply) => {
 			try {
 				const userId = getCurrentUserId(request);
-				const createClaxonDto = request.body as any;
+				const createClaxonDto = request.body as unknown as NewClaxon;
 
 				const claxon = await claxonsService.create(createClaxonDto, userId);
 				ResponseHelper.created(reply, claxon, "Claxon created successfully");
@@ -66,7 +82,8 @@ export async function claxonsRoutes(fastify: FastifyInstance) {
 		async (request, reply) => {
 			try {
 				const userId = getCurrentUserId(request);
-				const paginationDto = request.query as PaginationDto & Partial<QueryClaxon>;
+				const paginationDto = request.query as PaginationDto &
+					Partial<QueryClaxon>;
 
 				const claxons = await claxonsService.findInbox(userId, paginationDto);
 				ResponseHelper.success(reply, claxons);
@@ -113,7 +130,8 @@ export async function claxonsRoutes(fastify: FastifyInstance) {
 		async (request, reply) => {
 			try {
 				const userId = getCurrentUserId(request);
-				const paginationDto = request.query as PaginationDto & Partial<QueryClaxon>;
+				const paginationDto = request.query as PaginationDto &
+					Partial<QueryClaxon>;
 
 				const claxons = await claxonsService.findSent(userId, paginationDto);
 				ResponseHelper.success(reply, claxons);
@@ -159,14 +177,14 @@ export async function claxonsRoutes(fastify: FastifyInstance) {
 			preHandler: [
 				requireAuth,
 				validateParams(claxonIdParamsSchema),
-				validateBody(updateClaxonBodySchema),
+				validateBody(updateClaxonBodySchema as unknown as AnyZodObject),
 			],
 		},
 		async (request, reply) => {
 			try {
 				const userId = getCurrentUserId(request);
 				const { id } = request.params as { id: string };
-				const updateClaxonDto = request.body as any;
+				const updateClaxonDto = request.body as unknown as UpdateClaxon;
 
 				const claxon = await claxonsService.update(id, updateClaxonDto, userId);
 				ResponseHelper.success(reply, claxon, "Claxon updated successfully");

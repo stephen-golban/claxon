@@ -1,11 +1,11 @@
-import type { FastifyRequest, FastifyReply } from "fastify";
-import type { ZodSchema, ZodError } from "zod";
+import type { FastifyReply, FastifyRequest } from "fastify";
+import type { AnyZodObject, ZodError } from "zod";
 import { ResponseHelper } from "./responses";
 
 export interface ValidationOptions {
-	body?: any;
-	params?: any;
-	query?: any;
+	body?: AnyZodObject;
+	params?: AnyZodObject;
+	query?: AnyZodObject;
 }
 
 export function validateRequest(options: ValidationOptions) {
@@ -43,14 +43,14 @@ export function validateRequest(options: ValidationOptions) {
 	};
 }
 
-export function validateBody<T>(schema: any) {
+export function validateBody<_T>(schema: AnyZodObject) {
 	return validateRequest({ body: schema });
 }
 
-export function validateParams<T>(schema: any) {
+export function validateParams<_T>(schema: AnyZodObject) {
 	return validateRequest({ params: schema });
 }
 
-export function validateQuery<T>(schema: any) {
+export function validateQuery<_T>(schema: AnyZodObject) {
 	return validateRequest({ query: schema });
 }

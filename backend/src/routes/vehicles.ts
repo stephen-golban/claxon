@@ -1,10 +1,24 @@
 import type { FastifyInstance } from "fastify";
-import { z } from "zod";
+import { type AnyZodObject, z } from "zod";
+import {
+	insertVehicleSchema,
+	type NewVehicle,
+	type QueryVehicle,
+	type UpdateVehicle,
+	updateVehicleSchema,
+} from "../db/schema";
+import {
+	getCurrentUserId,
+	optionalAuth,
+	requireAuth,
+} from "../middleware/auth.middleware";
 import { vehiclesService } from "../services/vehicles.service";
-import { requireAuth, optionalAuth, getCurrentUserId } from "../middleware/auth.middleware";
-import { validateBody, validateParams, validateQuery } from "../utils/validation";
 import { ResponseHelper } from "../utils/responses";
-import { insertVehicleSchema, updateVehicleSchema } from "../db/schema";
+import {
+	validateBody,
+	validateParams,
+	validateQuery,
+} from "../utils/validation";
 
 // Validation schemas
 const createVehicleBodySchema = insertVehicleSchema.omit({
@@ -38,12 +52,15 @@ export async function vehiclesRoutes(fastify: FastifyInstance) {
 	fastify.post(
 		"/vehicles",
 		{
-			preHandler: [requireAuth, validateBody(createVehicleBodySchema)],
+			preHandler: [
+				requireAuth,
+				validateBody(createVehicleBodySchema as unknown as AnyZodObject),
+			],
 		},
 		async (request, reply) => {
 			try {
 				const userId = getCurrentUserId(request);
-				const createVehicleDto = request.body as any;
+				const createVehicleDto = request.body as unknown as NewVehicle;
 
 				const vehicle = await vehiclesService.create(createVehicleDto, userId);
 				ResponseHelper.created(reply, vehicle, "Vehicle created successfully");
@@ -67,7 +84,7 @@ export async function vehiclesRoutes(fastify: FastifyInstance) {
 		async (request, reply) => {
 			try {
 				const userId = getCurrentUserId(request);
-				const queryDto = request.query as any;
+				const queryDto = request.query as unknown as QueryVehicle;
 
 				const vehicles = await vehiclesService.findAllByUser(userId, queryDto);
 				ResponseHelper.success(reply, vehicles);
@@ -96,7 +113,10 @@ export async function vehiclesRoutes(fastify: FastifyInstance) {
 				ResponseHelper.success(reply, vehicle);
 			} catch (error) {
 				fastify.log.error(error);
-				if (error instanceof Error && error.message === "Vehicle not found or not active") {
+				if (
+					error instanceof Error &&
+					error.message === "Vehicle not found or not active"
+				) {
 					ResponseHelper.notFound(reply, error.message);
 				} else {
 					ResponseHelper.error(reply, "Failed to search vehicle");
@@ -136,16 +156,20 @@ export async function vehiclesRoutes(fastify: FastifyInstance) {
 			preHandler: [
 				requireAuth,
 				validateParams(vehicleIdParamsSchema),
-				validateBody(updateVehicleBodySchema),
+				validateBody(updateVehicleBodySchema as unknown as AnyZodObject),
 			],
 		},
 		async (request, reply) => {
 			try {
 				const userId = getCurrentUserId(request);
 				const { id } = request.params as { id: string };
-				const updateVehicleDto = request.body as any;
+				const updateVehicleDto = request.body as unknown as UpdateVehicle;
 
-				const vehicle = await vehiclesService.update(id, updateVehicleDto, userId);
+				const vehicle = await vehiclesService.update(
+					id,
+					updateVehicleDto,
+					userId,
+				);
 				ResponseHelper.success(reply, vehicle, "Vehicle updated successfully");
 			} catch (error) {
 				fastify.log.error(error);

@@ -1,6 +1,6 @@
-import type { FastifyRequest, FastifyReply } from "fastify";
-import { getAuth, clerkClient } from "@clerk/fastify";
 import type { User } from "@clerk/backend";
+import { clerkClient, getAuth } from "@clerk/fastify";
+import type { FastifyReply, FastifyRequest } from "fastify";
 import { ResponseHelper } from "../utils/responses";
 
 export interface AuthenticatedRequest extends FastifyRequest {

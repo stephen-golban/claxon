@@ -1,19 +1,19 @@
 import "dotenv/config";
-import env from "@fastify/env";
-import multipart from "@fastify/multipart";
-import cors from "@fastify/cors";
-import helmet from "@fastify/helmet";
-import Fastify from "fastify";
 import { clerkPlugin } from "@clerk/fastify";
-import { type Level, createLogger } from "./utils/logger";
-import { errorHandler } from "./utils/errors";
-import { healthRoutes } from "./routes/health";
-import { usersRoutes } from "./routes/users";
-import { vehiclesRoutes } from "./routes/vehicles";
+import cors from "@fastify/cors";
+import env from "@fastify/env";
+import helmet from "@fastify/helmet";
+import multipart from "@fastify/multipart";
+import Fastify from "fastify";
+import { createRouteHandler } from "uploadthing/fastify";
 import { claxonTemplatesRoutes } from "./routes/claxon-templates";
 import { claxonsRoutes } from "./routes/claxons";
-import { createRouteHandler } from "uploadthing/fastify";
+import { healthRoutes } from "./routes/health";
 import { uploadRouter } from "./routes/uploadthing";
+import { usersRoutes } from "./routes/users";
+import { vehiclesRoutes } from "./routes/vehicles";
+import { errorHandler } from "./utils/errors";
+import { createLogger, type Level } from "./utils/logger";
 
 const schema = {
 	type: "object",
@@ -71,7 +71,6 @@ declare module "fastify" {
 	}
 }
 
-
 const level = process.env.PINO_LOG_LEVEL as Level;
 const isDev = process.env.NODE_ENV === "development";
 const logger = createLogger({ level, isDev });
@@ -97,19 +96,19 @@ export const createServer = async () => {
 		origin: (origin, callback) => {
 			// Allow requests with no origin (mobile apps, curl, etc.)
 			if (!origin) return callback(null, true);
-			
+
 			// In production, you'd want to validate allowed origins
-			const allowedOrigins = [
+			const _allowedOrigins = [
 				"http://localhost:3000",
 				"http://localhost:8081", // Expo dev server
 				"exp://localhost:8081", // Expo dev server
 			];
-			
+
 			if (process.env.NODE_ENV === "production") {
 				// Add your production domains here
 				// allowedOrigins.push("https://yourdomain.com");
 			}
-			
+
 			return callback(null, true); // Allow all origins for now
 		},
 		credentials: true,

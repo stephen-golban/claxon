@@ -1,10 +1,22 @@
 import type { FastifyInstance } from "fastify";
-import { z } from "zod";
-import { claxonTemplatesService, type QueryClaxonTemplate } from "../services/claxon-templates.service";
-import { requireAuth, optionalAuth } from "../middleware/auth.middleware";
-import { validateBody, validateParams, validateQuery } from "../utils/validation";
+import { type AnyZodObject, z } from "zod";
+import {
+	insertClaxonTemplateSchema,
+	type NewClaxonTemplate,
+	type UpdateClaxonTemplate,
+	updateClaxonTemplateSchema,
+} from "../db/schema";
+import { optionalAuth, requireAuth } from "../middleware/auth.middleware";
+import {
+	claxonTemplatesService,
+	type QueryClaxonTemplate,
+} from "../services/claxon-templates.service";
 import { ResponseHelper } from "../utils/responses";
-import { insertClaxonTemplateSchema, updateClaxonTemplateSchema } from "../db/schema";
+import {
+	validateBody,
+	validateParams,
+	validateQuery,
+} from "../utils/validation";
 
 // Validation schemas
 const createTemplateBodySchema = insertClaxonTemplateSchema.omit({
@@ -33,14 +45,21 @@ export async function claxonTemplatesRoutes(fastify: FastifyInstance) {
 	fastify.post(
 		"/claxon-templates",
 		{
-			preHandler: [requireAuth, validateBody(createTemplateBodySchema)],
+			preHandler: [
+				requireAuth,
+				validateBody(createTemplateBodySchema as unknown as AnyZodObject),
+			],
 		},
 		async (request, reply) => {
 			try {
-				const dto = request.body as any;
+				const dto = request.body as unknown as NewClaxonTemplate;
 
 				const template = await claxonTemplatesService.create(dto);
-				ResponseHelper.created(reply, template, "Template created successfully");
+				ResponseHelper.created(
+					reply,
+					template,
+					"Template created successfully",
+				);
 			} catch (error) {
 				fastify.log.error(error);
 				if (error instanceof Error) {
@@ -86,7 +105,10 @@ export async function claxonTemplatesRoutes(fastify: FastifyInstance) {
 				const { category } = request.params as { category: string };
 				const queryDto = request.query as QueryClaxonTemplate;
 
-				const templates = await claxonTemplatesService.findByCategory(category, queryDto);
+				const templates = await claxonTemplatesService.findByCategory(
+					category,
+					queryDto,
+				);
 				ResponseHelper.success(reply, templates);
 			} catch (error) {
 				fastify.log.error(error);
@@ -130,16 +152,20 @@ export async function claxonTemplatesRoutes(fastify: FastifyInstance) {
 			preHandler: [
 				requireAuth,
 				validateParams(templateIdParamsSchema),
-				validateBody(updateTemplateBodySchema),
+				validateBody(updateTemplateBodySchema as unknown as AnyZodObject),
 			],
 		},
 		async (request, reply) => {
 			try {
 				const { id } = request.params as { id: string };
-				const dto = request.body as any;
+				const dto = request.body as unknown as UpdateClaxonTemplate;
 
 				const template = await claxonTemplatesService.update(id, dto);
-				ResponseHelper.success(reply, template, "Template updated successfully");
+				ResponseHelper.success(
+					reply,
+					template,
+					"Template updated successfully",
+				);
 			} catch (error) {
 				fastify.log.error(error);
 				if (error instanceof Error && error.message === "Template not found") {

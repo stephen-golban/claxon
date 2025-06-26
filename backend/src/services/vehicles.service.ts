@@ -1,14 +1,14 @@
+import { and, desc, eq } from "drizzle-orm";
 import { db } from "../db";
 import {
+	insertVehicleSchema,
 	type NewVehicle,
 	type QueryVehicle,
 	type UpdateVehicle,
-	insertVehicleSchema,
 	updateVehicleSchema,
 	users,
 	vehicles,
 } from "../db/schema";
-import { and, desc, eq } from "drizzle-orm";
 
 export class VehiclesService {
 	async create(createVehicleDto: NewVehicle, clerkId: string) {

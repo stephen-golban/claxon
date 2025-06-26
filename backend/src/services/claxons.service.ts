@@ -1,15 +1,15 @@
+import { and, desc, eq, or } from "drizzle-orm";
 import { db } from "../db";
 import {
+	claxons,
+	claxonTemplates,
+	insertClaxonSchema,
 	type NewClaxon,
 	type UpdateClaxon,
-	claxonTemplates,
-	claxons,
-	insertClaxonSchema,
 	updateClaxonSchema,
 	users,
 	vehicles,
 } from "../db/schema";
-import { and, desc, eq, or } from "drizzle-orm";
 
 export interface QueryClaxon {
 	read?: string;
@@ -56,9 +56,7 @@ export class ClaxonsService {
 		});
 
 		if (!vehicle) {
-			throw new Error(
-				"Vehicle not found or does not belong to recipient",
-			);
+			throw new Error("Vehicle not found or does not belong to recipient");
 		}
 
 		// Verify template exists if provided
@@ -84,7 +82,7 @@ export class ClaxonsService {
 
 		// Fetch the complete claxon with relations for response
 		const completeClaxon = await db.query.claxons.findFirst({
-			where: eq(claxons.id, createdClaxon!.id),
+			where: eq(claxons.id, createdClaxon?.id),
 			with: {
 				sender: {
 					columns: {
@@ -298,9 +296,7 @@ export class ClaxonsService {
 		});
 
 		if (!existingClaxon) {
-			throw new Error(
-				"Claxon not found or you are not the recipient",
-			);
+			throw new Error("Claxon not found or you are not the recipient");
 		}
 
 		const updateData = {

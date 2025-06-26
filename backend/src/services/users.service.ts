@@ -1,13 +1,13 @@
+import { eq } from "drizzle-orm";
 import { db } from "../db";
 import {
+	insertUserSchema,
 	type NewUser,
 	type UpdateUser,
-	insertUserSchema,
 	updateUserSchema,
 	users,
 } from "../db/schema";
-import { eq } from "drizzle-orm";
-import { NotFoundError, ConflictError } from "../utils/errors";
+import { ConflictError, NotFoundError } from "../utils/errors";
 
 export class UsersService {
 	async create(createUserDto: NewUser, clerkId: string) {
@@ -55,10 +55,7 @@ export class UsersService {
 				: null,
 		};
 
-		const [createdUser] = await db
-			.insert(users)
-			.values(newUser)
-			.returning();
+		const [createdUser] = await db.insert(users).values(newUser).returning();
 		return createdUser;
 	}
 

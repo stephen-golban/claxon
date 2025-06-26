@@ -1,10 +1,10 @@
 import type { FastifyInstance } from "fastify";
-import { requireAuth, getCurrentUser } from "../middleware/auth.middleware";
+import { getCurrentUser, requireAuth } from "../middleware/auth.middleware";
 import { createRouteHandler, successResponse } from "../utils/route-handler";
 
 export async function healthRoutes(fastify: FastifyInstance) {
 	// GET /health - System health check
-	fastify.get("/health", (request, reply) => {
+	fastify.get("/health", (_request, reply) => {
 		reply.send({
 			status: "ok",
 			timestamp: new Date().toISOString(),

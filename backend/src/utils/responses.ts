@@ -29,11 +29,7 @@ export const ResponseHelper = {
 		} as ApiResponse<T>);
 	},
 
-	created<T>(
-		reply: FastifyReply,
-		data: T,
-		message?: string,
-	): void {
+	created<T>(reply: FastifyReply, data: T, message?: string): void {
 		reply.code(201).send({
 			success: true,
 			data,
@@ -45,11 +41,7 @@ export const ResponseHelper = {
 		reply.code(204).send();
 	},
 
-	error(
-		reply: FastifyReply,
-		error: string,
-		statusCode = 500,
-	): void {
+	error(reply: FastifyReply, error: string, statusCode = 500): void {
 		reply.code(statusCode).send({
 			success: false,
 			error,

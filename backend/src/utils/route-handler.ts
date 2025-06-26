@@ -1,19 +1,20 @@
-import type { FastifyRequest, FastifyReply } from "fastify";
-import { asyncHandler, type AppError } from "./errors";
+import type { FastifyReply, FastifyRequest } from "fastify";
+import type { AnyZodObject } from "zod";
+import { asyncHandler } from "./errors";
 import { ResponseHelper } from "./responses";
 
 export interface RouteHandlerOptions {
 	requireAuth?: boolean;
 	validation?: {
-		body?: any;
-		params?: any;
-		query?: any;
+		body?: AnyZodObject;
+		params?: AnyZodObject;
+		query?: AnyZodObject;
 	};
 }
 
 export function createRouteHandler(
 	handler: (request: FastifyRequest, reply: FastifyReply) => Promise<void>,
-	options: RouteHandlerOptions = {},
+	_options: RouteHandlerOptions = {},
 ) {
 	return asyncHandler(async (request: FastifyRequest, reply: FastifyReply) => {
 		// Validation is handled by preHandler middleware

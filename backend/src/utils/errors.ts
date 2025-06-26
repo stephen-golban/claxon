@@ -13,7 +13,7 @@ export class AppError extends Error {
 }
 
 export class ValidationError extends AppError {
-	constructor(message: string, field?: string) {
+	constructor(message: string, _field?: string) {
 		super(message, 400, "VALIDATION_ERROR");
 		this.name = "ValidationError";
 	}
@@ -64,7 +64,10 @@ export function errorHandler(
 	}
 
 	// Handle database constraint errors
-	if (error.message.includes("duplicate key") || error.message.includes("UNIQUE constraint")) {
+	if (
+		error.message.includes("duplicate key") ||
+		error.message.includes("UNIQUE constraint")
+	) {
 		return ResponseHelper.conflict(reply, "Resource already exists");
 	}
 
@@ -73,7 +76,7 @@ export function errorHandler(
 }
 
 export function asyncHandler(
-	fn: (request: FastifyRequest, reply: FastifyReply) => Promise<any>,
+	fn: (request: FastifyRequest, reply: FastifyReply) => Promise<void>,
 ) {
 	return async (request: FastifyRequest, reply: FastifyReply) => {
 		try {
