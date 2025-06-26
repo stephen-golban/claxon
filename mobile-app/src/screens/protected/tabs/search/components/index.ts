@@ -1,3 +1,3 @@
-export * from "./search-results";
-export * from "./recent-searches";
 export * from "./message-composer";
+export * from "./recent-searches";
+export * from "./search-results";

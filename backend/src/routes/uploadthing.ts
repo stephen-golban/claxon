@@ -24,7 +24,7 @@ export const uploadRouter = {
 		.onUploadComplete(async ({ metadata, file }) => {
 			// This code RUNS ON YOUR SERVER after upload
 			console.log("Upload complete for userId:", metadata.userId);
-			console.log("File URL:", file.url);
+			console.log("File URL:", file.ufsUrl);
 
 			// You can update your database here with the file URL
 			// await updateUserAvatar(metadata.userId, file.url);
@@ -50,7 +50,7 @@ export const uploadRouter = {
 		})
 		.onUploadComplete(async ({ metadata, file }) => {
 			console.log("Image upload complete for userId:", metadata.userId);
-			console.log("File URL:", file.url);
+			console.log("File URL:", file.ufsUrl);
 
 			return { uploadedBy: metadata.userId };
 		}),
