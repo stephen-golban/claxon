@@ -9,31 +9,28 @@ import { useVerifyPhoneScreen } from "./hook";
 import OtpResend from "./otp-resend";
 
 interface IVerifyPhoneScreen {
-	phone: string;
+  phone: string;
 }
 
 export default function VerifyPhoneScreen({ phone }: IVerifyPhoneScreen) {
-	const { t } = useTranslation();
-	const { control, isSubmitting, handleSubmit, reset } =
-		useVerifyPhoneScreen(phone);
+  const { t } = useTranslation();
+  const { control, isSubmitting, handleSubmit, reset } = useVerifyPhoneScreen(phone);
 
-	const formattedPhone = formatPhoneNumber(phone);
+  const formattedPhone = formatPhoneNumber(phone);
 
-	return (
-		<Container loading={isSubmitting} removeEdges={[]}>
-			<Container.TopText
-				title={t("verificationCode:sentNewline")}
-				subtitle={t("verificationCode:sent", { phone: formattedPhone })}
-			/>
+  return (
+    <Container loading={isSubmitting}>
+      <Container.TopText
+        title={t("verificationCode:sentNewline")}
+        subtitle={t("verificationCode:sent", { phone: formattedPhone })}
+      />
 
-			<Text className="mt-4 text-3xl font-bold text-dark dark:text-light">
-				{t("verificationCode:code")}
-			</Text>
+      <Text className="mt-4 text-3xl font-bold text-dark dark:text-light">{t("verificationCode:code")}</Text>
 
-			<View className="mt-4 flex-1">
-				<OtpField name="otp" control={control} onFilled={handleSubmit} />
-				<OtpResend phone={phone} onResend={() => reset({ otp: "" })} />
-			</View>
-		</Container>
-	);
+      <View className="mt-4 flex-1">
+        <OtpField name="otp" control={control} onFilled={handleSubmit} />
+        <OtpResend phone={phone} onResend={() => reset({ otp: "" })} />
+      </View>
+    </Container>
+  );
 }

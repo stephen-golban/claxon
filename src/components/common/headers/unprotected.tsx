@@ -8,44 +8,44 @@ import { Button } from "@/components/ui/button";
 import { ThemeSwitcher } from "../theme-switcher";
 
 const HeaderLeft = (showBackButton: boolean, onBack?: () => void): ReactNode => {
-	const router = useRouter();
-	const canGoBack = router.canGoBack();
+  const router = useRouter();
+  const canGoBack = router.canGoBack();
 
-	if (!showBackButton || !canGoBack) {
-		return <View />;
-	}
+  if (!showBackButton || !canGoBack) {
+    return <View />;
+  }
 
-	const handleBack = onBack || router.back;
+  const handleBack = onBack || router.back;
 
-	return (
-		<Button size="icon" variant="ghost" onPress={handleBack} className="my-3 items-start">
-			<MoveLeftIcon className="text-primary" size={24} />
-		</Button>
-	);
+  return (
+    <Button size="icon" variant="ghost" onPress={handleBack} className="my-3 items-start">
+      <MoveLeftIcon className="text-primary" size={24} />
+    </Button>
+  );
 };
 
 const headerTitleStyle: StyleProp<
-	Pick<TextStyle, "fontFamily" | "fontSize" | "fontWeight"> & {
-		color?: string;
-	}
+  Pick<TextStyle, "fontFamily" | "fontSize" | "fontWeight"> & {
+    color?: string;
+  }
 > = {
-	color: "transparent",
+  color: "transparent",
 };
 
 const headerBackground = () => <View className="bg-background" />;
 
 const HeaderRight = (_props: NativeStackHeaderRightProps): ReactNode => {
-	return (
-		<View className="flex-row items-center gap-x-4 py-3">
-			{/* <LanguageSwitcher /> */}
-			<ThemeSwitcher />
-		</View>
-	);
+  return (
+    <View className="flex-row items-center gap-x-4 py-3">
+      {/* <LanguageSwitcher /> */}
+      <ThemeSwitcher />
+    </View>
+  );
 };
 
 export const UnprotectedHeader = {
-	headerLeft: (showBackButton: boolean, onBack?: () => void) => HeaderLeft(showBackButton, onBack),
-	headerRight: HeaderRight,
-	headerTitleStyle,
-	headerBackground,
+  headerLeft: (showBackButton: boolean, onBack?: () => void) => HeaderLeft(showBackButton, onBack),
+  headerRight: HeaderRight,
+  headerTitleStyle,
+  headerBackground,
 };

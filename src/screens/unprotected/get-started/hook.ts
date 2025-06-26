@@ -3,20 +3,20 @@ import { useAuthenticate } from "@/services/api/auth";
 import type { SignInFormData } from "./form/schema";
 
 export default function useGetStartedScreen() {
-	const router = useRouter();
-	const { mutateAsync, isPending } = useAuthenticate();
+  const router = useRouter();
+  const { mutateAsync, isPending } = useAuthenticate();
 
-	const onSubmit = async (data: SignInFormData) => {
-		await mutateAsync(data.phone, {
-			onSuccess: (data, phone) => {
-				if (!data) return;
-				router.replace({ pathname: "/verify", params: { phone } });
-			},
-		});
-	};
+  const onSubmit = async (data: SignInFormData) => {
+    await mutateAsync(data.phone, {
+      onSuccess: (data, phone) => {
+        if (!data) return;
+        router.replace({ pathname: "/verify", params: { phone } });
+      },
+    });
+  };
 
-	return {
-		isPending,
-		onSubmit,
-	};
+  return {
+    isPending,
+    onSubmit,
+  };
 }

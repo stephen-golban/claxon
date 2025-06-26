@@ -1,33 +1,74 @@
-import * as ImagePicker from "expo-image-picker";
-import { useState } from "react";
+import { useState } from 'react';
+import { toast } from '@/components/ui/toast';
+import * as ImagePicker from 'expo-image-picker';
+import { Dimensions, Platform } from 'react-native';
+import { manipulateAsync, SaveFormat } from 'expo-image-manipulator';
 
-export const useImagePicker = () => {
-	const [image, setImage] = useState<ImagePicker.ImagePickerAsset | null>(null);
 
-	const handlePick = async () => {
-		try {
-			const result = await ImagePicker.launchImageLibraryAsync({
-				...{
-					quality: 1,
-					base64: false,
-					allowsEditing: true,
-					mediaTypes: ["images"],
-				},
-			});
+export function useImagePick() {
+  const [uploading, setUploading] = useState(false);
 
-			if (!result.canceled && result.assets[0]) {
-				const pickedImage = result.assets[0];
+  // Get the screen width for dynamic resizing
+  const SCREEN_WIDTH = Dimensions.get('window').width;
 
-				setImage(pickedImage);
-				return pickedImage;
-			}
-		} catch (error) {
-			console.error(error);
-		}
-	};
+  const pickImage = async () => {
+    try {
+      setUploading(true);
 
-	return {
-		image,
-		handlePick,
-	};
-};
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ['images'],
+        allowsMultipleSelection: false,
+        allowsEditing: true,
+        quality: 1, // Pick at highest quality
+        exif: false,
+      });
+
+      if (result.canceled || !result.assets || result.assets.length === 0) {
+        console.log('User cancelled image picker.');
+        return;
+      }
+
+      const image = result.assets[0];
+      if (!image.uri) {
+        throw new Error('No image URI found!');
+      }
+
+      // Determine optimal width for mobile (adaptive sizing)
+      const MAX_WIDTH = SCREEN_WIDTH > 800 ? 800 : 600;
+
+      // Optimize image
+      const manipulatedImage = await manipulateAsync(
+        image.uri,
+
+        [{ resize: { width: MAX_WIDTH } }],
+        {
+          compress: Platform.OS === 'ios' ? 0.7 : 0.6, // Slightly lower quality on Android for better compression
+          format: SaveFormat.JPEG, // Ensure JPEG format
+        }
+      );
+
+      const optimizedUri = manipulatedImage.uri as string;
+      const path = `${Date.now()}.jpeg`;
+
+      // Fetch optimized image as an ArrayBuffer (for uploading)
+      const arraybuffer = await fetch(optimizedUri).then((res) => res.arrayBuffer());
+
+      const mimeType = image.mimeType ?? 'image/jpeg';
+
+      return { path, arraybuffer, uri: optimizedUri, mimeType };
+    } catch (error) {
+      if (error instanceof Error) {
+
+          console.log(error.message);
+
+        toast.error(error.message);
+      } else {
+        throw error;
+      }
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  return { pickImage, uploading };
+}

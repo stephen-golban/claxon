@@ -1,177 +1,163 @@
 import { Image } from "expo-image";
-import type { ImagePickerAsset } from "expo-image-picker";
 import React from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { CarIcon, UploadIcon } from "@/components/icons";
 import { Badge } from "@/components/ui/badge";
 import { Text } from "@/components/ui/text";
-import {
-	useErrorMessageTranslation,
-	useImagePicker,
-	useTranslation,
-} from "@/hooks";
+import { useErrorMessageTranslation, useImagePick, useTranslation } from "@/hooks";
 import { cn } from "@/lib/utils";
 import { FieldError } from "../field-error";
 
+type ImageData = {
+  uri: string;
+  path: string;
+  mimeType: string;
+  arraybuffer: ArrayBuffer;
+};
+
 export interface BaseAvatarFieldProps {
-	value: ImagePickerAsset | null;
-	size?: number;
-	error?: string;
-	label?: string;
-	onBlur: () => void;
-	isUploading?: boolean;
-	onChange: (value: ImagePickerAsset) => void;
+  value: ImageData;
+  size?: number;
+  error?: string;
+  label?: string;
+  onBlur: () => void;
+onChange: (...event: any[]) => void;
 }
 
 const blurhash =
-	"|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[";
+  "|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[";
 
-const BaseAvatarField = React.forwardRef<
-	React.ComponentRef<typeof TouchableOpacity>,
-	BaseAvatarFieldProps
->(
-	(
-		{ value, onChange, onBlur, error, size = 80, label, isUploading, ...rest },
-		ref,
-	) => {
-		const { t } = useTranslation();
-		const { handlePick } = useImagePicker();
-		const errorMessage = useErrorMessageTranslation(error);
+const BaseAvatarField = React.forwardRef<React.ComponentRef<typeof TouchableOpacity>, BaseAvatarFieldProps>(
+  ({ value, onChange, onBlur, error, size = 80, label, ...rest }, ref) => {
+    const { pickImage, uploading } = useImagePick();
 
-		async function handlePickImage() {
-			const pickedImage = await handlePick();
-			if (pickedImage) {
-				onChange(pickedImage);
-			}
-		}
+    const { t } = useTranslation();
+    const errorMessage = useErrorMessageTranslation(error);
 
-		const hasValue = typeof value === "object" ? !!value?.uri : !!value;
+    async function handlePickImage() {
+      const result = await pickImage();
 
-		const renderCarPhotoPreview = () => {
-			if (hasValue) {
-				return (
-					<View className="relative">
-						<View className="w-20 h-20 rounded-xl overflow-hidden border-2 border-primary/20">
-							<Image
-								transition={300}
-								contentFit="cover"
-								placeholder={{ blurhash }}
-								cachePolicy="memory-disk"
-								source={{ uri: value?.uri }}
-								style={StyleSheet.absoluteFillObject}
-							/>
-						</View>
-						{/* Success indicator - only show when upload is complete */}
-						{value?.uri && (
-							<View className="absolute -top-1 -right-1">
-								<View className="w-6 h-6 bg-green-500 rounded-full items-center justify-center border-2 border-background">
-									<Text className="text-xs text-white font-bold">✓</Text>
-								</View>
-							</View>
-						)}
-						{/* Loading indicator during upload */}
-						{isUploading && (
-							<View className="absolute -top-1 -right-1">
-								<View className="w-6 h-6 bg-blue-500 rounded-full items-center justify-center border-2 border-background">
-									<Text className="text-xs text-white font-bold">⟳</Text>
-								</View>
-							</View>
-						)}
-					</View>
-				);
-			}
+      if (result && result.uri && result.arraybuffer) {
+        onChange(result);
+      }
+    }
 
-			return (
-				<View
-					className={cn(
-						"w-20 h-20 rounded-xl border-2 border-dashed items-center justify-center",
-						"bg-muted/30 border-muted-foreground/30",
-						error && "border-destructive bg-destructive/5",
-					)}
-				>
-					<CarIcon
-						size={24}
-						className={cn("text-muted-foreground", error && "text-destructive")}
-					/>
-				</View>
-			);
-		};
+    const hasValue = typeof value === "object" ? !!value?.uri : !!value;
 
-		return (
-			<View className="gap-y-2">
-				{label && (
-					<Text className="text-lg font-medium text-foreground">
-						{label} <Text className="text-destructive">*</Text>
-					</Text>
-				)}
-				<TouchableOpacity
-					ref={ref}
-					className={cn(
-						"p-4 rounded-2xl border border-transparent bg-transparent-black dark:bg-transparent-white",
-						"active:opacity-80 transition-opacity",
-						error && "bg-destructive/10",
-						hasValue && "bg-primary/5 border-primary/20",
-						isUploading && "opacity-50",
-					)}
-					onPress={handlePickImage}
-					onBlur={onBlur}
-					activeOpacity={0.7}
-					disabled={isUploading}
-					{...rest}
-				>
-					<View className="flex-row items-center gap-x-4">
-						{renderCarPhotoPreview()}
+    const renderCarPhotoPreview = () => {
+      if (hasValue) {
+        return (
+          <View className="relative">
+            <View className="w-20 h-20 rounded-xl overflow-hidden border-2 border-primary/20">
+              <Image
+                transition={300}
+                contentFit="cover"
+                placeholder={{ blurhash }}
+                cachePolicy="memory-disk"
+                source={{ uri: value?.uri }}
+                style={StyleSheet.absoluteFillObject}
+              />
+            </View>
+            {/* Success indicator - only show when upload is complete */}
+            {value?.uri && (
+              <View className="absolute -top-1 -right-1">
+                <View className="w-6 h-6 bg-green-500 rounded-full items-center justify-center border-2 border-background">
+                  <Text className="text-xs text-white font-bold">✓</Text>
+                </View>
+              </View>
+            )}
+            {/* Loading indicator during upload */}
+            {uploading && (
+              <View className="absolute -top-1 -right-1">
+                <View className="w-6 h-6 bg-blue-500 rounded-full items-center justify-center border-2 border-background">
+                  <Text className="text-xs text-white font-bold">⟳</Text>
+                </View>
+              </View>
+            )}
+          </View>
+        );
+      }
 
-						<View className="flex-1 gap-y-1">
-							<Text
-								className={cn(
-									"text-base font-medium",
-									hasValue ? "text-primary" : "text-foreground",
-									error && "text-destructive",
-								)}
-							>
-								{isUploading
-									? "Uploading..."
-									: hasValue
-										? t("avatar:success_tip")
-										: t("avatar:initial_tip")}
-							</Text>
-							<Text className="text-sm text-muted-foreground">
-								{isUploading
-									? "Please wait while your image is being uploaded"
-									: hasValue
-										? t("avatar:change_tip2")
-										: t("avatar:initial_tip2")}
-							</Text>
-						</View>
+      return (
+        <View
+          className={cn(
+            "w-20 h-20 rounded-xl border-2 border-dashed items-center justify-center",
+            "bg-muted/30 border-muted-foreground/30",
+            error && "border-destructive bg-destructive/5",
+          )}
+        >
+          <CarIcon size={24} className={cn("text-muted-foreground", error && "text-destructive")} />
+        </View>
+      );
+    };
 
-						<View className="items-center">
-							{hasValue ? (
-								<Badge variant="secondary" className="px-2 py-1">
-									<Text className="text-xs">{t("buttons:change")}</Text>
-								</Badge>
-							) : (
-								<View
-									className={cn(
-										"w-8 h-8 rounded-full items-center justify-center",
-										"bg-primary/10 border border-primary/20",
-										error && "bg-destructive/10 border-destructive/20",
-									)}
-								>
-									<UploadIcon
-										size={16}
-										className={cn("text-primary", error && "text-destructive")}
-									/>
-								</View>
-							)}
-						</View>
-					</View>
-				</TouchableOpacity>
+    return (
+      <View className="gap-y-2">
+        {label && (
+          <Text className="text-lg font-medium text-foreground">
+            {label} <Text className="text-destructive">*</Text>
+          </Text>
+        )}
+        <TouchableOpacity
+          ref={ref}
+          className={cn(
+            "p-4 rounded-2xl border border-transparent bg-transparent-black dark:bg-transparent-white",
+            "active:opacity-80 transition-opacity",
+            error && "bg-destructive/10",
+            uploading && "opacity-50",
+          )}
+          onPress={handlePickImage}
+          onBlur={onBlur}
+          activeOpacity={0.7}
+          disabled={uploading}
+          {...rest}
+        >
+          <View className="flex-row items-center gap-x-4">
+            {renderCarPhotoPreview()}
 
-				{errorMessage && <FieldError message={errorMessage} />}
-			</View>
-		);
-	},
+            <View className="flex-1 gap-y-1">
+              <Text
+                className={cn(
+                  "text-base font-medium",
+                  hasValue ? "text-primary" : "text-foreground",
+                  error && "text-destructive",
+                )}
+              >
+                {uploading ? "Uploading..." : hasValue ? t("avatar:success_tip") : t("avatar:initial_tip")}
+              </Text>
+              <Text className="text-sm text-muted-foreground">
+                {uploading
+                  ? "Please wait while your image is being uploaded"
+                  : hasValue
+                    ? t("avatar:change_tip2")
+                    : t("avatar:initial_tip2")}
+              </Text>
+            </View>
+
+            <View className="items-center">
+              {hasValue ? (
+                <Badge variant="secondary" className="px-2 py-1">
+                  <Text className="text-xs">{t("buttons:change")}</Text>
+                </Badge>
+              ) : (
+                <View
+                  className={cn(
+                    "w-8 h-8 rounded-full items-center justify-center",
+                    "bg-primary/10 border border-primary/20",
+                    error && "bg-destructive/10 border-destructive/20",
+                  )}
+                >
+                  <UploadIcon size={16} className={cn("text-primary", error && "text-destructive")} />
+                </View>
+              )}
+            </View>
+          </View>
+        </TouchableOpacity>
+
+        {errorMessage && <FieldError message={errorMessage} />}
+      </View>
+    );
+  },
 );
 
 BaseAvatarField.displayName = "BaseAvatarField";

@@ -5,38 +5,38 @@ import { useQueryImage } from "@/services/api/image";
 import type { PersonalDetailsFormData } from "./form/schema";
 
 export default function usePersonalDetailsScreen() {
-	const router = useRouter();
+  const router = useRouter();
 
-	const { mutateAsync, isPending } = useUpdateAccount();
-	const { uploadMutation, isUploading } = useQueryImage("profile-avatar");
+  const { mutateAsync, isPending } = useUpdateAccount();
+  const { uploadMutation, isUploading } = useQueryImage("profile-avatar");
 
-	const onSubmit = async (dto: PersonalDetailsFormData) => {
-		if (isUploading || isPending) return;
+  const onSubmit = async (dto: PersonalDetailsFormData) => {
+    if (isUploading || isPending) return;
 
-		const res = await supabase.auth.getUser();
-		const { path } = await uploadMutation.mutateAsync(dto.image);
+    const res = await supabase.auth.getUser();
+    const { path } = await uploadMutation.mutateAsync(dto.image);
 
-		if (!path || !res.data.user) return;
+    if (!path || !res.data.user) return;
 
-		const profile = await mutateAsync(
-			{
-				id: res.data.user.id,
-				dto: {
-					...dto,
-					avatar_url: path,
-					dob: dto.dob.toISOString(),
-				},
-			},
-			{
-				onSuccess: () => {
-					router.dismissAll();
-					return router.replace("/(protected)");
-				},
-			},
-		);
+    const profile = await mutateAsync(
+      {
+        id: res.data.user.id,
+        dto: {
+          ...dto,
+          avatar_url: path,
+          dob: dto.dob.toISOString(),
+        },
+      },
+      {
+        onSuccess: () => {
+          router.dismissAll();
+          return router.replace("/(protected)");
+        },
+      },
+    );
 
-		return profile;
-	};
+    return profile;
+  };
 
-	return { onSubmit, isUploading };
+  return { onSubmit, isUploading };
 }
