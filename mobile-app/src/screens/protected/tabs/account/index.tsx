@@ -19,7 +19,7 @@ import {
 	useCurrentUser,
 	useDeleteUser,
 	useUpdateUser,
-} from "@/services/api";
+} from "@/services/api-old";
 import { ProfileForm } from "./form";
 import type { ProfileFormData } from "./schema";
 

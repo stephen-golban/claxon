@@ -4,7 +4,7 @@ import { StyleSheet, View } from "react-native";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Text } from "@/components/ui/text";
-import type { User } from "@/services/api/types";
+import type { User } from "@/services/api-old/types";
 import LoadingSkeleton from "./loading-skeleton";
 import { getInitials, SKELETON_CLASSES } from "./util";
 

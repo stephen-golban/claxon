@@ -11,7 +11,7 @@ interface AppState {
 
 export const useAppStore = create<AppState>()(
 	persist(
-		(set, get) => ({
+		(_set, _get) => ({
 			language: undefined,
 			isAuthenticated: false,
 		}),
@@ -22,7 +22,10 @@ export const useAppStore = create<AppState>()(
 	),
 );
 
-export const setAppStoreKey = (key: keyof AppState, value: AppState[keyof AppState]) => {
+export const setAppStoreKey = (
+	key: keyof AppState,
+	value: AppState[keyof AppState],
+) => {
 	useAppStore.setState({ [key]: value });
 };
 

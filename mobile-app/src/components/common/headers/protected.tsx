@@ -9,7 +9,7 @@ import { View } from "react-native";
 import { BellIcon, MoveLeftIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Text } from "@/components/ui/text";
-import { useCurrentUser, useUnreadClaxonCount } from "@/services/api";
+import { useCurrentUser, useUnreadClaxonCount } from "@/services/api-old";
 import { ProfileAvatar } from "../profile-avatar";
 import { ThemeSwitcher } from "../theme-switcher";
 

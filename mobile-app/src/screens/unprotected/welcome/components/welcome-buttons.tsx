@@ -25,7 +25,12 @@ interface WelcomeButtonsProps {
 	totalSlides: number;
 }
 
-export function WelcomeButtons({ currentIndex, onBack, onNext, totalSlides }: WelcomeButtonsProps) {
+export function WelcomeButtons({
+	currentIndex,
+	onBack,
+	onNext,
+	totalSlides,
+}: WelcomeButtonsProps) {
 	const router = useRouter();
 	const { t } = useTranslation();
 	const { width } = useWindowDimensions();
@@ -55,7 +60,12 @@ export function WelcomeButtons({ currentIndex, onBack, onNext, totalSlides }: We
 	const containerAnimatedStyle = useAnimatedStyle(() => ({
 		transform: [
 			{
-				translateY: interpolate(lastSlideProgress.value, [0, 0.7, 1], [0, 0, -32], Extrapolation.CLAMP),
+				translateY: interpolate(
+					lastSlideProgress.value,
+					[0, 0.7, 1],
+					[0, 0, -32],
+					Extrapolation.CLAMP,
+				),
 			},
 		],
 	}));
@@ -76,7 +86,12 @@ export function WelcomeButtons({ currentIndex, onBack, onNext, totalSlides }: We
 					),
 				},
 				{
-					translateY: interpolate(slideProgress, [0, 0.3, 0.7, 1], [0, 0, 0, 64], Extrapolation.CLAMP),
+					translateY: interpolate(
+						slideProgress,
+						[0, 0.3, 0.7, 1],
+						[0, 0, 0, 64],
+						Extrapolation.CLAMP,
+					),
 				},
 			],
 			zIndex: isHidden ? -1 : 1,
@@ -92,7 +107,12 @@ export function WelcomeButtons({ currentIndex, onBack, onNext, totalSlides }: We
 			opacity: isVisible ? 1 : 0,
 			transform: [
 				{
-					translateY: interpolate(slideProgress, [0, 0.3, 0.7, 1], [0, 0, 0, 30], Extrapolation.CLAMP),
+					translateY: interpolate(
+						slideProgress,
+						[0, 0.3, 0.7, 1],
+						[0, 0, 0, 30],
+						Extrapolation.CLAMP,
+					),
 				},
 			],
 			zIndex: -1,
@@ -108,13 +128,27 @@ export function WelcomeButtons({ currentIndex, onBack, onNext, totalSlides }: We
 			width: interpolate(
 				lastSlideProgress.value,
 				[0, 0.5, 1],
-				[minWidth + (maxWidth - minWidth) * (1 - progress.value), maxWidth, maxWidth],
+				[
+					minWidth + (maxWidth - minWidth) * (1 - progress.value),
+					maxWidth,
+					maxWidth,
+				],
 				Extrapolation.CLAMP,
 			),
-			marginLeft: interpolate(lastSlideProgress.value, [0, 1, 1], [20 * progress.value, 0, 0], Extrapolation.CLAMP),
+			marginLeft: interpolate(
+				lastSlideProgress.value,
+				[0, 1, 1],
+				[20 * progress.value, 0, 0],
+				Extrapolation.CLAMP,
+			),
 			transform: [
 				{
-					translateY: interpolate(lastSlideProgress.value, [0, 0.5, 1], [0, 0, -20], Extrapolation.CLAMP),
+					translateY: interpolate(
+						lastSlideProgress.value,
+						[0, 0.5, 1],
+						[0, 0, -20],
+						Extrapolation.CLAMP,
+					),
 				},
 			],
 		};
@@ -139,7 +173,10 @@ export function WelcomeButtons({ currentIndex, onBack, onNext, totalSlides }: We
 	};
 
 	return (
-		<AnimatedView className="w-full flex-row items-center justify-end px-5" style={containerAnimatedStyle}>
+		<AnimatedView
+			className="w-full flex-row items-center justify-end px-5"
+			style={containerAnimatedStyle}
+		>
 			<AnimatedView
 				style={backButtonAnimatedStyle}
 				className={cn(
@@ -147,7 +184,12 @@ export function WelcomeButtons({ currentIndex, onBack, onNext, totalSlides }: We
 					isFirstSlide && "pointer-events-none opacity-50",
 				)}
 			>
-				<MoveLeftIcon className="text-primary" onPress={handleBackAction} disabled={isFirstSlide} size={30} />
+				<MoveLeftIcon
+					className="text-primary"
+					onPress={handleBackAction}
+					disabled={isFirstSlide}
+					size={30}
+				/>
 			</AnimatedView>
 
 			<AnimatedButton
@@ -160,8 +202,15 @@ export function WelcomeButtons({ currentIndex, onBack, onNext, totalSlides }: We
 				<Text>{t("buttons:log_in")}</Text>
 			</AnimatedButton>
 
-			<AnimatedButton onPress={handleNext} style={nextButtonAnimatedStyle} className="rounded-full" size="lg">
-				<Text>{isLastSlide ? t("onboarding:get_started") : t("buttons:continue")}</Text>
+			<AnimatedButton
+				onPress={handleNext}
+				style={nextButtonAnimatedStyle}
+				className="rounded-full"
+				size="lg"
+			>
+				<Text>
+					{isLastSlide ? t("onboarding:get_started") : t("buttons:continue")}
+				</Text>
 			</AnimatedButton>
 		</AnimatedView>
 	);

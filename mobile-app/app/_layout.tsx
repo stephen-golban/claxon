@@ -1,10 +1,9 @@
-import { useAuth } from "@clerk/clerk-expo";
 import {
 	Nunito_400Regular,
 	Nunito_700Bold,
 	useFonts,
 } from "@expo-google-fonts/nunito";
-import { Stack, usePathname, useRouter, useSegments } from "expo-router";
+import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import React from "react";
 import Animated, { FadeIn } from "react-native-reanimated";
@@ -52,28 +51,19 @@ export default function RootLayout() {
 }
 
 const RootLayoutNav = () => {
-	const router = useRouter();
-	const pathname = usePathname();
-	const segments = useSegments();
-	const { isSignedIn, isLoaded } = useAuth();
+	const isAuthenticated = useAppStore((state) => state.isAuthenticated);
 
-	const inProtectedRoute =
-		segments[0] === "(protected)" || pathname.includes("/(protected)");
-
-	// biome-ignore lint/correctness/useExhaustiveDependencies: we need to check if the user is signed in and if they are in a protected route
-	React.useEffect(() => {
-		if (!isLoaded) return;
-
-		if (isSignedIn && !inProtectedRoute) {
-			router.replace("/(protected)");
-		} else if (!isSignedIn && inProtectedRoute) {
-			router.replace("/");
-		}
-	}, [isSignedIn, isLoaded, inProtectedRoute]);
-
-	if (!isLoaded) {
-		return null;
-	}
-
-	return <Stack screenOptions={{ headerShown: false }} />;
+	return (
+		<Stack
+			screenOptions={{ headerShown: false }}
+			initialRouteName="(unprotected)"
+		>
+			<Stack.Protected guard={isAuthenticated}>
+				<Stack.Screen name="(protected)" />
+			</Stack.Protected>
+			<Stack.Protected guard={!isAuthenticated}>
+				<Stack.Screen name="(unprotected)" />
+			</Stack.Protected>
+		</Stack>
+	);
 };

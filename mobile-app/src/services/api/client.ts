@@ -1,146 +1,79 @@
-/** biome-ignore-all lint/suspicious/noExplicitAny: we need to use any for generic fetcher */
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { createClient } from "@supabase/supabase-js";
+import * as aesjs from "aes-js";
+import * as SecureStore from "expo-secure-store";
+import "react-native-get-random-values";
+import type { Database } from "@/typings/database";
 
-import { useAuth } from "@clerk/clerk-expo";
-import type { ApiResponse } from "./types";
+// As Expo's SecureStore does not support values larger than 2048
+// bytes, an AES-256 key is generated and stored in SecureStore, while
+// it is used to encrypt/decrypt values stored in AsyncStorage.
+class LargeSecureStore {
+	private async _encrypt(key: string, value: string) {
+		const encryptionKey = crypto.getRandomValues(new Uint8Array(256 / 8));
 
-// ============================================================================
-// CONFIGURATION
-// ============================================================================
+		const cipher = new aesjs.ModeOfOperation.ctr(
+			encryptionKey,
+			new aesjs.Counter(1),
+		);
+		const encryptedBytes = cipher.encrypt(aesjs.utils.utf8.toBytes(value));
 
-const API_BASE_URL =
-	process.env.EXPO_PUBLIC_API_BASE_URL || "http://localhost:3000";
+		await SecureStore.setItemAsync(
+			key,
+			aesjs.utils.hex.fromBytes(encryptionKey),
+		);
 
-// ============================================================================
-// HTTP CLIENT
-// ============================================================================
+		return aesjs.utils.hex.fromBytes(encryptedBytes);
+	}
 
-export class ApiError extends Error {
-	constructor(
-		message: string,
-		public statusCode: number,
-		public response?: ApiResponse,
-	) {
-		super(message);
-		this.name = "ApiError";
+	private async _decrypt(key: string, value: string) {
+		const encryptionKeyHex = await SecureStore.getItemAsync(key);
+		if (!encryptionKeyHex) {
+			return encryptionKeyHex;
+		}
+
+		const cipher = new aesjs.ModeOfOperation.ctr(
+			aesjs.utils.hex.toBytes(encryptionKeyHex),
+			new aesjs.Counter(1),
+		);
+		const decryptedBytes = cipher.decrypt(aesjs.utils.hex.toBytes(value));
+
+		return aesjs.utils.utf8.fromBytes(decryptedBytes);
+	}
+
+	async getItem(key: string) {
+		const encrypted = await AsyncStorage.getItem(key);
+		if (!encrypted) {
+			return encrypted;
+		}
+
+		return await this._decrypt(key, encrypted);
+	}
+
+	async removeItem(key: string) {
+		await AsyncStorage.removeItem(key);
+		await SecureStore.deleteItemAsync(key);
+	}
+
+	async setItem(key: string, value: string) {
+		const encrypted = await this._encrypt(key, value);
+
+		await AsyncStorage.setItem(key, encrypted);
 	}
 }
 
-export class HttpClient {
-	private baseURL: string;
-	private getAuthToken: () => Promise<string | null>;
+const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL;
+const supabaseAnonKey = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY;
 
-	constructor(baseURL: string, getAuthToken: () => Promise<string | null>) {
-		this.baseURL = baseURL;
-		this.getAuthToken = getAuthToken;
-	}
-
-	private async request<T>(
-		endpoint: string,
-		options: RequestInit = {},
-	): Promise<ApiResponse<T>> {
-		const url = `${this.baseURL}${endpoint}`;
-		const token = await this.getAuthToken();
-
-		const headers: Record<string, string> = {
-			"Content-Type": "application/json",
-			...(options.headers as Record<string, string>),
-		};
-
-		if (token) {
-			headers.Authorization = `Bearer ${token}`;
-		}
-
-		try {
-			const response = await fetch(url, { ...options, headers });
-
-			if (response.status === 204) {
-				return { success: true, data: undefined as T };
-			}
-
-			const data: ApiResponse<T> = await response.json();
-
-			if (!response.ok) {
-				throw new ApiError(
-					data.error || `HTTP ${response.status}`,
-					response.status,
-					data,
-				);
-			}
-
-			return data;
-		} catch (error) {
-			if (error instanceof ApiError) {
-				throw error;
-			}
-			throw new ApiError(
-				error instanceof Error ? error.message : "Network error",
-				0,
-			);
-		}
-	}
-
-	async get<T>(endpoint: string, params?: Record<string, any>): Promise<T> {
-		const searchParams = params
-			? `?${new URLSearchParams(params).toString()}`
-			: "";
-		const response = await this.request<T>(`${endpoint}${searchParams}`);
-		return response.data as T;
-	}
-
-	async post<T>(endpoint: string, data?: any): Promise<T> {
-		const response = await this.request<T>(endpoint, {
-			method: "POST",
-			body: data ? JSON.stringify(data) : undefined,
-		});
-		return response.data as T;
-	}
-
-	async patch<T>(endpoint: string, data?: any): Promise<T> {
-		const response = await this.request<T>(endpoint, {
-			method: "PATCH",
-			body: data ? JSON.stringify(data) : undefined,
-		});
-		return response.data as T;
-	}
-
-	async delete<T>(endpoint: string): Promise<T> {
-		const response = await this.request<T>(endpoint, {
-			method: "DELETE",
-		});
-		return response.data as T;
-	}
+if (!supabaseUrl || !supabaseAnonKey) {
+	throw new Error("Supabase URL or anon key is not set");
 }
 
-// ============================================================================
-// API CLIENT HOOK
-// ============================================================================
-
-let _apiClientInstance: HttpClient | null = null;
-
-export const useApiClient = () => {
-	const { getToken } = useAuth();
-
-	const getAuthToken = async () => {
-		try {
-			return await getToken();
-		} catch (error) {
-			console.error("Failed to get auth token:", error);
-			return null;
-		}
-	};
-
-	if (!_apiClientInstance) {
-		_apiClientInstance = new HttpClient(API_BASE_URL, getAuthToken);
-	}
-
-	// In a React hook context, we can re-create it to ensure it has the latest `getToken` function.
-	// For this app's lifecycle, a singleton is likely fine, but this is safer.
-	return new HttpClient(API_BASE_URL, getAuthToken);
-};
-
-export const getApiClient = () => {
-	if (!_apiClientInstance) {
-		_apiClientInstance = new HttpClient(API_BASE_URL, async () => null);
-	}
-	return _apiClientInstance;
-};
+export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey, {
+	auth: {
+		storage: new LargeSecureStore(),
+		autoRefreshToken: true,
+		persistSession: true,
+		detectSessionInUrl: false,
+	},
+});

@@ -1,58 +1,48 @@
 import { Image } from "expo-image";
-import { openSettings } from "expo-linking";
+import type { ImagePickerAsset } from "expo-image-picker";
 import React from "react";
-import { Alert, StyleSheet, TouchableOpacity, View } from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { CarIcon, UploadIcon } from "@/components/icons";
 import { Badge } from "@/components/ui/badge";
 import { Text } from "@/components/ui/text";
-import { useErrorMessageTranslation, useTranslation } from "@/hooks";
-import { useImageUploader } from "@/lib/uploadthing";
+import {
+	useErrorMessageTranslation,
+	useImagePicker,
+	useTranslation,
+} from "@/hooks";
 import { cn } from "@/lib/utils";
 import { FieldError } from "../field-error";
 
 export interface BaseAvatarFieldProps {
-	value: { uri: string; mimeType: string; uploadedUrl?: string };
+	value: ImagePickerAsset | null;
 	size?: number;
 	error?: string;
 	label?: string;
 	onBlur: () => void;
-	onChange: (value: { uri: string; mimeType: string; uploadedUrl?: string }) => void;
+	isUploading?: boolean;
+	onChange: (value: ImagePickerAsset) => void;
 }
 
 const blurhash =
 	"|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[";
 
-const BaseAvatarField = React.forwardRef<React.ComponentRef<typeof TouchableOpacity>, BaseAvatarFieldProps>(
-	({ value, onChange, onBlur, error, size = 80, label, ...rest }, ref) => {
+const BaseAvatarField = React.forwardRef<
+	React.ComponentRef<typeof TouchableOpacity>,
+	BaseAvatarFieldProps
+>(
+	(
+		{ value, onChange, onBlur, error, size = 80, label, isUploading, ...rest },
+		ref,
+	) => {
 		const { t } = useTranslation();
+		const { handlePick } = useImagePicker();
 		const errorMessage = useErrorMessageTranslation(error);
 
-		const { openImagePicker, isUploading } = useImageUploader("avatarUploader", {
-			onClientUploadComplete: (res) => {
-				// When upload completes, store the uploaded URL
-				if (res?.[0]?.url) {
-					onChange({
-						uri: res[0].url, // Use the uploaded URL as the URI for display
-						uploadedUrl: res[0].url,
-						mimeType: res[0].type || "image/jpeg",
-					});
-				}
-			},
-			onUploadError: (error) => {
-				Alert.alert("Upload Error", error.message);
-			},
-		});
-
-		function handlePickImage() {
-			openImagePicker({
-				source: "library",
-				onInsufficientPermissions: () => {
-					Alert.alert("No Permissions", "You need to grant permission to your Photos", [
-						{ text: "Dismiss" },
-						{ text: "Open Settings", onPress: () => openSettings() },
-					]);
-				},
-			});
+		async function handlePickImage() {
+			const pickedImage = await handlePick();
+			if (pickedImage) {
+				onChange(pickedImage);
+			}
 		}
 
 		const hasValue = typeof value === "object" ? !!value?.uri : !!value;
@@ -72,7 +62,7 @@ const BaseAvatarField = React.forwardRef<React.ComponentRef<typeof TouchableOpac
 							/>
 						</View>
 						{/* Success indicator - only show when upload is complete */}
-						{value?.uploadedUrl && !isUploading && (
+						{value?.uri && (
 							<View className="absolute -top-1 -right-1">
 								<View className="w-6 h-6 bg-green-500 rounded-full items-center justify-center border-2 border-background">
 									<Text className="text-xs text-white font-bold">✓</Text>
@@ -99,7 +89,10 @@ const BaseAvatarField = React.forwardRef<React.ComponentRef<typeof TouchableOpac
 						error && "border-destructive bg-destructive/5",
 					)}
 				>
-					<CarIcon size={24} className={cn("text-muted-foreground", error && "text-destructive")} />
+					<CarIcon
+						size={24}
+						className={cn("text-muted-foreground", error && "text-destructive")}
+					/>
 				</View>
 			);
 		};
@@ -137,7 +130,11 @@ const BaseAvatarField = React.forwardRef<React.ComponentRef<typeof TouchableOpac
 									error && "text-destructive",
 								)}
 							>
-								{isUploading ? "Uploading..." : hasValue ? t("avatar:success_tip") : t("avatar:initial_tip")}
+								{isUploading
+									? "Uploading..."
+									: hasValue
+										? t("avatar:success_tip")
+										: t("avatar:initial_tip")}
 							</Text>
 							<Text className="text-sm text-muted-foreground">
 								{isUploading
@@ -161,7 +158,10 @@ const BaseAvatarField = React.forwardRef<React.ComponentRef<typeof TouchableOpac
 										error && "bg-destructive/10 border-destructive/20",
 									)}
 								>
-									<UploadIcon size={16} className={cn("text-primary", error && "text-destructive")} />
+									<UploadIcon
+										size={16}
+										className={cn("text-primary", error && "text-destructive")}
+									/>
 								</View>
 							)}
 						</View>

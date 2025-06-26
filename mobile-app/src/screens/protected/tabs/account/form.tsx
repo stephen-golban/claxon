@@ -5,7 +5,7 @@ import { View } from "react-native";
 import * as FormElements from "@/components/form-elements";
 import { useTranslation } from "@/hooks";
 import { APP_CONSTANTS } from "@/lib/constants";
-import type { User } from "@/services/api";
+import type { User } from "@/services/api-old";
 import { defaultValues, type ProfileFormData, resolver } from "./schema";
 
 interface ProfileFormProps {

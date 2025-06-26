@@ -5,7 +5,7 @@ import { toast } from "@/components/ui/toast";
 
 import { APP_CONSTANTS } from "@/lib/constants";
 import { ERROR_CODES } from "@/lib/constants/errors";
-import { useCreateUser } from "@/services/api";
+import { useCreateUser } from "@/services/api-old";
 import { useAppStore } from "@/stores/app";
 import type { SignUpFormData } from "./form/schema";
 

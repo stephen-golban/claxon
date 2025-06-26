@@ -6,7 +6,7 @@ import { OnboardingHeader } from "@/components/common/headers";
 import { WelcomeButtons, WelcomeIndicators, WelcomePager } from "./components";
 import { useWelcomeSlides } from "./constants";
 
-export default function OnboardingScreen() {
+export default function WelcomeScreen() {
 	const slides = useWelcomeSlides();
 	const [currentPage, setCurrentPage] = React.useState(0);
 
