@@ -3,16 +3,24 @@ import { FormProvider, useForm } from "react-hook-form";
 import { View } from "react-native";
 import * as FormElements from "@/components/form-elements";
 import { useTranslation } from "@/hooks";
-import { defaultValues, resolver, type SignUpFormData } from "./schema";
+import {
+	defaultValues,
+	type PersonalDetailsFormData,
+	resolver,
+} from "./schema";
 
-interface ISignUpForm {
-	onSubmit: (data: SignUpFormData) => void;
+interface IPersonalDetailsForm {
+	isUploading: boolean;
+	onSubmit: (data: PersonalDetailsFormData) => void;
 }
 
-const SignUpForm: React.FC<ISignUpForm> = ({ onSubmit }) => {
+const PersonalDetailsForm: React.FC<IPersonalDetailsForm> = ({
+	onSubmit,
+	isUploading,
+}) => {
 	const { t } = useTranslation();
 
-	const hook = useForm<SignUpFormData>({
+	const hook = useForm<PersonalDetailsFormData>({
 		resolver,
 		defaultValues,
 		mode: "onChange",
@@ -20,7 +28,7 @@ const SignUpForm: React.FC<ISignUpForm> = ({ onSubmit }) => {
 
 	const { control, handleSubmit, formState } = hook;
 
-	const prepareData = (dto: SignUpFormData) => {
+	const prepareData = (dto: PersonalDetailsFormData) => {
 		const cleaned = dto.phone.replace(/\s/g, "");
 		const phone = `+373${cleaned}`;
 		return onSubmit({ ...dto, phone });
@@ -88,10 +96,10 @@ const SignUpForm: React.FC<ISignUpForm> = ({ onSubmit }) => {
 			<FormElements.SubmitButton
 				isDisabled={!formState.isValid}
 				onSubmit={handleSubmit(prepareData)}
-				isSubmitting={formState.isSubmitting}
+				isSubmitting={formState.isSubmitting || isUploading}
 			/>
 		</FormProvider>
 	);
 };
 
-export default SignUpForm;
+export default PersonalDetailsForm;

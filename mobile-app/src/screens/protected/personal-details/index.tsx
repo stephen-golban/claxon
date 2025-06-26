@@ -1,39 +1,21 @@
-import React from "react";
-import { Modal } from "react-native";
 import { Container, KeyboardAware } from "@/components/common";
 import { useTranslation } from "@/hooks";
-import VerifyPhoneScreen from "../../unprotected/verify-phone";
-import SignUpForm from "./form";
-import useSignUpScreen from "./hook";
+import PersonalDetailsForm from "./form";
+import usePersonalDetailsScreen from "./hook";
 
-export default function SignUpScreen() {
+export default function PersonalDetailsScreen() {
 	const { t } = useTranslation();
-	const { onSubmit, verifying, phone, handleResendCode, handleVerification } =
-		useSignUpScreen();
+	const { onSubmit, isUploading } = usePersonalDetailsScreen();
 
 	return (
-		<>
-			<Container>
-				<KeyboardAware>
-					<Container.TopText
-						title={t("getStarted:signup:title")}
-						subtitle={t("getStarted:signup:subtitle")}
-					/>
-					<SignUpForm onSubmit={onSubmit} />
-				</KeyboardAware>
-			</Container>
-			<Modal
-				visible={verifying}
-				transparent
-				animationType="slide"
-				presentationStyle="overFullScreen"
-			>
-				<VerifyPhoneScreen
-					phone={phone}
-					onResend={handleResendCode}
-					onSubmit={handleVerification}
+		<Container>
+			<KeyboardAware>
+				<Container.TopText
+					title={t("getStarted:signup:title")}
+					subtitle={t("getStarted:signup:subtitle")}
 				/>
-			</Modal>
-		</>
+				<PersonalDetailsForm onSubmit={onSubmit} isUploading={isUploading} />
+			</KeyboardAware>
+		</Container>
 	);
 }

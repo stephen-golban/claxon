@@ -13,12 +13,15 @@ import { useCurrentUser, useUnreadClaxonCount } from "@/services/api-old";
 import { ProfileAvatar } from "../profile-avatar";
 import { ThemeSwitcher } from "../theme-switcher";
 
-const HeaderLeft = (_props: NativeStackHeaderLeftProps): ReactNode => {
+const HeaderLeft = (
+	_props: NativeStackHeaderLeftProps,
+	showBackButton: boolean = true,
+): ReactNode => {
 	const router = useRouter();
 
 	const canGoBack = router.canGoBack();
 
-	if (!canGoBack) {
+	if (!canGoBack || !showBackButton) {
 		return null;
 	}
 

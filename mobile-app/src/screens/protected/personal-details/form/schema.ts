@@ -36,7 +36,7 @@ const nameSchema = z
 		stringifyObjectValidate({ keyT: "errors:nameInvalidFormat" }),
 	);
 
-export const signUpSchema = z.object({
+export const personalDetailsSchema = z.object({
 	email: emailSchema,
 	phone: z
 		.string()
@@ -48,13 +48,10 @@ export const signUpSchema = z.object({
 	last_name: nameSchema,
 	dob: dobSchema,
 	image: z.object({
-		uri: z
-			.string()
-			.min(1, stringifyObjectValidate({ keyT: "errors:required" })),
+		path: z.string(),
+		arraybuffer: z.instanceof(ArrayBuffer),
 		mimeType: z.string(),
-		uploadedUrl: z
-			.string()
-			.min(1, stringifyObjectValidate({ keyT: "errors:required" })),
+		uri: z.string(),
 	}),
 	gender: z
 		.string()
@@ -67,15 +64,16 @@ export const signUpSchema = z.object({
 		),
 });
 
-export type SignUpFormData = z.infer<typeof signUpSchema>;
+export type PersonalDetailsFormData = z.infer<typeof personalDetailsSchema>;
 
-export const defaultValues: SignUpFormData = {
+export const defaultValues: PersonalDetailsFormData = {
 	email: "",
 	phone: "",
 	image: {
 		uri: "",
+		path: "",
 		mimeType: "",
-		uploadedUrl: "",
+		arraybuffer: new ArrayBuffer(0),
 	},
 	gender: "",
 	last_name: "",
@@ -84,4 +82,4 @@ export const defaultValues: SignUpFormData = {
 	termsAccepted: false,
 };
 
-export const resolver = zodResolver(signUpSchema);
+export const resolver = zodResolver(personalDetailsSchema);
