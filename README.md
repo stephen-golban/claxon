@@ -20,26 +20,23 @@ Manage personal and vehicle details, or adjust preferences anytime.
 
 ## 🔐 Unauthenticated User Flow
 
-1. Onboarding Slides (3 slides)
+1. Onboarding Slides (3 slides) [Slide1, Slide2, Slide3 (with a get started button)]
 
-   - Slide 1: What the app does
-   - Slide 2: Use cases (e.g., blocked driveway, compliments)
-   - Slide 3: No contact info, just license plates
+2. On the 3rd slide, the user can press the Get Started button
 
-2. Welcome Screen
-
-   - Choose to sign in or create an account screen
-   - If user chooses to sign in, they are redirected to the sign in screen (only with phone number input)
-   - If user chooses to create an account, they are redirected to the sign up screen (with the following fields: phone, avatar, first and last name, email, gender, date of birth)
+   - Once user presses the Get Started button, they are redirected to the get-staretd screen (only with phone number input)
 
 3. OTP verification screen
 
-   - wrapped with a context provider so that this screen has access to clerk's auth state
-   - on OTP verification success, user is redirected to the post-auth welcome screen
+   - on OTP verification success, user is redirected to the post-auth personal details screen
 
-4. Post-auth Welcome Screen
-   - Option 1: 🔍 Explore the app (no car needed)
-   - Option 2: 🚘 Register your car (optional but recommended)
+4. Post-auth Personal Details Screen (only shown if user has not filled in their personal details)
+
+   - User can fill in their personal details (avatar, first and last name, email, gender, date of birth)
+
+5. Post-auth Welcome Screen
+
+   - User can choose to explore the app or register their car
 
 ## ✅ Authenticated App Flow
 
@@ -75,15 +72,18 @@ After login, user lands in a tab-based navigation interface.
 
 ## 🔔 Push Notification Overview
 
-On login, the user’s device push token is saved in the profiles table
+When a message is sent to a plate, the claxon is saved in the claxons table.
 
-When a message is sent to a plate, the alert is saved in the alerts table
+The recipient receives an Expo push notification.
 
-The recipient receives an Expo push notification
+The recipient can view the claxon in the inbox.
 
-🧠 Behavior Summary
-Car registration is optional, but required to receive alerts
+The recipient can view the claxon in the my cars screen.
 
-Messages are all template-based, ensuring safe and uniform communication
+## 🧠 Behavior Summary
 
-App is designed for speed, privacy, and simplicity
+Car registration is optional, but required to receive claxons
+
+Messages are all template-based or custom, ensuring safe and uniform communication
+
+App is designed for speed, privacy, and simplicity.

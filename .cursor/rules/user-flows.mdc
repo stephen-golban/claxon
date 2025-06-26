@@ -1,0 +1,108 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# 🔄 Claxon User Flows
+
+## Unauthenticated User Journey
+
+### 1. Onboarding Flow
+**Route**: [`app/(unprotected)/index.tsx`](mdc:app/(unprotected)/index.tsx)
+- **Screen**: Welcome slides (3 slides)
+- **Component**: [src/screens/unprotected/welcome/](mdc:src/screens/unprotected/welcome)
+- **Flow**: Slide1 → Slide2 → Slide3 (with "Get Started" button)
+
+### 2. Phone Registration
+**Route**: [`app/(unprotected)/get-started.tsx`](mdc:app/(unprotected)/get-started.tsx)
+- **Screen**: Phone number input only
+- **Component**: [src/screens/unprotected/get-started/](mdc:src/screens/unprotected/get-started)
+- **Form**: Phone validation with country code support
+
+### 3. OTP Verification
+**Route**: [`app/(unprotected)/verify.tsx`](mdc:app/(unprotected)/verify.tsx)
+- **Screen**: OTP input and verification
+- **Component**: [src/screens/unprotected/verify-phone/](mdc:src/screens/unprotected/verify-phone)
+- **Features**: Resend OTP functionality
+- **Success**: Redirects to personal details
+
+### 4. Post-Auth Setup
+**Route**: [`app/(protected)/personal-details.tsx`](mdc:app/(protected)/personal-details.tsx)
+- **Screen**: Profile completion (first-time only)
+- **Fields**: Avatar, name, email, gender, date of birth
+- **Component**: [src/screens/protected/personal-details/](mdc:src/screens/protected/personal-details)
+
+### 5. Welcome Screen
+**Route**: [`app/(protected)/index.tsx`](mdc:app/(protected)/index.tsx)
+- **Screen**: Post-auth welcome
+- **Options**: Explore app or register car
+- **Component**: [src/screens/protected/welcome/](mdc:src/screens/protected/welcome)
+
+## Authenticated User Flows
+
+### Tab Navigation Structure
+**Layout**: [`app/(protected)/tabs/_layout.tsx`](mdc:app/(protected)/tabs/_layout.tsx)
+
+### 1. Search Tab (Main Functionality)
+**Route**: [`app/(protected)/tabs/index.tsx`](mdc:app/(protected)/tabs/index.tsx)
+- **Purpose**: License plate search and messaging
+- **Component**: [src/screens/protected/tabs/search/](mdc:src/screens/protected/tabs/search)
+- **Flow**:
+  1. Enter license plate number
+  2. Search for registered vehicle
+  3. If found → Select predefined message
+  4. Send claxon (notification to owner)
+- **Features**: Multi-language message templates
+
+### 2. Inbox Tab
+**Route**: [`app/(protected)/tabs/inbox.tsx`](mdc:app/(protected)/tabs/inbox.tsx)
+- **Purpose**: View received messages/alerts
+- **Component**: [src/screens/protected/tabs/inbox/](mdc:src/screens/protected/tabs/inbox)
+- **States**:
+  - **No car registered**: Show CTA to register vehicle
+  - **Car registered**: Display list of received claxons
+- **Features**: Message history, notification details
+
+### 3. My Cars Tab
+**Route**: [`app/(protected)/tabs/my-cars.tsx`](mdc:app/(protected)/tabs/my-cars.tsx)
+- **Purpose**: Vehicle management
+- **Component**: [src/screens/protected/tabs/my-cars/](mdc:src/screens/protected/tabs/my-cars)
+- **States**:
+  - **No cars**: Show CTA to register first vehicle
+  - **Cars registered**: List with details (plate, brand, model, color, VIN, year)
+- **Actions**: Add, edit, delete vehicles
+
+### 4. Account Tab
+**Route**: [`app/(protected)/tabs/account.tsx`](mdc:app/(protected)/tabs/account.tsx)
+- **Purpose**: Profile and settings management
+- **Component**: [src/screens/protected/tabs/account/](mdc:src/screens/protected/tabs/account)
+- **Sections**:
+  - **Personal Details**: Avatar, name, email, gender, DOB (editable)
+  - **Preferences**: Language, theme, push notification settings
+  - **Actions**: Sign out
+
+## Key User Behaviors
+
+### Car Registration (Optional but Important)
+- **Required for**: Receiving claxons/notifications
+- **Benefits**: Get notified when someone messages your plate
+- **Data**: License plate, vehicle details (brand, model, color, etc.)
+
+### Messaging System
+- **Template-based**: Predefined safe messages only
+- **Multi-language**: Romanian, Russian, English support
+- **Privacy-focused**: No contact info exchange
+- **Notification**: Expo push notifications to recipients
+
+### Push Notification Flow
+1. User sends claxon to a license plate
+2. System saves claxon in database
+3. If plate is registered → Send Expo push notification
+4. Recipient sees notification and can view in inbox
+5. Recipient can view claxon details in my cars section
+
+## Navigation Patterns
+- **File-based routing**: Expo Router with route groups
+- **Protected routes**: Auth guard in layout
+- **Tab navigation**: Bottom tabs for main app sections
+- **Modal navigation**: For forms and detailed views

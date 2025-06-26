@@ -3,188 +3,85 @@ description:
 globs: 
 alwaysApply: true
 ---
-# Development Guidelines
+# 🛠️ Claxon Development Guidelines
 
-## 🎯 Code Quality Standards
+## Core Principles
+- **Privacy First**: No contact info sharing, template-based messaging only
+- **Speed & Simplicity**: Fast license plate lookup and messaging
+- **Multi-language Support**: Romanian, Russian, English support
+- **Moldova-Specific**: License plate formats and regional considerations
 
-### Backend ([backend/](mdc:backend))
-- **Linting**: Biome for code formatting and linting
-- **Commands**: 
-  - `bun run lint` - Lint and auto-fix
-  - `bun run format` - Format code
-  - `bun run check` - Combined lint + format
-- **Config**: [backend/biome.json](mdc:backend/biome.json)
+## Development Standards
 
-### Mobile App ([mobile-app/](mdc:mobile-app))
-- **Linting**: Biome for TypeScript/JavaScript
-- **Config**: [mobile-app/biome.json](mdc:mobile-app/biome.json)
-- **Styling**: TailwindCSS with consistent class usage
+### TypeScript Usage
+- All files must use TypeScript with proper typing
+- Database types defined in [src/typings/database.ts](mdc:src/typings/database.ts)
+- Vehicle types in [src/typings/vehicle.ts](mdc:src/typings/vehicle.ts)
+- Validation schemas using Zod in `schema.ts` files
 
-## 🏗️ Architecture Patterns
+### Form Handling
+- Use React Hook Form for all forms
+- Validation schemas with Zod
+- Form components in [src/components/form-elements/](mdc:src/components/form-elements)
+- Pattern: Base component + Controller wrapper
 
-### NestJS Backend Patterns
-- **Modules**: Feature-based module organization
-- **Controllers**: Thin controllers, business logic in services
-- **DTOs**: Zod schemas for validation
-- **Guards**: Authentication and authorization
-- **Interceptors**: Response transformation and logging
+### Styling Guidelines
+- Use NativeWind (Tailwind CSS for React Native)
+- Consistent theme defined in [src/lib/constants/theme.ts](mdc:src/lib/constants/theme.ts)
+- Dark/light mode support via [src/hooks/use-color-scheme.ts](mdc:src/hooks/use-color-scheme.ts)
+- UI components in [src/components/ui/](mdc:src/components/ui)
 
-### React Native Patterns
-- **Components**: Functional components with hooks
-- **State**: Zustand for global state, local state with useState
-- **Forms**: React Hook Form + Zod validation
-- **API**: Custom hooks for data fetching
-- **Navigation**: Expo Router with typed routes
+### State Management
+- Zustand for global state ([src/stores/](mdc:src/stores))
+- TanStack Query for server state ([src/providers/tanstack.tsx](mdc:src/providers/tanstack.tsx))
+- Local state with React hooks
 
-## 📝 Naming Conventions
+### API Integration
+- Supabase client in [src/services/api/client.ts](mdc:src/services/api/client.ts)
+- API functions organized by domain (auth, accounts, etc.)
+- Error handling with translated messages
 
-### Files and Directories
-- **Components**: PascalCase for component files (`UserProfile.tsx`)
-- **Hooks**: camelCase with `use` prefix (`useUserProfile.ts`)
-- **Utilities**: camelCase (`formatDate.ts`)
-- **Constants**: UPPER_SNAKE_CASE (`API_ENDPOINTS.ts`)
-- **Types**: PascalCase (`UserProfile.types.ts`)
+### License Plate System
+- Moldova-specific plate formats and validation
+- Visual plate picker component in [src/components/common/license-plate-picker/](mdc:src/components/common/license-plate-picker)
+- Plate images in [assets/images/plates/](mdc:assets/images/plates)
+- Support for different vehicle types and special plates
 
-### Code Conventions
-- **Variables**: camelCase (`userName`, `isLoading`)
-- **Functions**: camelCase (`getUserProfile`, `handleSubmit`)
-- **Classes**: PascalCase (`UserService`, `AuthGuard`)
-- **Interfaces**: PascalCase with `I` prefix (`IUserRepository`)
-- **Types**: PascalCase (`UserProfile`, `ApiResponse`)
+### Internationalization
+- Translation files in [src/translations/locales/](mdc:src/translations/locales)
+- Hook: [src/hooks/use-translation.ts](mdc:src/hooks/use-translation.ts)
+- Support for Romanian (ro), Russian (ru), and English (en)
 
-## 🗃️ Database Guidelines
+### Authentication Flow
+- Phone-based authentication via Clerk
+- Protected routes with auth guards
+- Post-auth profile completion flow
+- Session management in providers
 
-### Schema Design ([mobile-app/src/db/schema.ts](mdc:mobile-app/src/db/schema.ts))
-- **Primary Keys**: Use UUIDs for all entities
-- **Foreign Keys**: Proper cascade deletion setup
-- **Indexes**: Add indexes for frequently queried fields
-- **Timestamps**: Always include `createdAt` and `updatedAt`
-- **Soft Deletes**: Use `isActive` boolean instead of hard deletes
+### Push Notifications
+- Expo push notifications for claxon alerts
+- Notification preferences in account settings
+- Integration with inbox functionality
 
-### Query Patterns
-- **Relations**: Use Drizzle's `with` for eager loading
-- **Pagination**: Implement cursor-based pagination for large datasets
-- **Filtering**: Use proper WHERE clauses with indexes
-- **Transactions**: Wrap multi-table operations in transactions
+## File Naming Conventions
+- Components: PascalCase (`MyComponent.tsx`)
+- Hooks: camelCase starting with `use` (`useMyHook.ts`)
+- Utilities: camelCase (`myUtility.ts`)
+- Constants: SCREAMING_SNAKE_CASE
+- Schemas: `schema.ts` for validation schemas
 
-## 🔐 Security Best Practices
-
-### Authentication
-- **Clerk Integration**: Use Clerk for all authentication
-- **Token Validation**: Always validate JWT tokens server-side
-- **Authorization**: Implement role-based access control
-- **Session Management**: Proper session handling and cleanup
-
-### Data Protection
-- **Input Validation**: Validate all inputs with Zod schemas
-- **SQL Injection**: Use parameterized queries (Drizzle handles this)
-- **XSS Prevention**: Sanitize user inputs
-- **Rate Limiting**: Implement rate limiting on API endpoints
-
-## 📱 Mobile App Guidelines
-
-### Component Structure
+## Component Structure
 ```typescript
 // Component file structure
-interface Props {
-  // Type all props
-}
-
-export function ComponentName({ prop1, prop2 }: Props) {
-  // Hooks at the top
-  const [state, setState] = useState();
-  const { data } = useQuery();
-  
-  // Event handlers
-  const handleEvent = useCallback(() => {
-    // Handler logic
-  }, [dependencies]);
-  
-  // Early returns for loading/error states
-  if (loading) return <LoadingSpinner />;
-  if (error) return <ErrorScreen />;
-  
-  // Main render
-  return (
-    <View>
-      {/* Component JSX */}
-    </View>
-  );
+export default function ComponentName() {
+  // 1. Hooks and state
+  // 2. Event handlers
+  // 3. Effects
+  // 4. Render logic
 }
 ```
 
-### Form Handling
-- **Validation**: Always use Zod schemas
-- **Error Handling**: Display field-specific errors
-- **Loading States**: Show loading during submission
-- **Success Feedback**: Provide user feedback on success
-
-### API Integration
-- **Custom Hooks**: Create reusable API hooks
-- **Error Handling**: Consistent error handling patterns
-- **Loading States**: Manage loading states properly
-- **Caching**: Implement appropriate caching strategies
-
-## 🧪 Testing Strategy
-
-### Backend Testing
-- **Unit Tests**: Test services and utilities
-- **Integration Tests**: Test controllers with database
-- **E2E Tests**: Test complete API workflows
-- **Mocking**: Mock external dependencies
-
-### Mobile App Testing
-- **Component Tests**: Test component rendering and interactions
-- **Hook Tests**: Test custom hooks in isolation
-- **Integration Tests**: Test screen flows
-- **E2E Tests**: Test complete user journeys
-
-## 🚀 Performance Guidelines
-
-### Backend Performance
-- **Database**: Optimize queries with proper indexes
-- **Caching**: Implement Redis caching for frequent queries
-- **Pagination**: Use cursor-based pagination
-- **Compression**: Enable gzip compression
-
-### Mobile App Performance
-- **Images**: Use Expo Image for optimized image handling
-- **Lists**: Use FlatList for large datasets
-- **Lazy Loading**: Load screens and components lazily
-- **Bundle Size**: Monitor and optimize bundle size
-
-## 🔄 Git Workflow
-
-### Branch Naming
-- `feature/feature-name` - New features
-- `fix/bug-description` - Bug fixes
-- `refactor/component-name` - Code refactoring
-- `docs/update-readme` - Documentation updates
-
-### Commit Messages
-- Use conventional commits format
-- `feat: add user profile management`
-- `fix: resolve authentication redirect issue`
-- `refactor: improve database query performance`
-- `docs: update API documentation`
-
-### Pull Requests
-- **Title**: Clear, descriptive title
-- **Description**: Explain what and why
-- **Testing**: Include testing instructions
-- **Screenshots**: For UI changes
-- **Breaking Changes**: Clearly document breaking changes
-
-## 📦 Dependency Management
-
-### Backend Dependencies
-- **Production**: Keep production dependencies minimal
-- **Development**: Use dev dependencies for tools
-- **Updates**: Regular security updates
-- **Audit**: Run security audits regularly
-
-### Mobile App Dependencies
-- **Expo**: Use Expo SDK compatible versions
-- **Native**: Minimize native dependencies
-- **Bundle Impact**: Consider bundle size impact
-- **Compatibility**: Ensure iOS/Android compatibility
+## Error Handling
+- Use error boundaries for React errors
+- Translated error messages via [src/hooks/use-error-message-translation.ts](mdc:src/hooks/use-error-message-translation.ts)
+- Consistent error UI components

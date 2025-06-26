@@ -1,0 +1,68 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# 📂 Claxon App Structure Guide
+
+## Expo Router File-Based Routing
+
+### Route Groups
+- **`(protected)/`**: Authenticated user routes requiring login
+- **`(unprotected)/`**: Public routes for onboarding and authentication
+
+### Main App Structure
+```
+app/
+├── _layout.tsx                 # Root layout with providers
+├── (protected)/
+│   ├── _layout.tsx            # Protected layout with auth guards
+│   ├── index.tsx              # Welcome screen after auth
+│   ├── personal-details.tsx   # Post-auth profile setup
+│   └── tabs/                  # Tab navigation
+│       ├── _layout.tsx        # Tab bar layout
+│       ├── index.tsx          # Search tab (main functionality)
+│       ├── inbox.tsx          # Messages/notifications tab
+│       ├── my-cars.tsx        # Vehicle management tab
+│       └── account.tsx        # Profile & settings tab
+└── (unprotected)/
+    ├── _layout.tsx            # Unprotected layout
+    ├── index.tsx              # Onboarding slides
+    ├── get-started.tsx        # Phone number input
+    └── verify.tsx             # OTP verification
+```
+
+## Component Organization
+
+### UI Components ([src/components/ui/](mdc:src/components/ui))
+- Base UI components (Button, Input, Card, etc.)
+- Styled with NativeWind/Tailwind CSS
+
+### Form Elements ([src/components/form-elements/](mdc:src/components/form-elements))
+- Specialized form components with validation
+- License plate picker, phone input, avatar selector
+- All use React Hook Form integration
+
+### Common Components ([src/components/common/](mdc:src/components/common))
+- Reusable app-specific components
+- Headers, containers, loading states, tab bar
+
+### Icons ([src/components/icons/](mdc:src/components/icons))
+- SVG icons and flag components
+- Country flags for license plates
+
+## Screen Components
+
+### Protected Screens ([src/screens/protected/](mdc:src/screens/protected))
+- Corresponds to protected routes in `app/(protected)/`
+- Each screen has its own folder with components, forms, and hooks
+
+### Unprotected Screens ([src/screens/unprotected/](mdc:src/screens/unprotected))
+- Onboarding and authentication screens
+- Welcome flow, phone verification, terms acceptance
+
+## Key Patterns
+- Each screen folder contains: `index.tsx`, `schema.ts` (validation), `hook.ts` (logic)
+- Form components are separated into base components and controller wrappers
+- Consistent use of TypeScript for type safety
+- Modular component structure for reusability
