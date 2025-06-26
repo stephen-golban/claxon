@@ -1,8 +1,19 @@
 import "dotenv/config";
 import env from "@fastify/env";
+import multipart from "@fastify/multipart";
+import cors from "@fastify/cors";
+import helmet from "@fastify/helmet";
 import Fastify from "fastify";
-import { clerkClient, clerkPlugin, getAuth } from "@clerk/fastify";
+import { clerkPlugin } from "@clerk/fastify";
 import { type Level, createLogger } from "./utils/logger";
+import { errorHandler } from "./utils/errors";
+import { healthRoutes } from "./routes/health";
+import { usersRoutes } from "./routes/users";
+import { vehiclesRoutes } from "./routes/vehicles";
+import { claxonTemplatesRoutes } from "./routes/claxon-templates";
+import { claxonsRoutes } from "./routes/claxons";
+import { createRouteHandler } from "uploadthing/fastify";
+import { uploadRouter } from "./routes/uploadthing";
 
 const schema = {
 	type: "object",
@@ -11,7 +22,7 @@ const schema = {
 		"DATABASE_URL",
 		"CLERK_PUBLISHABLE_KEY",
 		"CLERK_SECRET_KEY",
-		"UPLOADTHING_SECRET",
+		"UPLOADTHING_TOKEN",
 	],
 	properties: {
 		PORT: {
@@ -27,7 +38,7 @@ const schema = {
 		CLERK_SECRET_KEY: {
 			type: "string",
 		},
-		UPLOADTHING_SECRET: {
+		UPLOADTHING_TOKEN: {
 			type: "string",
 		},
 		PINO_LOG_LEVEL: {
@@ -53,7 +64,7 @@ declare module "fastify" {
 			DATABASE_URL: string;
 			CLERK_PUBLISHABLE_KEY: string;
 			CLERK_SECRET_KEY: string;
-			UPLOADTHING_SECRET: string;
+			UPLOADTHING_TOKEN: string;
 			PINO_LOG_LEVEL: string;
 			NODE_ENV: string;
 		};
@@ -72,54 +83,55 @@ export const createServer = async () => {
 		logger: true,
 	});
 
+	// Register global error handler
+	fastify.setErrorHandler(errorHandler);
+
 	await fastify.register(env, options).after();
+
+	// Register security plugins
+	await fastify.register(helmet, {
+		contentSecurityPolicy: false, // Disable CSP for API
+	});
+
+	await fastify.register(cors, {
+		origin: (origin, callback) => {
+			// Allow requests with no origin (mobile apps, curl, etc.)
+			if (!origin) return callback(null, true);
+			
+			// In production, you'd want to validate allowed origins
+			const allowedOrigins = [
+				"http://localhost:3000",
+				"http://localhost:8081", // Expo dev server
+				"exp://localhost:8081", // Expo dev server
+			];
+			
+			if (process.env.NODE_ENV === "production") {
+				// Add your production domains here
+				// allowedOrigins.push("https://yourdomain.com");
+			}
+			
+			return callback(null, true); // Allow all origins for now
+		},
+		credentials: true,
+	});
+
+	// Register multipart plugin for file uploads
+	await fastify.register(multipart);
 
 	// Register Clerk plugin
 	await fastify.register(clerkPlugin);
 
-	fastify.get("/ping", (request, reply) => {
-		reply.send({ message: "pong" });
+	// Register UploadThing routes (must be before other routes to avoid conflicts)
+	await fastify.register(createRouteHandler, {
+		router: uploadRouter,
 	});
 
-	// Protected route example
-	fastify.get("/protected", async (request, reply) => {
-		try {
-			const { userId } = getAuth(request);
-
-			if (!userId) {
-				return reply.code(401).send({ error: "User not authenticated" });
-			}
-
-			const user = await clerkClient.users.getUser(userId);
-
-			return reply.send({
-				message: "User retrieved successfully",
-				user,
-			});
-		} catch (error) {
-			fastify.log.error(error);
-			return reply.code(500).send({ error: "Failed to retrieve user" });
-		}
-	});
-
-	// Get current user info
-	fastify.get("/me", async (request, reply) => {
-		try {
-			const { userId, sessionId } = getAuth(request);
-
-			if (!userId) {
-				return reply.code(401).send({ error: "User not authenticated" });
-			}
-
-			return reply.send({
-				userId,
-				sessionId,
-			});
-		} catch (error) {
-			fastify.log.error(error);
-			return reply.code(500).send({ error: "Failed to get user info" });
-		}
-	});
+	// Register route handlers
+	await fastify.register(healthRoutes);
+	await fastify.register(usersRoutes);
+	await fastify.register(vehiclesRoutes);
+	await fastify.register(claxonTemplatesRoutes);
+	await fastify.register(claxonsRoutes);
 
 	return fastify;
 };
