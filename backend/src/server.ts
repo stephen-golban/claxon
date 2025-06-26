@@ -1,6 +1,7 @@
+import "dotenv/config";
 import env from "@fastify/env";
-import dotenv from "dotenv";
 import Fastify from "fastify";
+import { clerkClient, clerkPlugin, getAuth } from "@clerk/fastify";
 import { type Level, createLogger } from "./utils/logger";
 
 const schema = {
@@ -59,7 +60,6 @@ declare module "fastify" {
 	}
 }
 
-dotenv.config();
 
 const level = process.env.PINO_LOG_LEVEL as Level;
 const isDev = process.env.NODE_ENV === "development";
@@ -74,8 +74,51 @@ export const createServer = async () => {
 
 	await fastify.register(env, options).after();
 
+	// Register Clerk plugin
+	await fastify.register(clerkPlugin);
+
 	fastify.get("/ping", (request, reply) => {
 		reply.send({ message: "pong" });
+	});
+
+	// Protected route example
+	fastify.get("/protected", async (request, reply) => {
+		try {
+			const { userId } = getAuth(request);
+
+			if (!userId) {
+				return reply.code(401).send({ error: "User not authenticated" });
+			}
+
+			const user = await clerkClient.users.getUser(userId);
+
+			return reply.send({
+				message: "User retrieved successfully",
+				user,
+			});
+		} catch (error) {
+			fastify.log.error(error);
+			return reply.code(500).send({ error: "Failed to retrieve user" });
+		}
+	});
+
+	// Get current user info
+	fastify.get("/me", async (request, reply) => {
+		try {
+			const { userId, sessionId } = getAuth(request);
+
+			if (!userId) {
+				return reply.code(401).send({ error: "User not authenticated" });
+			}
+
+			return reply.send({
+				userId,
+				sessionId,
+			});
+		} catch (error) {
+			fastify.log.error(error);
+			return reply.code(500).send({ error: "Failed to get user info" });
+		}
 	});
 
 	return fastify;
