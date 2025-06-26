@@ -80,9 +80,13 @@ export class ClaxonsService {
 			.values(newClaxon)
 			.returning();
 
+		if (!createdClaxon) {
+			throw new Error("Failed to create claxon");
+		}
+
 		// Fetch the complete claxon with relations for response
 		const completeClaxon = await db.query.claxons.findFirst({
-			where: eq(claxons.id, createdClaxon?.id),
+			where: eq(claxons.id, createdClaxon.id),
 			with: {
 				sender: {
 					columns: {

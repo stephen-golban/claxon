@@ -41,9 +41,6 @@
 				}
 			]
 		],
-		"web": {
-			"output": "server"
-		},
 		"experiments": {
 			"typedRoutes": true
 		}

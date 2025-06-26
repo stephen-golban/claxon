@@ -47,15 +47,15 @@ export const signUpSchema = z.object({
 	first_name: nameSchema,
 	last_name: nameSchema,
 	dob: dobSchema,
-	// image: z.object({
-	// 	uri: z
-	// 		.string()
-	// 		.min(1, stringifyObjectValidate({ keyT: "errors:required" })),
-	// 	mimeType: z.string(),
-	// 	uploadedUrl: z
-	// 		.string()
-	// 		.min(1, stringifyObjectValidate({ keyT: "errors:required" })),
-	// }),
+	image: z.object({
+		uri: z
+			.string()
+			.min(1, stringifyObjectValidate({ keyT: "errors:required" })),
+		mimeType: z.string(),
+		uploadedUrl: z
+			.string()
+			.min(1, stringifyObjectValidate({ keyT: "errors:required" })),
+	}),
 	gender: z
 		.string()
 		.min(1, stringifyObjectValidate({ keyT: "errors:genderRequired" })),
@@ -72,11 +72,11 @@ export type SignUpFormData = z.infer<typeof signUpSchema>;
 export const defaultValues: SignUpFormData = {
 	email: "",
 	phone: "",
-	// image: {
-	// 	uri: "",
-	// 	mimeType: "",
-	// 	uploadedUrl: "",
-	// },
+	image: {
+		uri: "",
+		mimeType: "",
+		uploadedUrl: "",
+	},
 	gender: "",
 	last_name: "",
 	first_name: "",

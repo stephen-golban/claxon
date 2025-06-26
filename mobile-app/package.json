@@ -11,7 +11,6 @@
 		"clean": "rm -rf .expo && rm -rf node_modules && rm -rf bun.lock && bun install"
 	},
 	"dependencies": {
-		"@clerk/backend": "^2.2.0",
 		"@clerk/clerk-expo": "^2.13.1",
 		"@expo-google-fonts/nunito": "^0.4.1",
 		"@gorhom/bottom-sheet": "^5.1.6",
@@ -27,7 +26,6 @@
 		"@rn-primitives/slot": "^1.2.0",
 		"@rn-primitives/switch": "^1.2.0",
 		"@tanstack/react-query": "^5.81.2",
-		"@uploadthing/expo": "^7.2.5",
 		"class-variance-authority": "^0.7.1",
 		"clsx": "^2.1.1",
 		"dayjs": "^1.11.13",
@@ -69,7 +67,6 @@
 		"react-native-svg": "15.11.2",
 		"react-native-toast-message": "^2.3.0",
 		"tailwind-merge": "^3.3.1",
-		"uploadthing": "^7.7.3",
 		"zod": "^3.25.67",
 		"zustand": "^5.0.5"
 	},

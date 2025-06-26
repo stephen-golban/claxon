@@ -30,10 +30,10 @@ const BaseAvatarField = React.forwardRef<React.ComponentRef<typeof TouchableOpac
 		const { openImagePicker, isUploading } = useImageUploader("avatarUploader", {
 			onClientUploadComplete: (res) => {
 				// When upload completes, store the uploaded URL
-				if (res?.[0]?.ufsUrl) {
+				if (res?.[0]?.url) {
 					onChange({
-						uri: res[0].ufsUrl, // Use the uploaded URL as the URI for display
-						uploadedUrl: res[0].ufsUrl,
+						uri: res[0].url, // Use the uploaded URL as the URI for display
+						uploadedUrl: res[0].url,
 						mimeType: res[0].type || "image/jpeg",
 					});
 				}

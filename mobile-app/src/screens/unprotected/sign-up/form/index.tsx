@@ -72,9 +72,9 @@ const SignUpForm: React.FC<ISignUpForm> = ({ onSubmit }) => {
 					<View>
 						<FormElements.DatePickerField control={hook.control} name="dob" />
 					</View>
-					{/* <View>
+					<View>
 						<FormElements.AvatarField name="image" control={hook.control} />
-					</View> */}
+					</View>
 					<View>
 						<FormElements.TermsAcceptanceField
 							control={hook.control}

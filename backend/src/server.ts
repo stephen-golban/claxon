@@ -5,11 +5,9 @@ import env from "@fastify/env";
 import helmet from "@fastify/helmet";
 import multipart from "@fastify/multipart";
 import Fastify from "fastify";
-import { createRouteHandler } from "uploadthing/fastify";
 import { claxonTemplatesRoutes } from "./routes/claxon-templates";
 import { claxonsRoutes } from "./routes/claxons";
 import { healthRoutes } from "./routes/health";
-import { uploadRouter } from "./routes/uploadthing";
 import { usersRoutes } from "./routes/users";
 import { vehiclesRoutes } from "./routes/vehicles";
 import { errorHandler } from "./utils/errors";
@@ -22,7 +20,6 @@ const schema = {
 		"DATABASE_URL",
 		"CLERK_PUBLISHABLE_KEY",
 		"CLERK_SECRET_KEY",
-		"UPLOADTHING_TOKEN",
 	],
 	properties: {
 		PORT: {
@@ -36,9 +33,6 @@ const schema = {
 			type: "string",
 		},
 		CLERK_SECRET_KEY: {
-			type: "string",
-		},
-		UPLOADTHING_TOKEN: {
 			type: "string",
 		},
 		PINO_LOG_LEVEL: {
@@ -64,7 +58,6 @@ declare module "fastify" {
 			DATABASE_URL: string;
 			CLERK_PUBLISHABLE_KEY: string;
 			CLERK_SECRET_KEY: string;
-			UPLOADTHING_TOKEN: string;
 			PINO_LOG_LEVEL: string;
 			NODE_ENV: string;
 		};
@@ -119,11 +112,6 @@ export const createServer = async () => {
 
 	// Register Clerk plugin
 	await fastify.register(clerkPlugin);
-
-	// Register UploadThing routes (must be before other routes to avoid conflicts)
-	await fastify.register(createRouteHandler, {
-		router: uploadRouter,
-	});
 
 	// Register route handlers
 	await fastify.register(healthRoutes);

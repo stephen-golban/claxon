@@ -5,8 +5,7 @@ export const { useImageUploader, uploadFiles } =
 	generateReactNativeHelpers<UploadThingRouter>({
 		/**
 		 * Your server url.
-		 * @default process.env.EXPO_PUBLIC_API_BASE_URL
-		 * @remarks In dev we will also try to use Expo.debuggerHost
+		 * @remarks Points to the Expo API route for UploadThing
 		 */
-		url: process.env.EXPO_PUBLIC_API_BASE_URL,
+		url: process.env.EXPO_PUBLIC_SERVER_URL || "http://localhost:8081",
 	});

@@ -65,7 +65,7 @@ export default function useSignUpScreen() {
 							gender: data.gender || "",
 							clerkId: signUpAttempt.createdUserId || "",
 							language: language || APP_CONSTANTS.DEFAULT_LANGUAGE,
-							avatarUrl: "",
+							avatarUrl: data.image.uploadedUrl,
 							privacySettings: JSON.stringify({}),
 							isPhonePublic: true,
 							lastName: data.last_name || "",
@@ -78,6 +78,11 @@ export default function useSignUpScreen() {
 								await setActive({ session: signUpAttempt.createdSessionId });
 								setVerifying(false);
 								router.replace("/(protected)");
+							},
+							onError: async (error) => {
+								console.error("Failed to create user:", error);
+								await setActive({ session: null });
+								toast.error(ERROR_CODES.USER_CREATION_FAILED);
 							},
 						},
 					);

@@ -24,7 +24,7 @@ export default function useSignInScreen() {
 	};
 
 	const onSubmit = async (data: SignInFormData) => {
-		if (!isLoaded && !signIn) return null;
+		if (!isLoaded && !signIn) return;
 
 		try {
 			setPhone(data.phone);
@@ -54,7 +54,7 @@ export default function useSignInScreen() {
 	};
 
 	async function handleVerification(code: string) {
-		if (!isLoaded && !signIn) return null;
+		if (!isLoaded && !signIn) return;
 
 		try {
 			// Use the code provided by the user and attempt verification
@@ -74,7 +74,7 @@ export default function useSignInScreen() {
 	}
 
 	const handleResendCode = async () => {
-		if (!isLoaded && !signIn) return null;
+		if (!isLoaded && !signIn) return;
 		try {
 			await onSubmit({ phone });
 		} catch (err) {

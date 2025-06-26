@@ -12,13 +12,7 @@ export type UploadThingRouter = {
 		input: undefined;
 		output: {
 			uploadedBy: string;
-		};
-		errorShape: Json;
-	}>;
-	imageUploader: FileRoute<{
-		input: undefined;
-		output: {
-			uploadedBy: string;
+			url: string;
 		};
 		errorShape: Json;
 	}>;
