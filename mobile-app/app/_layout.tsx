@@ -1,5 +1,9 @@
 import { useAuth } from "@clerk/clerk-expo";
-import { Nunito_400Regular, Nunito_700Bold, useFonts } from "@expo-google-fonts/nunito";
+import {
+	Nunito_400Regular,
+	Nunito_700Bold,
+	useFonts,
+} from "@expo-google-fonts/nunito";
 import { Stack, usePathname, useRouter, useSegments } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import React from "react";
@@ -16,7 +20,10 @@ SplashScreen.preventAutoHideAsync().catch(() => {});
 
 export default function RootLayout() {
 	const currentLanguage = useAppStore((state) => state.language);
-	const [loaded, error] = useFonts({ Nunito: Nunito_400Regular, Nunito_Bold: Nunito_700Bold });
+	const [loaded, error] = useFonts({
+		Nunito: Nunito_400Regular,
+		Nunito_Bold: Nunito_700Bold,
+	});
 
 	const { isReady, handleLayoutReady } = useAppInit({
 		dependencies: [loaded],
@@ -32,7 +39,11 @@ export default function RootLayout() {
 			{!isReady ? (
 				<CustomSplashScreen shouldFadeOut />
 			) : (
-				<Animated.View entering={FadeIn.duration(300)} style={{ flex: 1 }} onLayout={handleLayoutReady}>
+				<Animated.View
+					entering={FadeIn.duration(300)}
+					style={{ flex: 1 }}
+					onLayout={handleLayoutReady}
+				>
 					<RootLayoutNav />
 				</Animated.View>
 			)}
@@ -46,13 +57,10 @@ const RootLayoutNav = () => {
 	const segments = useSegments();
 	const { isSignedIn, isLoaded } = useAuth();
 
-	const inProtectedRoute = segments[0] === "(protected)" || pathname.includes("/(protected)");
+	const inProtectedRoute =
+		segments[0] === "(protected)" || pathname.includes("/(protected)");
 
-	if (!isLoaded) {
-		return null;
-	}
-
-	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+	// biome-ignore lint/correctness/useExhaustiveDependencies: we need to check if the user is signed in and if they are in a protected route
 	React.useEffect(() => {
 		if (!isLoaded) return;
 
@@ -62,6 +70,10 @@ const RootLayoutNav = () => {
 			router.replace("/");
 		}
 	}, [isSignedIn, isLoaded, inProtectedRoute]);
+
+	if (!isLoaded) {
+		return null;
+	}
 
 	return <Stack screenOptions={{ headerShown: false }} />;
 };
