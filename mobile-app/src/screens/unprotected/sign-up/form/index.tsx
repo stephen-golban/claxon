@@ -12,7 +12,11 @@ interface ISignUpForm {
 const SignUpForm: React.FC<ISignUpForm> = ({ onSubmit }) => {
 	const { t } = useTranslation();
 
-	const hook = useForm<SignUpFormData>({ resolver, defaultValues, mode: "onChange" });
+	const hook = useForm<SignUpFormData>({
+		resolver,
+		defaultValues,
+		mode: "onChange",
+	});
 
 	const { control, handleSubmit, formState } = hook;
 
@@ -37,12 +41,20 @@ const SignUpForm: React.FC<ISignUpForm> = ({ onSubmit }) => {
 						/>
 					</View>
 					<View className="flex-1">
-						<FormElements.TextField control={hook.control} name="last_name" placeholder={t("placeholders:lastName")} />
+						<FormElements.TextField
+							control={hook.control}
+							name="last_name"
+							placeholder={t("placeholders:lastName")}
+						/>
 					</View>
 				</View>
 				<View className="gap-y-4 flex-1">
 					<View>
-						<FormElements.EmailField control={hook.control} name="email" placeholder={t("placeholders:email")} />
+						<FormElements.EmailField
+							control={hook.control}
+							name="email"
+							placeholder={t("placeholders:email")}
+						/>
 					</View>
 
 					<View>
@@ -60,11 +72,15 @@ const SignUpForm: React.FC<ISignUpForm> = ({ onSubmit }) => {
 					<View>
 						<FormElements.DatePickerField control={hook.control} name="dob" />
 					</View>
-					<View>
+					{/* <View>
 						<FormElements.AvatarField name="image" control={hook.control} />
-					</View>
+					</View> */}
 					<View>
-						<FormElements.TermsAcceptanceField control={hook.control} name="termsAccepted" type="signup" />
+						<FormElements.TermsAcceptanceField
+							control={hook.control}
+							name="termsAccepted"
+							type="signup"
+						/>
 					</View>
 				</View>
 			</View>

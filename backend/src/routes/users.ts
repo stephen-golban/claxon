@@ -18,7 +18,6 @@ import { validateBody, validateParams } from "../utils/validation";
 // Validation schemas
 const createUserBodySchema = insertUserSchema.omit({
 	id: true,
-	clerkId: true,
 	createdAt: true,
 	updatedAt: true,
 });
@@ -46,20 +45,25 @@ export async function usersRoutes(fastify: FastifyInstance) {
 		}),
 	);
 
-	// POST /users - Create user profile
+	// POST /users - Create user profile (no auth required for sign-up)
 	fastify.post(
 		"/users",
 		{
 			preHandler: [
-				requireAuth,
 				validateBody(createUserBodySchema as unknown as AnyZodObject),
 			],
 		},
 		createRouteHandler(async (request, reply) => {
-			const userId = getCurrentUserId(request);
 			const createUserDto = request.body as unknown as NewUser;
 
-			const user = await usersService.create(createUserDto, userId);
+			// Extract clerkId from the request body
+			const clerkId = createUserDto.clerkId;
+
+			if (!clerkId) {
+				throw new Error("clerkId is required");
+			}
+
+			const user = await usersService.create(createUserDto, clerkId);
 			successResponse(reply, user, "User created successfully", 201);
 		}),
 	);

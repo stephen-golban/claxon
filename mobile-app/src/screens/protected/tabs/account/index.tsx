@@ -4,10 +4,22 @@ import React, { useState } from "react";
 import { Alert, ScrollView, View } from "react-native";
 import { Container } from "@/components/common";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle,
+} from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Text } from "@/components/ui/text";
-import { useCurrentUser, useDeleteUser, useTranslation, useUpdateUser } from "@/hooks";
+import { useTranslation } from "@/hooks";
+import {
+	type User,
+	useCurrentUser,
+	useDeleteUser,
+	useUpdateUser,
+} from "@/services/api";
 import { ProfileForm } from "./form";
 import type { ProfileFormData } from "./schema";
 
@@ -64,28 +76,32 @@ export function AccountTab() {
 	};
 
 	const handleDeleteAccount = () => {
-		Alert.alert("Delete Account", "This action cannot be undone. Are you sure you want to delete your account?", [
-			{ text: "Cancel", style: "cancel" },
-			{
-				text: "Delete",
-				style: "destructive",
-				onPress: async () => {
-					if (!userId) {
-						Alert.alert("Error", "User not authenticated");
-						return;
-					}
+		Alert.alert(
+			"Delete Account",
+			"This action cannot be undone. Are you sure you want to delete your account?",
+			[
+				{ text: "Cancel", style: "cancel" },
+				{
+					text: "Delete",
+					style: "destructive",
+					onPress: async () => {
+						if (!userId) {
+							Alert.alert("Error", "User not authenticated");
+							return;
+						}
 
-					try {
-						await deleteUserMutation.mutateAsync();
-						await signOut();
-						router.replace("/");
-					} catch (error) {
-						console.error("Account deletion error:", error);
-						Alert.alert("Error", "Failed to delete account");
-					}
+						try {
+							await deleteUserMutation.mutateAsync();
+							await signOut();
+							router.replace("/");
+						} catch (error) {
+							console.error("Account deletion error:", error);
+							Alert.alert("Error", "Failed to delete account");
+						}
+					},
 				},
-			},
-		]);
+			],
+		);
 	};
 
 	// Show loading state while fetching user data
@@ -103,14 +119,21 @@ export function AccountTab() {
 	if (isEditing) {
 		return (
 			<Container>
-				<Container.TopText title="Edit Profile" subtitle="Update your personal information" />
+				<Container.TopText
+					title="Edit Profile"
+					subtitle="Update your personal information"
+				/>
 				<ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
 					<ProfileForm
 						onSubmit={handleSaveProfile}
 						isLoading={updateUserMutation.isPending}
-						initialData={user as UserType}
+						initialData={user as User}
 					/>
-					<Button variant="outline" onPress={() => setIsEditing(false)} className="mt-4">
+					<Button
+						variant="outline"
+						onPress={() => setIsEditing(false)}
+						className="mt-4"
+					>
 						<Text>Cancel</Text>
 					</Button>
 				</ScrollView>
@@ -120,7 +143,10 @@ export function AccountTab() {
 
 	return (
 		<Container>
-			<Container.TopText title="Account" subtitle="Manage your profile and preferences" />
+			<Container.TopText
+				title="Account"
+				subtitle="Manage your profile and preferences"
+			/>
 
 			<ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
 				<View className="gap-y-6">
@@ -128,22 +154,33 @@ export function AccountTab() {
 					<Card>
 						<CardHeader>
 							<CardTitle>Profile Information</CardTitle>
-							<CardDescription>Your personal details and preferences</CardDescription>
+							<CardDescription>
+								Your personal details and preferences
+							</CardDescription>
 						</CardHeader>
 						<CardContent className="gap-y-4">
 							<View className="flex-row items-center justify-between">
 								<View className="flex-1">
 									<Text className="font-medium">
-										{user?.first_name && user?.last_name ? `${user.first_name} ${user.last_name}` : "No name set"}
+										{user?.firstName && user?.lastName
+											? `${user.firstName} ${user.lastName}`
+											: "No name set"}
 									</Text>
-									<Text className="text-sm text-muted-foreground">{user?.email || "No email set"}</Text>
+									<Text className="text-sm text-muted-foreground">
+										{user?.email || "No email set"}
+									</Text>
 									<Text className="text-sm text-muted-foreground">
 										{user?.gender && user?.dob
 											? `${user.gender} • Born ${new Date(user.dob).getFullYear()}`
 											: "Personal details not set"}
 									</Text>
 									<Text className="text-sm text-muted-foreground">
-										Language: {user?.language === "ro" ? "Romanian" : user?.language === "ru" ? "Russian" : "English"}
+										Language:{" "}
+										{user?.language === "ro"
+											? "Romanian"
+											: user?.language === "ru"
+												? "Russian"
+												: "English"}
 									</Text>
 								</View>
 							</View>
@@ -157,21 +194,29 @@ export function AccountTab() {
 					<Card>
 						<CardHeader>
 							<CardTitle>Privacy Settings</CardTitle>
-							<CardDescription>Control your privacy and data sharing</CardDescription>
+							<CardDescription>
+								Control your privacy and data sharing
+							</CardDescription>
 						</CardHeader>
 						<CardContent className="gap-y-4">
 							<View className="flex-row items-center justify-between">
 								<View className="flex-1">
 									<Text className="font-medium">Share Phone Number</Text>
-									<Text className="text-sm text-muted-foreground">Allow other users to see your phone number</Text>
+									<Text className="text-sm text-muted-foreground">
+										Allow other users to see your phone number
+									</Text>
 								</View>
-								<Text className="text-sm text-muted-foreground">{user?.is_phone_public ? "Enabled" : "Disabled"}</Text>
+								<Text className="text-sm text-muted-foreground">
+									{user?.isPhonePublic ? "Enabled" : "Disabled"}
+								</Text>
 							</View>
 							<Separator />
 							<View className="flex-row items-center justify-between">
 								<View className="flex-1">
 									<Text className="font-medium">Notification Preferences</Text>
-									<Text className="text-sm text-muted-foreground">Manage how you receive notifications</Text>
+									<Text className="text-sm text-muted-foreground">
+										Manage how you receive notifications
+									</Text>
 								</View>
 								<Button variant="outline" size="sm">
 									<Text>Configure</Text>
@@ -190,17 +235,23 @@ export function AccountTab() {
 							<View className="flex-row justify-between">
 								<View className="flex-1 items-center">
 									<Text className="text-2xl font-bold">0</Text>
-									<Text className="text-sm text-muted-foreground">Registered Cars</Text>
+									<Text className="text-sm text-muted-foreground">
+										Registered Cars
+									</Text>
 								</View>
 								<Separator orientation="vertical" className="mx-4" />
 								<View className="flex-1 items-center">
 									<Text className="text-2xl font-bold">0</Text>
-									<Text className="text-sm text-muted-foreground">Claxons Sent</Text>
+									<Text className="text-sm text-muted-foreground">
+										Claxons Sent
+									</Text>
 								</View>
 								<Separator orientation="vertical" className="mx-4" />
 								<View className="flex-1 items-center">
 									<Text className="text-2xl font-bold">0</Text>
-									<Text className="text-sm text-muted-foreground">Claxons Received</Text>
+									<Text className="text-sm text-muted-foreground">
+										Claxons Received
+									</Text>
 								</View>
 							</View>
 						</CardContent>

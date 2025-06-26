@@ -1,4 +1,7 @@
-import type { NativeStackHeaderLeftProps, NativeStackHeaderRightProps } from "@react-navigation/native-stack";
+import type {
+	NativeStackHeaderLeftProps,
+	NativeStackHeaderRightProps,
+} from "@react-navigation/native-stack";
 import { useRouter } from "expo-router";
 import type { ReactNode } from "react";
 import type { StyleProp, TextStyle } from "react-native";
@@ -6,7 +9,7 @@ import { View } from "react-native";
 import { BellIcon, MoveLeftIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Text } from "@/components/ui/text";
-import { useCurrentUser, useUnreadClaxonCount } from "@/hooks";
+import { useCurrentUser, useUnreadClaxonCount } from "@/services/api";
 import { ProfileAvatar } from "../profile-avatar";
 import { ThemeSwitcher } from "../theme-switcher";
 
@@ -20,7 +23,12 @@ const HeaderLeft = (_props: NativeStackHeaderLeftProps): ReactNode => {
 	}
 
 	return (
-		<Button size="icon" variant="ghost" onPress={() => router.back()} className="active:bg-transparent my-4">
+		<Button
+			size="icon"
+			variant="ghost"
+			onPress={() => router.back()}
+			className="active:bg-transparent my-4"
+		>
 			<MoveLeftIcon className="text-primary" size={24} />
 		</Button>
 	);
@@ -43,7 +51,12 @@ const HeaderRight = (_props: NativeStackHeaderRightProps): ReactNode => {
 	return (
 		<View className="flex-row items-center gap-3 py-4">
 			<ThemeSwitcher />
-			<Button size="icon" variant="ghost" onPress={() => {}} className="active:bg-transparent relative">
+			<Button
+				size="icon"
+				variant="ghost"
+				onPress={() => {}}
+				className="active:bg-transparent relative"
+			>
 				<BellIcon className="text-primary" size={24} />
 				{unreadCount && unreadCount.count > 0 && (
 					<View className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full items-center justify-center">

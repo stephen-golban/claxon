@@ -1,4 +1,3 @@
-export * from "./use-api";
 export * from "./use-app-init";
 export * from "./use-color-scheme";
 export * from "./use-effect-hooks";

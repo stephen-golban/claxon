@@ -3,33 +3,37 @@ import { FormProvider, useForm } from "react-hook-form";
 import { View } from "react-native";
 
 import * as FormElements from "@/components/form-elements";
-import type { UserType } from "@/convex/schema";
 import { useTranslation } from "@/hooks";
 import { APP_CONSTANTS } from "@/lib/constants";
+import type { User } from "@/services/api";
 import { defaultValues, type ProfileFormData, resolver } from "./schema";
 
 interface ProfileFormProps {
 	onSubmit: (data: ProfileFormData) => void;
 	isLoading?: boolean;
-	initialData?: UserType;
+	initialData?: User;
 }
 
-export function ProfileForm({ onSubmit, isLoading = false, initialData }: ProfileFormProps) {
+export function ProfileForm({
+	onSubmit,
+	isLoading = false,
+	initialData,
+}: ProfileFormProps) {
 	const { t } = useTranslation();
 
 	// Use current user data if available, otherwise fall back to default values
 	const formDefaultValues: ProfileFormData = initialData
 		? {
-				first_name: initialData.first_name || "",
-				last_name: initialData.last_name || "",
+				first_name: initialData.firstName || "",
+				last_name: initialData.lastName || "",
 				email: initialData.email || "",
 				dob: initialData.dob ? new Date(initialData.dob) : undefined,
-				gender: initialData.gender,
-				share_phone: initialData.is_phone_public,
+				gender: initialData.gender ?? undefined,
+				share_phone: initialData.isPhonePublic ?? undefined,
 				language: initialData.language as "ro" | "en" | "ru" | undefined,
-				avatar: initialData.avatar_url
+				avatar: initialData.avatarUrl
 					? {
-							uri: initialData.avatar_url,
+							uri: initialData.avatarUrl,
 							path: "",
 							mimeType: "",
 							arraybuffer: new ArrayBuffer(0),
@@ -68,14 +72,26 @@ export function ProfileForm({ onSubmit, isLoading = false, initialData }: Profil
 				<View className="gap-y-4">
 					<View className="flex-row items-start gap-x-4">
 						<View className="flex-1">
-							<FormElements.TextField control={control} name="first_name" placeholder={t("placeholders:firstName")} />
+							<FormElements.TextField
+								control={control}
+								name="first_name"
+								placeholder={t("placeholders:firstName")}
+							/>
 						</View>
 						<View className="flex-1">
-							<FormElements.TextField control={control} name="last_name" placeholder={t("placeholders:lastName")} />
+							<FormElements.TextField
+								control={control}
+								name="last_name"
+								placeholder={t("placeholders:lastName")}
+							/>
 						</View>
 					</View>
 
-					<FormElements.EmailField control={control} name="email" placeholder={t("placeholders:email")} />
+					<FormElements.EmailField
+						control={control}
+						name="email"
+						placeholder={t("placeholders:email")}
+					/>
 
 					<View className="flex-row items-start gap-x-4">
 						<View className="flex-1">

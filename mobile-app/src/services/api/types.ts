@@ -1,3 +1,49 @@
+/**
+ * This file consolidates all API-related type definitions for the application.
+ * It includes types for API responses, pagination, query parameters, and
+ * the data models for Users, Vehicles, Claxons, and ClaxonTemplates.
+ */
+
+// ============================================================================
+// API GENERIC RESPONSE TYPES
+// ============================================================================
+
+export interface ApiResponse<T = unknown> {
+	success: boolean;
+	data?: T;
+	error?: string;
+	message?: string;
+}
+
+export interface PaginatedResponse<T = unknown> extends ApiResponse<T> {
+	pagination?: {
+		total: number;
+		limit: number;
+		offset: number;
+	};
+}
+
+// ============================================================================
+// API-SPECIFIC PARAMETER TYPES
+// ============================================================================
+
+export interface ClaxonPaginationParams {
+	limit?: number;
+	offset?: number;
+	read?: string;
+	type?: string;
+	senderLanguage?: string;
+}
+
+export interface ClaxonTemplateParams {
+	category?: string;
+	language?: string;
+}
+
+// ============================================================================
+// DATA MODEL TYPES (from api.d.ts)
+// ============================================================================
+
 // Users Schema Types
 export type User = {
 	id: string;
@@ -18,7 +64,6 @@ export type User = {
 };
 
 export type NewUser = {
-	id: string;
 	phone: string;
 	email: string;
 	clerkId: string;
@@ -31,8 +76,6 @@ export type NewUser = {
 	privacySettings?: string | null;
 	isPhonePublic?: boolean | null;
 	notificationPreferences?: string | null;
-	createdAt?: Date;
-	updatedAt?: Date;
 };
 
 export type UpdateUser = {

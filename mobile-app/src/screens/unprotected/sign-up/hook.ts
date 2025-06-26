@@ -3,9 +3,9 @@ import { useRouter } from "expo-router";
 import { useState } from "react";
 import { toast } from "@/components/ui/toast";
 
-import { useCreateUser } from "@/hooks";
 import { APP_CONSTANTS } from "@/lib/constants";
 import { ERROR_CODES } from "@/lib/constants/errors";
+import { useCreateUser } from "@/services/api";
 import { useAppStore } from "@/stores/app";
 import type { SignUpFormData } from "./form/schema";
 
@@ -58,23 +58,29 @@ export default function useSignUpScreen() {
 			if (signUpAttempt.status === "complete") {
 				try {
 					// Create the user with avatar URL if available
-					await createUserMutation.mutateAsync({
-						phone: data.phone,
-						email: data.email,
-						gender: data.gender,
-						language: language || APP_CONSTANTS.DEFAULT_LANGUAGE,
-						avatarUrl: data.image?.uploadedUrl || null, // Use uploaded URL from form or null
-						privacySettings: JSON.stringify({}),
-						isPhonePublic: true,
-						lastName: data.last_name,
-						firstName: data.first_name,
-						notificationPreferences: JSON.stringify({}),
-						dob: data.dob?.toISOString() || "",
-					});
-
-					await setActive({ session: signUpAttempt.createdSessionId });
-					setVerifying(false);
-					router.replace("/(protected)");
+					await createUserMutation.mutateAsync(
+						{
+							phone: data.phone || "",
+							email: data.email || "",
+							gender: data.gender || "",
+							clerkId: signUpAttempt.createdUserId || "",
+							language: language || APP_CONSTANTS.DEFAULT_LANGUAGE,
+							avatarUrl: "",
+							privacySettings: JSON.stringify({}),
+							isPhonePublic: true,
+							lastName: data.last_name || "",
+							firstName: data.first_name || "",
+							notificationPreferences: JSON.stringify({}),
+							dob: data.dob?.toISOString() || "",
+						},
+						{
+							onSuccess: async () => {
+								await setActive({ session: signUpAttempt.createdSessionId });
+								setVerifying(false);
+								router.replace("/(protected)");
+							},
+						},
+					);
 				} catch (error) {
 					console.error("Failed to create user:", error);
 					toast.error(ERROR_CODES.USER_CREATION_FAILED);
