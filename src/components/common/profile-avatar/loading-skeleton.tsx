@@ -4,11 +4,11 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { SKELETON_CLASSES } from "./util";
 
 const LoadingSkeleton = memo(() => (
-  <Avatar alt="Profile Avatar">
-    <AvatarFallback>
-      <Skeleton className={SKELETON_CLASSES} />
-    </AvatarFallback>
-  </Avatar>
+	<Avatar alt="Profile Avatar">
+		<AvatarFallback>
+			<Skeleton className={SKELETON_CLASSES} />
+		</AvatarFallback>
+	</Avatar>
 ));
 
 LoadingSkeleton.displayName = "LoadingSkeleton";

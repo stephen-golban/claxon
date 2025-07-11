@@ -1,4 +1,8 @@
-import { Nunito_400Regular, Nunito_700Bold, useFonts } from "@expo-google-fonts/nunito";
+import {
+	Nunito_400Regular,
+	Nunito_700Bold,
+	useFonts,
+} from "@expo-google-fonts/nunito";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import React from "react";
@@ -14,45 +18,49 @@ export { ErrorBoundary } from "expo-router";
 SplashScreen.preventAutoHideAsync().catch(() => {});
 
 export default function RootLayout() {
-  const currentLanguage = useAppStore((state) => state.language);
-  const [loaded, error] = useFonts({
-    Nunito: Nunito_400Regular,
-    Nunito_Bold: Nunito_700Bold,
-  });
+	const currentLanguage = useAppStore((state) => state.language);
+	const [loaded, error] = useFonts({
+		Nunito: Nunito_400Regular,
+		Nunito_Bold: Nunito_700Bold,
+	});
 
-  const { isReady, handleLayoutReady } = useAppInit({
-    dependencies: [loaded],
-    initializationTasks: [() => initI18n(currentLanguage)],
-  });
+	const { isReady, handleLayoutReady } = useAppInit({
+		dependencies: [loaded],
+		initializationTasks: [() => initI18n(currentLanguage)],
+	});
 
-  React.useEffect(() => {
-    if (error) throw error;
-  }, [error]);
+	React.useEffect(() => {
+		if (error) throw error;
+	}, [error]);
 
-  return (
-    <AppProviders>
-      {!isReady ? (
-        <CustomSplashScreen shouldFadeOut />
-      ) : (
-        <Animated.View entering={FadeIn.duration(300)} style={{ flex: 1 }} onLayout={handleLayoutReady}>
-          <RootLayoutNav />
-        </Animated.View>
-      )}
-    </AppProviders>
-  );
+	return (
+		<AppProviders>
+			{!isReady ? (
+				<CustomSplashScreen shouldFadeOut />
+			) : (
+				<Animated.View
+					entering={FadeIn.duration(300)}
+					style={{ flex: 1 }}
+					onLayout={handleLayoutReady}
+				>
+					<RootLayoutNav />
+				</Animated.View>
+			)}
+		</AppProviders>
+	);
 }
 
 const RootLayoutNav = () => {
-  const isAuthenticated = useAppStore((state) => state.isAuthenticated);
+	const isAuthenticated = useAppStore((state) => state.isAuthenticated);
 
-  return (
-    <Stack screenOptions={{ headerShown: false }}>
-      <Stack.Protected guard={isAuthenticated}>
-        <Stack.Screen name="(protected)" />
-      </Stack.Protected>
-      <Stack.Protected guard={!isAuthenticated}>
-        <Stack.Screen name="(unprotected)" />
-      </Stack.Protected>
-    </Stack>
-  );
+	return (
+		<Stack screenOptions={{ headerShown: false }}>
+			<Stack.Protected guard={isAuthenticated}>
+				<Stack.Screen name="(protected)" />
+			</Stack.Protected>
+			<Stack.Protected guard={!isAuthenticated}>
+				<Stack.Screen name="(unprotected)" />
+			</Stack.Protected>
+		</Stack>
+	);
 };
