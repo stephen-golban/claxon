@@ -9,61 +9,56 @@ import { ThemeSwitcher } from "../theme-switcher";
 
 // Configuration for header visibility
 const HEADER_CONFIG = {
-	HIDE_GO_BACK: new Set(["/verify"]),
+  HIDE_GO_BACK: new Set(["/verify"]),
 } as const;
 
 const getGoBackShouldHide = (pathname: string): boolean => {
-	return HEADER_CONFIG.HIDE_GO_BACK.has(pathname);
+  return HEADER_CONFIG.HIDE_GO_BACK.has(pathname);
 };
 
 const HeaderLeft = memo(() => {
-	const router = useRouter();
-	const pathname = usePathname();
+  const router = useRouter();
+  const pathname = usePathname();
 
-	const shouldShow = useMemo(() => {
-		return router.canGoBack() && !getGoBackShouldHide(pathname);
-	}, [router, pathname]);
+  const shouldShow = useMemo(() => {
+    return router.canGoBack() && !getGoBackShouldHide(pathname);
+  }, [router, pathname]);
 
-	if (!shouldShow) {
-		return null;
-	}
+  if (!shouldShow) {
+    return null;
+  }
 
-	return (
-		<Button
-			size="icon"
-			variant="ghost"
-			onPress={() => router.back()}
-			className="my-3 items-start"
-		>
-			<MoveLeftIcon className="text-primary" size={24} />
-		</Button>
-	);
+  return (
+    <Button size="icon" variant="ghost" onPress={() => router.back()} className="my-3 items-start">
+      <MoveLeftIcon className="text-primary" size={24} />
+    </Button>
+  );
 });
 
 const headerTitleStyle: StyleProp<
-	Pick<TextStyle, "fontFamily" | "fontSize" | "fontWeight"> & {
-		color?: string;
-	}
+  Pick<TextStyle, "fontFamily" | "fontSize" | "fontWeight"> & {
+    color?: string;
+  }
 > = {
-	color: "transparent",
+  color: "transparent",
 };
 
 const headerBackground = () => <View className="bg-background" />;
 
 const HeaderRight = memo((_props: NativeStackHeaderRightProps): ReactNode => {
-	return (
-		<View className="flex-row items-center gap-x-4 py-3">
-			{/* <LanguageSwitcher /> */}
-			<ThemeSwitcher />
-		</View>
-	);
+  return (
+    <View className="flex-row items-center gap-x-4 py-3">
+      {/* <LanguageSwitcher /> */}
+      <ThemeSwitcher />
+    </View>
+  );
 });
 
 export const getUnprotectedHeader = () => {
-	return {
-		headerLeft: () => <HeaderLeft />,
-		headerRight: () => <HeaderRight />,
-		headerTitleStyle,
-		headerBackground,
-	};
+  return {
+    headerLeft: () => <HeaderLeft />,
+    headerRight: () => <HeaderRight />,
+    headerTitleStyle,
+    headerBackground,
+  };
 };

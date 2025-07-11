@@ -3,14 +3,14 @@ import { getProtectedHeader } from "@/components/common/headers/protected";
 import { useAppStore } from "@/stores/app";
 
 export default function ProtectedLayout() {
-	const pathname = usePathname();
-	const header = getProtectedHeader(pathname);
+  const pathname = usePathname();
+  const header = getProtectedHeader(pathname);
 
-	const isAuthenticated = useAppStore((state) => state.isAuthenticated);
+  const isAuthenticated = useAppStore((state) => state.isAuthenticated);
 
-	if (!isAuthenticated) {
-		return <Redirect href="/(unprotected)" />;
-	}
+  if (!isAuthenticated) {
+    return <Redirect href="/(unprotected)" />;
+  }
 
-	return <Stack screenOptions={header} />;
+  return <Stack screenOptions={header} />;
 }

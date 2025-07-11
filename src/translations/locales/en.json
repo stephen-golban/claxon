@@ -1,254 +1,254 @@
 {
-	"language": {
-		"en": "English",
-		"ro": "Romanian",
-		"ru": "Russian",
-		"languageTitle": "Choose language",
-		"languageDescription": "You can choose the language and customise your application in the language you want"
-	},
+  "language": {
+    "en": "English",
+    "ro": "Romanian",
+    "ru": "Russian",
+    "languageTitle": "Choose language",
+    "languageDescription": "You can choose the language and customise your application in the language you want"
+  },
 
-	"theme": {
-		"themeTitle": "Choose Theme",
-		"themeDescription": "Personalize your experience by choosing a theme and mode.",
-		"mode": "Mode",
-		"theme": "Theme",
-		"purple": "Purple",
-		"blue": "Blue",
-		"gold": "Gold"
-	},
-	"options": {
-		"color": {
-			"WHI": "White",
-			"BLK": "Black",
-			"GRY": "Gray",
-			"SIL": "Silver/Aluminum",
-			"BLU": "Blue",
-			"RED": "Red",
-			"GRN": "Green",
-			"YEL": "Yellow",
-			"ONG": "Orange",
-			"PNK": "Pink",
-			"PUR": "Purple",
-			"BRZ": "Bronze",
-			"BGE": "Beige",
-			"MAR": "Burgundy (Maroon)",
-			"CAM": "Camouflage",
-			"MUL": "Multicolored",
-			"CRM": "Cream/Ivory"
-		},
-		"plateTypes": {
-			"standard_current": "Standard model",
-			"standard_old_four": "Old 4 letter model",
-			"standard_old_three": "Old 3 letter model",
-			"standard_neutral": "Neutral",
-			"transnistria": "Transnistria",
-			"cd_diplomatic": "Diplomatic corp",
-			"presidential": "Presidential",
-			"government": "Government",
-			"fa": "Armed Forces",
-			"police": "MAI",
-			"carabinieri": "MIC",
-			"border_control": "DG",
-			"temporary": "Temporary",
-			"transit": "Transit"
-		},
-		"gender": {
-			"male": "Male",
-			"female": "Female"
-		}
-	},
+  "theme": {
+    "themeTitle": "Choose Theme",
+    "themeDescription": "Personalize your experience by choosing a theme and mode.",
+    "mode": "Mode",
+    "theme": "Theme",
+    "purple": "Purple",
+    "blue": "Blue",
+    "gold": "Gold"
+  },
+  "options": {
+    "color": {
+      "WHI": "White",
+      "BLK": "Black",
+      "GRY": "Gray",
+      "SIL": "Silver/Aluminum",
+      "BLU": "Blue",
+      "RED": "Red",
+      "GRN": "Green",
+      "YEL": "Yellow",
+      "ONG": "Orange",
+      "PNK": "Pink",
+      "PUR": "Purple",
+      "BRZ": "Bronze",
+      "BGE": "Beige",
+      "MAR": "Burgundy (Maroon)",
+      "CAM": "Camouflage",
+      "MUL": "Multicolored",
+      "CRM": "Cream/Ivory"
+    },
+    "plateTypes": {
+      "standard_current": "Standard model",
+      "standard_old_four": "Old 4 letter model",
+      "standard_old_three": "Old 3 letter model",
+      "standard_neutral": "Neutral",
+      "transnistria": "Transnistria",
+      "cd_diplomatic": "Diplomatic corp",
+      "presidential": "Presidential",
+      "government": "Government",
+      "fa": "Armed Forces",
+      "police": "MAI",
+      "carabinieri": "MIC",
+      "border_control": "DG",
+      "temporary": "Temporary",
+      "transit": "Transit"
+    },
+    "gender": {
+      "male": "Male",
+      "female": "Female"
+    }
+  },
 
-	"avatar": {
-		"initial_tip": "Tap to upload",
-		"initial_tip2": "Upload a photo of your car",
-		"change_tip": "Tap to change",
-		"change_tip2": "Change your car photo",
-		"success_tip": "Car photo added"
-	},
+  "avatar": {
+    "initial_tip": "Tap to upload",
+    "initial_tip2": "Upload a photo of your car",
+    "change_tip": "Tap to change",
+    "change_tip2": "Change your car photo",
+    "success_tip": "Car photo added"
+  },
 
-	"labels": {
-		"firstName": "First Name",
-		"lastName": "Last Name",
-		"email": "Email",
-		"avatar": "Car Photo",
-		"dob": "Date of Birth",
-		"gender": "Gender",
-		"password": "Password",
-		"confirmPassword": "Confirm Password",
-		"phone": "Phone",
-		"plateType": "License Plate Type",
-		"selectColor": "Select a color"
-	},
+  "labels": {
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "email": "Email",
+    "avatar": "Car Photo",
+    "dob": "Date of Birth",
+    "gender": "Gender",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "phone": "Phone",
+    "plateType": "License Plate Type",
+    "selectColor": "Select a color"
+  },
 
-	"placeholders": {
-		"firstName": "Your first name",
-		"lastName": "Your last name",
-		"gender": "Select your gender",
-		"dob": "Select your date of birth",
-		"phone": "Enter your phone number",
-		"email": "Enter your email address",
-		"password": "Enter your password",
-		"confirmPassword": "Confirm your password",
-		"brand": "Brand",
-		"model": "Model",
-		"manufactureYear": "Year of Manufacture",
-		"color": "Color",
-		"plateNumber": "License Plate Number",
-		"vinCode": "Vehicle Identification Number (VIN)"
-	},
+  "placeholders": {
+    "firstName": "Your first name",
+    "lastName": "Your last name",
+    "gender": "Select your gender",
+    "dob": "Select your date of birth",
+    "phone": "Enter your phone number",
+    "email": "Enter your email address",
+    "password": "Enter your password",
+    "confirmPassword": "Confirm your password",
+    "brand": "Brand",
+    "model": "Model",
+    "manufactureYear": "Year of Manufacture",
+    "color": "Color",
+    "plateNumber": "License Plate Number",
+    "vinCode": "Vehicle Identification Number (VIN)"
+  },
 
-	"buttons": {
-		"signup": "Sign Up",
-		"signin": "Sign In",
-		"log_in": "Log In",
-		"confirm": "Confirm",
-		"search": "Search",
-		"continue": "Continue",
-		"change": "Change",
-		"cancel": "Cancel",
-		"back": "Back",
-		"next": "Next",
-		"done": "Done"
-	},
+  "buttons": {
+    "signup": "Sign Up",
+    "signin": "Sign In",
+    "log_in": "Log In",
+    "confirm": "Confirm",
+    "search": "Search",
+    "continue": "Continue",
+    "change": "Change",
+    "cancel": "Cancel",
+    "back": "Back",
+    "next": "Next",
+    "done": "Done"
+  },
 
-	"errors": {
-		"notFound": "No results found",
-		"required": "This field is required",
-		"passwordMatch": "Passwords do not match",
-		"min": "Insert at least {{min}} characters",
-		"invalid": "This field is not properly formatted",
-		"invalidPhoneFormat": "Phone number must be in format: XXX XX XXX",
-		"numbersOnly": "This field must contain numbers only",
+  "errors": {
+    "notFound": "No results found",
+    "required": "This field is required",
+    "passwordMatch": "Passwords do not match",
+    "min": "Insert at least {{min}} characters",
+    "invalid": "This field is not properly formatted",
+    "invalidPhoneFormat": "Phone number must be in format: XXX XX XXX",
+    "numbersOnly": "This field must contain numbers only",
 
-		"noVehiclesFound": "No vehicles found for the current user",
-		"countryCodeRequired": "Country code is required",
-		"phoneNumberRequired": "Phone number is required",
-		"phoneNumberFormat": "Phone number must be in format: XXX XX XXX",
-		"profileCreationTimeout": "Profile creation timeout.",
-		"userNotFound": "User not found",
-		"invalidEmail": "Please enter a valid email",
-		"firstNameRequired": "First name is required",
-		"lastNameRequired": "Last name is required",
-		"nameRequired": "Name is required",
-		"nameInvalidFormat": "Name can only contain letters, spaces, and hyphens",
-		"idnpLength": "IDNP must be exactly 13 digits",
-		"idnpNumbers": "IDNP must contain only numbers",
-		"idnpFormat": "Invalid IDNP format",
-		"idnpChecksum": "Invalid IDNP checksum",
-		"minAge": "You must be at least 16 years old",
-		"genderRequired": "Gender is required",
-		"vehicleExists": "A vehicle with this registration already exists",
-		"vehicleSerialNumberExists": "A vehicle with this serial number already exists",
-		"vehicleVinCodeExists": "A vehicle with this VIN code already exists",
-		"vehicleIdnvNumberExists": "A vehicle with this IDNV number already exists",
-		"databaseError": "An error occurred while accessing the database",
-		"terms": "You must accept the terms and privacy policy to continue",
+    "noVehiclesFound": "No vehicles found for the current user",
+    "countryCodeRequired": "Country code is required",
+    "phoneNumberRequired": "Phone number is required",
+    "phoneNumberFormat": "Phone number must be in format: XXX XX XXX",
+    "profileCreationTimeout": "Profile creation timeout.",
+    "userNotFound": "User not found",
+    "invalidEmail": "Please enter a valid email",
+    "firstNameRequired": "First name is required",
+    "lastNameRequired": "Last name is required",
+    "nameRequired": "Name is required",
+    "nameInvalidFormat": "Name can only contain letters, spaces, and hyphens",
+    "idnpLength": "IDNP must be exactly 13 digits",
+    "idnpNumbers": "IDNP must contain only numbers",
+    "idnpFormat": "Invalid IDNP format",
+    "idnpChecksum": "Invalid IDNP checksum",
+    "minAge": "You must be at least 16 years old",
+    "genderRequired": "Gender is required",
+    "vehicleExists": "A vehicle with this registration already exists",
+    "vehicleSerialNumberExists": "A vehicle with this serial number already exists",
+    "vehicleVinCodeExists": "A vehicle with this VIN code already exists",
+    "vehicleIdnvNumberExists": "A vehicle with this IDNV number already exists",
+    "databaseError": "An error occurred while accessing the database",
+    "terms": "You must accept the terms and privacy policy to continue",
 
-		"yearTooOld": "Year must be after 1900",
-		"yearCannotBeInFuture": "Year cannot be in the future",
-		"colorRequired": "Color is required",
-		"vinCodeRequired": "VIN code is required",
-		"vinCodeLength": "VIN code must be at most 17 characters",
-		"vinCodeFormat": "VIN code must contain only valid characters (A-H, J-N, P-Z, 0-9)",
+    "yearTooOld": "Year must be after 1900",
+    "yearCannotBeInFuture": "Year cannot be in the future",
+    "colorRequired": "Color is required",
+    "vinCodeRequired": "VIN code is required",
+    "vinCodeLength": "VIN code must be at most 17 characters",
+    "vinCodeFormat": "VIN code must contain only valid characters (A-H, J-N, P-Z, 0-9)",
 
-		"plateNumberCannotBeZeroOnly": "License plate number cannot be zero only",
+    "plateNumberCannotBeZeroOnly": "License plate number cannot be zero only",
 
-		"PHONE_TAKEN": "This phone number is already registered",
-		"EMAIL_TAKEN": "This email address is already registered",
-		"UNAUTHORIZED": "You are not authorized to perform this action",
-		"CLERK_ID_TAKEN": "This account is already registered",
-		"USER_NOT_FOUND": "User not found",
-		"UPLOAD_FAILED": "Failed to upload image. Please try again",
-		"USER_CREATION_FAILED": "Failed to create user account",
-		"PUSH_NOTIFICATION_FAILED": "Failed to send push notification"
-	},
+    "PHONE_TAKEN": "This phone number is already registered",
+    "EMAIL_TAKEN": "This email address is already registered",
+    "UNAUTHORIZED": "You are not authorized to perform this action",
+    "CLERK_ID_TAKEN": "This account is already registered",
+    "USER_NOT_FOUND": "User not found",
+    "UPLOAD_FAILED": "Failed to upload image. Please try again",
+    "USER_CREATION_FAILED": "Failed to create user account",
+    "PUSH_NOTIFICATION_FAILED": "Failed to send push notification"
+  },
 
-	"onboarding": {
-		"slides": {
-			"connect": {
-				"title": "Connect with \ncar owners instantly",
-				"description": "Claxon lets you message car owners instantly via license plates — no contact info needed."
-			},
-			"send": {
-				"title": "Send custom \nor predefined claxons",
-				"description": "Choose from the templates or write your own message. Send claxons using just the license plate."
-			},
-			"perfect": {
-				"title": "Perfect for \neveryday situations",
-				"description": "Use Claxon for situations like blocked driveways, giving compliments, or other friendly/urgent messages."
-			}
-		},
-		"already_have_account": "Already have an account? Log in",
-		"get_started": "Get Started"
-	},
+  "onboarding": {
+    "slides": {
+      "connect": {
+        "title": "Connect with \ncar owners instantly",
+        "description": "Claxon lets you message car owners instantly via license plates — no contact info needed."
+      },
+      "send": {
+        "title": "Send custom \nor predefined claxons",
+        "description": "Choose from the templates or write your own message. Send claxons using just the license plate."
+      },
+      "perfect": {
+        "title": "Perfect for \neveryday situations",
+        "description": "Use Claxon for situations like blocked driveways, giving compliments, or other friendly/urgent messages."
+      }
+    },
+    "already_have_account": "Already have an account? Log in",
+    "get_started": "Get Started"
+  },
 
-	"getStarted": {
-		"title": "Let's get started",
-		"subtitle": "Welcome to Claxon! Please enter your phone number to authenticate",
-		"terms-login": {
-			"text": "<text>By continuing, you agree to our</text> <termsLink>Terms of Service</termsLink> and <privacyLink>Privacy Policy</privacyLink>",
-			"termsOfUse": "Terms of Service",
-			"privacyPolicy": "Privacy Policy"
-		},
-		"terms-signup": {
-			"text": "<text>I agree to the</text> <termsLink>Terms of Service</termsLink> and <privacyLink>Privacy Policy</privacyLink>",
-			"termsOfUse": "Terms of Service",
-			"privacyPolicy": "Privacy Policy"
-		}
-	},
+  "getStarted": {
+    "title": "Let's get started",
+    "subtitle": "Welcome to Claxon! Please enter your phone number to authenticate",
+    "terms-login": {
+      "text": "<text>By continuing, you agree to our</text> <termsLink>Terms of Service</termsLink> and <privacyLink>Privacy Policy</privacyLink>",
+      "termsOfUse": "Terms of Service",
+      "privacyPolicy": "Privacy Policy"
+    },
+    "terms-signup": {
+      "text": "<text>I agree to the</text> <termsLink>Terms of Service</termsLink> and <privacyLink>Privacy Policy</privacyLink>",
+      "termsOfUse": "Terms of Service",
+      "privacyPolicy": "Privacy Policy"
+    }
+  },
 
-	"verificationCode": {
-		"sent": "We've sent a verification code to your phone number {{phone}}",
-		"invalidCode": "Please enter a valid 6-digit code",
-		"sentNewline": "We've sent a\nverification code",
-		"code": "6-digit code",
-		"didNotReceiveCode": "I did not receive a code",
-		"resending": "Resend code in {{seconds}}s",
-		"error": "Failed to resend code. Try again.",
-		"resentCode": "We have sent you a new code!"
-	},
+  "verificationCode": {
+    "sent": "We've sent a verification code to your phone number {{phone}}",
+    "invalidCode": "Please enter a valid 6-digit code",
+    "sentNewline": "We've sent a\nverification code",
+    "code": "6-digit code",
+    "didNotReceiveCode": "I did not receive a code",
+    "resending": "Resend code in {{seconds}}s",
+    "error": "Failed to resend code. Try again.",
+    "resentCode": "We have sent you a new code!"
+  },
 
-	"vehicleDetails": {
-		"screenTitle": "Your car details",
-		"subtitle": "We'll securely collect your data, making sure it's accurate and there won't be any duplicates",
-		"successMessage": "Vehicle details saved successfully!",
-		"errorMessage": "Failed to save vehicle details"
-	},
+  "vehicleDetails": {
+    "screenTitle": "Your car details",
+    "subtitle": "We'll securely collect your data, making sure it's accurate and there won't be any duplicates",
+    "successMessage": "Vehicle details saved successfully!",
+    "errorMessage": "Failed to save vehicle details"
+  },
 
-	"personalDetails": {
-		"screenTitle": "Your personal details",
-		"subtitle": "We'll securely collect your data, making sure it's accurate and there won't be any identity theft",
-		"successMessage": "Personal details saved successfully!",
-		"errorMessage": "Failed to save personal details"
-	},
+  "personalDetails": {
+    "screenTitle": "Your personal details",
+    "subtitle": "We'll securely collect your data, making sure it's accurate and there won't be any identity theft",
+    "successMessage": "Personal details saved successfully!",
+    "errorMessage": "Failed to save personal details"
+  },
 
-	"search": {
-		"title": "Search License Plate",
-		"subtitle": "Enter a license plate number to send a message to the car owner",
-		"placeholder": "Enter license plate number",
-		"searchButton": "Search Plate",
-		"selectMessage": "Select a message to send",
-		"sendMessage": "Send Message",
-		"plateNotFound": "License plate not found",
-		"messageSent": "Message sent successfully!",
-		"sendingMessage": "Sending message...",
-		"messages": {
-			"moveYourCar": "Please move your car",
-			"niceCar": "Nice car!",
-			"youBlockedMe": "You're blocking my driveway",
-			"lightsOn": "Your lights are on",
-			"windowsOpen": "Your windows are open",
-			"doorsUnlocked": "Your doors appear to be unlocked",
-			"thankYou": "Thank you!",
-			"sorryForScratch": "Sorry for the scratch",
-			"loveYourCar": "I love your car!"
-		}
-	},
+  "search": {
+    "title": "Search License Plate",
+    "subtitle": "Enter a license plate number to send a message to the car owner",
+    "placeholder": "Enter license plate number",
+    "searchButton": "Search Plate",
+    "selectMessage": "Select a message to send",
+    "sendMessage": "Send Message",
+    "plateNotFound": "License plate not found",
+    "messageSent": "Message sent successfully!",
+    "sendingMessage": "Sending message...",
+    "messages": {
+      "moveYourCar": "Please move your car",
+      "niceCar": "Nice car!",
+      "youBlockedMe": "You're blocking my driveway",
+      "lightsOn": "Your lights are on",
+      "windowsOpen": "Your windows are open",
+      "doorsUnlocked": "Your doors appear to be unlocked",
+      "thankYou": "Thank you!",
+      "sorryForScratch": "Sorry for the scratch",
+      "loveYourCar": "I love your car!"
+    }
+  },
 
-	"vehiclePlate": {
-		"screenTitle": "License Plate Details",
-		"subtitle": "Please provide your vehicle's license plate information.",
-		"successMessage": "License plate details saved successfully!",
-		"errorMessage": "Failed to save license plate details"
-	}
+  "vehiclePlate": {
+    "screenTitle": "License Plate Details",
+    "subtitle": "Please provide your vehicle's license plate information.",
+    "successMessage": "License plate details saved successfully!",
+    "errorMessage": "Failed to save license plate details"
+  }
 }

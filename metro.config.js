@@ -6,8 +6,8 @@ const config = getDefaultConfig(__dirname);
 const { resolver } = config;
 
 config.resolver = {
-	...resolver,
-	assetExts: [...resolver.assetExts, "lottie"],
+  ...resolver,
+  assetExts: [...resolver.assetExts, "lottie"],
 };
 
 module.exports = withNativeWind(config, { input: "./global.css" });

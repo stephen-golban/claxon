@@ -5,15 +5,15 @@ import { WelcomeScreen } from "@/screens/protected/welcome";
 import { useGetMe } from "@/services/api/accounts";
 
 export default function Page() {
-	const { data, isPending } = useGetMe();
+  const { data, isPending } = useGetMe();
 
-	if (isPending) {
-		return <FullScreenLoader />;
-	}
+  if (isPending) {
+    return <FullScreenLoader />;
+  }
 
-	if (isEmpty(data?.email)) {
-		return <Redirect href="/(protected)/personal-details" />;
-	}
+  if (isEmpty(data?.email)) {
+    return <Redirect href="/(protected)/personal-details" />;
+  }
 
-	return <WelcomeScreen loading={false} />;
+  return <WelcomeScreen loading={false} />;
 }

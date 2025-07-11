@@ -1,255 +1,255 @@
 {
-	"language": {
-		"en": "Engleză",
-		"ro": "Română",
-		"ru": "Rusă",
-		"languageTitle": "Alege limba",
-		"languageDescription": "Poți alege limba și personaliza aplicația în limba dorită"
-	},
+  "language": {
+    "en": "Engleză",
+    "ro": "Română",
+    "ru": "Rusă",
+    "languageTitle": "Alege limba",
+    "languageDescription": "Poți alege limba și personaliza aplicația în limba dorită"
+  },
 
-	"theme": {
-		"themeTitle": "Alege o temă",
-		"themeDescription": "Personalizează experiența ta prin alegerea unei teme și mod.",
-		"mode": "Mod",
-		"theme": "Tema",
-		"purple": "Purpuriu",
-		"blue": "Albastru",
-		"gold": "Auriu"
-	},
+  "theme": {
+    "themeTitle": "Alege o temă",
+    "themeDescription": "Personalizează experiența ta prin alegerea unei teme și mod.",
+    "mode": "Mod",
+    "theme": "Tema",
+    "purple": "Purpuriu",
+    "blue": "Albastru",
+    "gold": "Auriu"
+  },
 
-	"options": {
-		"color": {
-			"WHI": "Alb",
-			"BLK": "Negru",
-			"GRY": "Gri",
-			"SIL": "Argintiu/Aluminiu",
-			"BLU": "Albastru",
-			"RED": "Roșu",
-			"GRN": "Verde",
-			"YEL": "Galben",
-			"ONG": "Portocaliu",
-			"PNK": "Roz",
-			"PUR": "Purpuriu",
-			"BRZ": "Bronz",
-			"BGE": "Bej",
-			"MAR": "Bordo (Maro)",
-			"CAM": "Camuflaj",
-			"MUL": "Multicolor",
-			"CRM": "Crem/Ivoriu"
-		},
-		"plateTypes": {
-			"standard_current": "Model standard",
-			"standard_old_four": "Model vechi cu 4 litere",
-			"standard_old_three": "Model vechi cu 3 litere",
-			"standard_neutral": "Neutru",
-			"transnistria": "Transnistria",
-			"cd_diplomatic": "Corp diplomatic",
-			"presidential": "Prezidențial",
-			"government": "Guvernamental",
-			"fa": "Forțele Armate",
-			"police": "MAI",
-			"carabinieri": "MIC",
-			"border_control": "DG",
-			"temporary": "Temporar",
-			"transit": "Tranzit"
-		},
-		"gender": {
-			"male": "Masculin",
-			"female": "Feminin"
-		}
-	},
+  "options": {
+    "color": {
+      "WHI": "Alb",
+      "BLK": "Negru",
+      "GRY": "Gri",
+      "SIL": "Argintiu/Aluminiu",
+      "BLU": "Albastru",
+      "RED": "Roșu",
+      "GRN": "Verde",
+      "YEL": "Galben",
+      "ONG": "Portocaliu",
+      "PNK": "Roz",
+      "PUR": "Purpuriu",
+      "BRZ": "Bronz",
+      "BGE": "Bej",
+      "MAR": "Bordo (Maro)",
+      "CAM": "Camuflaj",
+      "MUL": "Multicolor",
+      "CRM": "Crem/Ivoriu"
+    },
+    "plateTypes": {
+      "standard_current": "Model standard",
+      "standard_old_four": "Model vechi cu 4 litere",
+      "standard_old_three": "Model vechi cu 3 litere",
+      "standard_neutral": "Neutru",
+      "transnistria": "Transnistria",
+      "cd_diplomatic": "Corp diplomatic",
+      "presidential": "Prezidențial",
+      "government": "Guvernamental",
+      "fa": "Forțele Armate",
+      "police": "MAI",
+      "carabinieri": "MIC",
+      "border_control": "DG",
+      "temporary": "Temporar",
+      "transit": "Tranzit"
+    },
+    "gender": {
+      "male": "Masculin",
+      "female": "Feminin"
+    }
+  },
 
-	"avatar": {
-		"initial_tip": "Atinge pentru a încărca",
-		"initial_tip2": "Încarcă o fotografie a mașinii tale",
-		"change_tip": "Atinge pentru a schimba",
-		"change_tip2": "Schimbă fotografia mașinii tale",
-		"success_tip": "Fotografia mașinii a fost adăugată"
-	},
+  "avatar": {
+    "initial_tip": "Atinge pentru a încărca",
+    "initial_tip2": "Încarcă o fotografie a mașinii tale",
+    "change_tip": "Atinge pentru a schimba",
+    "change_tip2": "Schimbă fotografia mașinii tale",
+    "success_tip": "Fotografia mașinii a fost adăugată"
+  },
 
-	"labels": {
-		"firstName": "Prenume",
-		"lastName": "Nume",
-		"email": "Email",
-		"avatar": "Fotografia mașinii",
-		"dob": "Data nașterii",
-		"gender": "Gen",
-		"password": "Parolă",
-		"confirmPassword": "Confirmă parola",
-		"phone": "Telefon",
-		"plateType": "Tipul plăcuței de înmatriculare",
-		"selectColor": "Selectează o culoare"
-	},
+  "labels": {
+    "firstName": "Prenume",
+    "lastName": "Nume",
+    "email": "Email",
+    "avatar": "Fotografia mașinii",
+    "dob": "Data nașterii",
+    "gender": "Gen",
+    "password": "Parolă",
+    "confirmPassword": "Confirmă parola",
+    "phone": "Telefon",
+    "plateType": "Tipul plăcuței de înmatriculare",
+    "selectColor": "Selectează o culoare"
+  },
 
-	"placeholders": {
-		"firstName": "Prenumele tău",
-		"lastName": "Numele tău",
-		"gender": "Selectează genul",
-		"dob": "Selectează data nașterii",
-		"phone": "Introdu numărul tău de telefon",
-		"email": "Introdu adresa ta de email",
-		"password": "Introdu parola",
-		"confirmPassword": "Confirmă parola",
-		"brand": "Marca",
-		"model": "Model",
-		"manufactureYear": "An de fabricare",
-		"color": "Culoare",
-		"plateNumber": "Număr de înmatriculare",
-		"vinCode": "Număr de identificare (VIN)"
-	},
+  "placeholders": {
+    "firstName": "Prenumele tău",
+    "lastName": "Numele tău",
+    "gender": "Selectează genul",
+    "dob": "Selectează data nașterii",
+    "phone": "Introdu numărul tău de telefon",
+    "email": "Introdu adresa ta de email",
+    "password": "Introdu parola",
+    "confirmPassword": "Confirmă parola",
+    "brand": "Marca",
+    "model": "Model",
+    "manufactureYear": "An de fabricare",
+    "color": "Culoare",
+    "plateNumber": "Număr de înmatriculare",
+    "vinCode": "Număr de identificare (VIN)"
+  },
 
-	"buttons": {
-		"signup": "Înregistrare",
-		"signin": "Autentificare",
-		"log_in": "Autentifică-te",
-		"confirm": "Confirmă",
-		"search": "Caută",
-		"continue": "Continuă",
-		"change": "Schimbă",
-		"cancel": "Anulează",
-		"back": "Înapoi",
-		"next": "Următorul",
-		"done": "Gata"
-	},
+  "buttons": {
+    "signup": "Înregistrare",
+    "signin": "Autentificare",
+    "log_in": "Autentifică-te",
+    "confirm": "Confirmă",
+    "search": "Caută",
+    "continue": "Continuă",
+    "change": "Schimbă",
+    "cancel": "Anulează",
+    "back": "Înapoi",
+    "next": "Următorul",
+    "done": "Gata"
+  },
 
-	"errors": {
-		"notFound": "Nu s-au găsit rezultate",
-		"passwordMatch": "Parolele nu coincid",
-		"required": "Acest câmp este obligatoriu",
-		"min": "Introdu cel puțin {{min}} caractere",
-		"invalid": "Acest câmp nu este formatat corect",
-		"invalidPhoneFormat": "Numărul de telefon trebuie să fie în formatul: XXX XX XXX",
-		"numbersOnly": "Acest câmp trebuie să conțină doar cifre",
+  "errors": {
+    "notFound": "Nu s-au găsit rezultate",
+    "passwordMatch": "Parolele nu coincid",
+    "required": "Acest câmp este obligatoriu",
+    "min": "Introdu cel puțin {{min}} caractere",
+    "invalid": "Acest câmp nu este formatat corect",
+    "invalidPhoneFormat": "Numărul de telefon trebuie să fie în formatul: XXX XX XXX",
+    "numbersOnly": "Acest câmp trebuie să conțină doar cifre",
 
-		"noVehiclesFound": "Nu au fost găsite vehicule pentru utilizatorul curent",
-		"countryCodeRequired": "Codul țării este obligatoriu",
-		"phoneNumberRequired": "Numărul de telefon este obligatoriu",
-		"phoneNumberFormat": "Numărul de telefon trebuie să fie în format: XXX XX XXX",
-		"profileCreationTimeout": "Timpul de creare a profilului a expirat.",
-		"userNotFound": "Utilizatorul nu a fost găsit",
-		"invalidEmail": "Vă rugăm să introduceți o adresă de email validă",
-		"firstNameRequired": "Numele este obligatoriu",
-		"lastNameRequired": "Prenumele este obligatoriu",
-		"nameRequired": "Numele este obligatoriu",
-		"nameInvalidFormat": "Numele poate conține doar litere, spații și cratime",
-		"idnpLength": "IDNP-ul trebuie să conțină exact 13 cifre",
-		"idnpNumbers": "IDNP-ul trebuie să conțină doar cifre",
-		"idnpFormat": "Format IDNP invalid",
-		"idnpChecksum": "Suma de control IDNP invalidă",
-		"minAge": "Trebuie să aveți cel puțin 16 ani",
-		"genderRequired": "Genul este obligatoriu",
-		"vehicleExists": "Un vehicul cu această înregistrare există deja",
-		"vehicleSerialNumberExists": "Un vehicul cu acest număr de serie există deja",
-		"vehicleVinCodeExists": "Un vehicul cu acest cod VIN există deja",
-		"vehicleIdnvNumberExists": "Un vehicul cu acest număr IDNV există deja",
-		"databaseError": "A apărut o eroare la accesarea bazei de date",
-		"terms": "Trebuie să acceptați termenii și politica de confidențialitate pentru a continua",
+    "noVehiclesFound": "Nu au fost găsite vehicule pentru utilizatorul curent",
+    "countryCodeRequired": "Codul țării este obligatoriu",
+    "phoneNumberRequired": "Numărul de telefon este obligatoriu",
+    "phoneNumberFormat": "Numărul de telefon trebuie să fie în format: XXX XX XXX",
+    "profileCreationTimeout": "Timpul de creare a profilului a expirat.",
+    "userNotFound": "Utilizatorul nu a fost găsit",
+    "invalidEmail": "Vă rugăm să introduceți o adresă de email validă",
+    "firstNameRequired": "Numele este obligatoriu",
+    "lastNameRequired": "Prenumele este obligatoriu",
+    "nameRequired": "Numele este obligatoriu",
+    "nameInvalidFormat": "Numele poate conține doar litere, spații și cratime",
+    "idnpLength": "IDNP-ul trebuie să conțină exact 13 cifre",
+    "idnpNumbers": "IDNP-ul trebuie să conțină doar cifre",
+    "idnpFormat": "Format IDNP invalid",
+    "idnpChecksum": "Suma de control IDNP invalidă",
+    "minAge": "Trebuie să aveți cel puțin 16 ani",
+    "genderRequired": "Genul este obligatoriu",
+    "vehicleExists": "Un vehicul cu această înregistrare există deja",
+    "vehicleSerialNumberExists": "Un vehicul cu acest număr de serie există deja",
+    "vehicleVinCodeExists": "Un vehicul cu acest cod VIN există deja",
+    "vehicleIdnvNumberExists": "Un vehicul cu acest număr IDNV există deja",
+    "databaseError": "A apărut o eroare la accesarea bazei de date",
+    "terms": "Trebuie să acceptați termenii și politica de confidențialitate pentru a continua",
 
-		"yearTooOld": "Anul trebuie să fie după 1900",
-		"yearCannotBeInFuture": "Anul nu poate fi în viitor",
-		"colorRequired": "Culoarea este obligatorie",
-		"vinCodeRequired": "Codul VIN este obligatoriu",
-		"vinCodeLength": "Codul VIN trebuie să aibă maximum 17 caractere",
-		"vinCodeFormat": "Codul VIN trebuie să conțină doar caractere valide (A-H, J-N, P-Z, 0-9)",
+    "yearTooOld": "Anul trebuie să fie după 1900",
+    "yearCannotBeInFuture": "Anul nu poate fi în viitor",
+    "colorRequired": "Culoarea este obligatorie",
+    "vinCodeRequired": "Codul VIN este obligatoriu",
+    "vinCodeLength": "Codul VIN trebuie să aibă maximum 17 caractere",
+    "vinCodeFormat": "Codul VIN trebuie să conțină doar caractere valide (A-H, J-N, P-Z, 0-9)",
 
-		"plateNumberCannotBeZeroOnly": "Numărul de înmatriculare nu poate conține doar zerouri",
+    "plateNumberCannotBeZeroOnly": "Numărul de înmatriculare nu poate conține doar zerouri",
 
-		"PHONE_TAKEN": "Acest număr de telefon este deja înregistrat",
-		"EMAIL_TAKEN": "Această adresă de email este deja înregistrată",
-		"UNAUTHORIZED": "Nu sunteți autorizat să efectuați această acțiune",
-		"CLERK_ID_TAKEN": "Acest cont este deja înregistrat",
-		"USER_NOT_FOUND": "Utilizatorul nu a fost găsit",
-		"UPLOAD_FAILED": "Încărcarea imaginii a eșuat. Vă rugăm să încercați din nou",
-		"USER_CREATION_FAILED": "Crearea contului de utilizator a eșuat",
-		"PUSH_NOTIFICATION_FAILED": "Trimiterea notificării push a eșuat"
-	},
+    "PHONE_TAKEN": "Acest număr de telefon este deja înregistrat",
+    "EMAIL_TAKEN": "Această adresă de email este deja înregistrată",
+    "UNAUTHORIZED": "Nu sunteți autorizat să efectuați această acțiune",
+    "CLERK_ID_TAKEN": "Acest cont este deja înregistrat",
+    "USER_NOT_FOUND": "Utilizatorul nu a fost găsit",
+    "UPLOAD_FAILED": "Încărcarea imaginii a eșuat. Vă rugăm să încercați din nou",
+    "USER_CREATION_FAILED": "Crearea contului de utilizator a eșuat",
+    "PUSH_NOTIFICATION_FAILED": "Trimiterea notificării push a eșuat"
+  },
 
-	"onboarding": {
-		"slides": {
-			"connect": {
-				"title": "Conectează-te cu \nproprietarii de mașini instant",
-				"description": "Claxon îți permite să trimiți mesaje proprietarilor de mașini instant prin plăcuțe de înmatriculare — fără informații de contact necesare."
-			},
-			"send": {
-				"title": "Trimite claxoane \npersonalizate sau predefinite",
-				"description": "Alege din șabloane sau scrie propriul tău mesaj. Trimite claxoane folosind doar plăcuța de înmatriculare."
-			},
-			"perfect": {
-				"title": "Perfect pentru \nsituații de zi cu zi",
-				"description": "Folosește Claxon pentru situații precum alei blocate, complimente sau alte mesaje prietenoase/urgente."
-			}
-		},
-		"already_have_account": "Ai deja un cont? Autentifică-te",
-		"get_started": "Începe"
-	},
+  "onboarding": {
+    "slides": {
+      "connect": {
+        "title": "Conectează-te cu \nproprietarii de mașini instant",
+        "description": "Claxon îți permite să trimiți mesaje proprietarilor de mașini instant prin plăcuțe de înmatriculare — fără informații de contact necesare."
+      },
+      "send": {
+        "title": "Trimite claxoane \npersonalizate sau predefinite",
+        "description": "Alege din șabloane sau scrie propriul tău mesaj. Trimite claxoane folosind doar plăcuța de înmatriculare."
+      },
+      "perfect": {
+        "title": "Perfect pentru \nsituații de zi cu zi",
+        "description": "Folosește Claxon pentru situații precum alei blocate, complimente sau alte mesaje prietenoase/urgente."
+      }
+    },
+    "already_have_account": "Ai deja un cont? Autentifică-te",
+    "get_started": "Începe"
+  },
 
-	"getStarted": {
-		"title": "Hai să începem",
-		"subtitle": "Bine ai venit pe Claxon! Introdu numărul tău de telefon pentru a te autentifica",
-		"terms": {
-			"text": "<text>Continuând, ești de acord cu</text> <termsLink>Termenii de utilizare</termsLink> și <privacyLink>Politica de confidențialitate</privacyLink>",
-			"termsOfUse": "Termenii de utilizare",
-			"privacyPolicy": "Politica de confidențialitate"
-		},
-		"terms-signup": {
-			"text": "<text>Sunt de acord cu</text> <termsLink>Termenii de utilizare</termsLink> și <privacyLink>Politica de confidențialitate</privacyLink>",
-			"termsOfUse": "Termenii de utilizare",
-			"privacyPolicy": "Politica de confidențialitate"
-		}
-	},
+  "getStarted": {
+    "title": "Hai să începem",
+    "subtitle": "Bine ai venit pe Claxon! Introdu numărul tău de telefon pentru a te autentifica",
+    "terms": {
+      "text": "<text>Continuând, ești de acord cu</text> <termsLink>Termenii de utilizare</termsLink> și <privacyLink>Politica de confidențialitate</privacyLink>",
+      "termsOfUse": "Termenii de utilizare",
+      "privacyPolicy": "Politica de confidențialitate"
+    },
+    "terms-signup": {
+      "text": "<text>Sunt de acord cu</text> <termsLink>Termenii de utilizare</termsLink> și <privacyLink>Politica de confidențialitate</privacyLink>",
+      "termsOfUse": "Termenii de utilizare",
+      "privacyPolicy": "Politica de confidențialitate"
+    }
+  },
 
-	"verificationCode": {
-		"sent": "Am trimis un cod de verificare la numărul dvs. de telefon {{phone}}",
-		"invalidCode": "Vă rugăm să introduceți un cod valid de 6 cifre",
-		"sentNewline": "Am trimis un\ncod de verificare",
-		"code": "cod de 6 cifre",
-		"didNotReceiveCode": "Nu ați primit codul?",
-		"resending": "Resend code in {{seconds}}s",
-		"error": "Failed to resend code. Try again.",
-		"resentCode": "Am trimis un nou cod!"
-	},
+  "verificationCode": {
+    "sent": "Am trimis un cod de verificare la numărul dvs. de telefon {{phone}}",
+    "invalidCode": "Vă rugăm să introduceți un cod valid de 6 cifre",
+    "sentNewline": "Am trimis un\ncod de verificare",
+    "code": "cod de 6 cifre",
+    "didNotReceiveCode": "Nu ați primit codul?",
+    "resending": "Resend code in {{seconds}}s",
+    "error": "Failed to resend code. Try again.",
+    "resentCode": "Am trimis un nou cod!"
+  },
 
-	"vehicleDetails": {
-		"screenTitle": "Detaliile mașinii tale",
-		"subtitle": "Vom colecta datele în mod sigur, asigurându-ne că sunt corecte și că nu va fi niciun furt de identitate",
-		"successMessage": "Detaliile vehiculului au fost salvate cu succes!",
-		"errorMessage": "Salvarea detaliilor vehiculului a eșuat"
-	},
+  "vehicleDetails": {
+    "screenTitle": "Detaliile mașinii tale",
+    "subtitle": "Vom colecta datele în mod sigur, asigurându-ne că sunt corecte și că nu va fi niciun furt de identitate",
+    "successMessage": "Detaliile vehiculului au fost salvate cu succes!",
+    "errorMessage": "Salvarea detaliilor vehiculului a eșuat"
+  },
 
-	"personalDetails": {
-		"screenTitle": "Detaliile tale personale",
-		"subtitle": "Vom colecta datele în mod sigur, asigurându-ne că sunt corecte și că nu vor fi duplicate",
-		"successMessage": "Detaliile tale personale au fost salvate cu succes!",
-		"errorMessage": "Salvarea detaliilor tale personale a eșuat"
-	},
+  "personalDetails": {
+    "screenTitle": "Detaliile tale personale",
+    "subtitle": "Vom colecta datele în mod sigur, asigurându-ne că sunt corecte și că nu vor fi duplicate",
+    "successMessage": "Detaliile tale personale au fost salvate cu succes!",
+    "errorMessage": "Salvarea detaliilor tale personale a eșuat"
+  },
 
-	"search": {
-		"title": "Caută numărul de înmatriculare",
-		"subtitle": "Introdu un număr de înmatriculare pentru a trimite un mesaj proprietarului",
-		"placeholder": "Introdu numărul de înmatriculare",
-		"searchButton": "Caută plăcuța",
-		"selectMessage": "Selectează un mesaj de trimis",
-		"sendMessage": "Trimite mesajul",
-		"plateNotFound": "Numărul de înmatriculare nu a fost găsit",
-		"messageSent": "Mesajul a fost trimis cu succes!",
-		"sendingMessage": "Se trimite mesajul...",
-		"messages": {
-			"moveYourCar": "Te rog să îți muți mașina",
-			"niceCar": "Mașină frumoasă!",
-			"youBlockedMe": "Îmi blochezi intrarea",
-			"lightsOn": "Ai luminile aprinse",
-			"windowsOpen": "Ai geamurile deschise",
-			"doorsUnlocked": "Pare că ai ușile descuiate",
-			"thankYou": "Mulțumesc!",
-			"sorryForScratch": "Îmi pare rău pentru zgârietură",
-			"loveYourCar": "Îmi place mașina ta!"
-		}
-	},
+  "search": {
+    "title": "Caută numărul de înmatriculare",
+    "subtitle": "Introdu un număr de înmatriculare pentru a trimite un mesaj proprietarului",
+    "placeholder": "Introdu numărul de înmatriculare",
+    "searchButton": "Caută plăcuța",
+    "selectMessage": "Selectează un mesaj de trimis",
+    "sendMessage": "Trimite mesajul",
+    "plateNotFound": "Numărul de înmatriculare nu a fost găsit",
+    "messageSent": "Mesajul a fost trimis cu succes!",
+    "sendingMessage": "Se trimite mesajul...",
+    "messages": {
+      "moveYourCar": "Te rog să îți muți mașina",
+      "niceCar": "Mașină frumoasă!",
+      "youBlockedMe": "Îmi blochezi intrarea",
+      "lightsOn": "Ai luminile aprinse",
+      "windowsOpen": "Ai geamurile deschise",
+      "doorsUnlocked": "Pare că ai ușile descuiate",
+      "thankYou": "Mulțumesc!",
+      "sorryForScratch": "Îmi pare rău pentru zgârietură",
+      "loveYourCar": "Îmi place mașina ta!"
+    }
+  },
 
-	"vehiclePlate": {
-		"screenTitle": "Detalii plăcuță de înmatriculare",
-		"subtitle": "Vă rugăm să furnizați informații despre plăcuța de înmatriculare a vehiculului.",
-		"successMessage": "Detaliile plăcuței de înmatriculare au fost salvate cu succes!",
-		"errorMessage": "Salvarea detaliilor plăcuței de înmatriculare a eșuat"
-	}
+  "vehiclePlate": {
+    "screenTitle": "Detalii plăcuță de înmatriculare",
+    "subtitle": "Vă rugăm să furnizați informații despre plăcuța de înmatriculare a vehiculului.",
+    "successMessage": "Detaliile plăcuței de înmatriculare au fost salvate cu succes!",
+    "errorMessage": "Salvarea detaliilor plăcuței de înmatriculare a eșuat"
+  }
 }
