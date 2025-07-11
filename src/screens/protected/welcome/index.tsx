@@ -11,7 +11,7 @@ const WelcomeScreen: React.FC = () => {
   const { quickActions } = useWelcomeActions();
 
   return (
-    <Container removeEdges={[]} className="bg-background">
+    <Container className="bg-background">
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ flexGrow: 1 }} className="flex-1">
         <WelcomeHeader />
 

@@ -5,31 +5,26 @@ import { StyleSheet, View } from "react-native";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Text } from "@/components/ui/text";
+import { useGetMe } from "@/services/api/accounts";
 import { useQueryImage } from "@/services/api/image";
 import LoadingSkeleton from "./loading-skeleton";
 import { getInitials, SKELETON_CLASSES } from "./util";
 
-interface ProfileAvatarProps {
-  isLoading: boolean;
-  first_name: string | null;
-  last_name: string | null;
-  bucket_avatar_url: string | null;
-}
-
-const ProfileAvatar = memo<ProfileAvatarProps>(({ first_name, last_name, bucket_avatar_url, isLoading }) => {
+const ProfileAvatar = memo(() => {
+  const me = useGetMe();
   const [hasLoaded, setHasLoaded] = useState(false);
   const { downloadMutation, isDownloading, downloadedImagePath } = useQueryImage("profile-avatar");
 
   useEffect(() => {
-    if (bucket_avatar_url && !isEmpty(bucket_avatar_url)) {
-      downloadMutation.mutateAsync(bucket_avatar_url);
+    if (me.data?.avatar_url && !isEmpty(me.data.avatar_url)) {
+      downloadMutation.mutateAsync(me.data.avatar_url);
     }
-  }, [bucket_avatar_url, downloadMutation]);
+  }, [me.data?.avatar_url, downloadMutation]);
 
   // Memoize initials calculation - only recalculate when name data changes
   const initials = useMemo(() => {
-    return getInitials(first_name, last_name);
-  }, [first_name, last_name]);
+    return getInitials(me.data?.first_name ?? null, me.data?.last_name ?? null);
+  }, [me.data?.first_name, me.data?.last_name]);
 
   // Reset hasLoaded when avatar URL changes
   // biome-ignore lint/correctness/useExhaustiveDependencies: downloadedImagePath is needed
@@ -43,11 +38,11 @@ const ProfileAvatar = memo<ProfileAvatarProps>(({ first_name, last_name, bucket_
   }, []);
 
   // Early returns for loading and empty states
-  if (isLoading || isDownloading) {
+  if (me.isLoading || me.isPending || isDownloading) {
     return <LoadingSkeleton />;
   }
 
-  if (!first_name || !last_name) {
+  if (!me.data?.first_name || !me.data?.last_name) {
     return null;
   }
 

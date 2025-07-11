@@ -12,5 +12,11 @@ export default function ProtectedLayout() {
     return <Redirect href="/(unprotected)" />;
   }
 
-  return <Stack screenOptions={header} />;
+  return (
+    <Stack>
+      <Stack.Screen name="index" options={header} />
+      <Stack.Screen name="personal-details" options={header} />
+      <Stack.Screen name="tabs" options={header} />
+    </Stack>
+  );
 }

@@ -145,7 +145,7 @@ export function AccountTab() {
 									</Text>
 								</View> */}
               </View>
-              <Button onPress={() => setIsEditing(true)}>
+              <Button onPress={() => router.push("/personal-details")}>
                 <Text>Edit Profile</Text>
               </Button>
             </CardContent>

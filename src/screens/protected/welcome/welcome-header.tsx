@@ -15,18 +15,18 @@ const WelcomeHeader: React.FC<WelcomeHeaderProps> = ({
 }) => {
   return (
     <View className="items-center pt-4 pb-6">
-      <View className="mb-6 p-6 bg-primary/5 rounded-3xl">
+      <View className="mb-6 p-4 bg-primary/5 rounded-3xl">
         <LottieView
           autoPlay
           loop
           source={require("@/assets/animations/claxon.lottie")}
-          style={{ width: 120, height: 120 }}
+          style={{ width: 100, height: 100 }}
         />
       </View>
 
       <Text className="text-3xl font-bold text-center mb-3 text-foreground">{title}</Text>
 
-      <Text className="text-base text-center text-muted-foreground leading-relaxed px-6 max-w-sm">{subtitle}</Text>
+      <Text className="text-base text-center text-muted-foreground leading-relaxed">{subtitle}</Text>
     </View>
   );
 };

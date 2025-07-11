@@ -39,7 +39,7 @@ const getIconClassName = (variant: string) => {
 
 const QuickActions: React.FC<QuickActionsProps> = ({ actions, title = "Quick Actions" }) => {
   return (
-    <View className="px-4">
+    <View className="mt-4">
       <Text className="text-lg font-semibold mb-4 text-foreground">{title}</Text>
 
       <View className="gap-4">
