@@ -1,17 +1,9 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "@/components/ui/toast";
-import { ERROR_CODES } from "@/lib/constants";
-import { printError, translateError } from "@/lib/utils";
-import { AccountService } from "./accounts";
+import { getSupabaseErrorCode, printError, translateError } from "@/lib/utils";
 import { supabase } from "./client";
 
 export class AuthService {
-  private account: AccountService;
-
-  constructor() {
-    this.account = new AccountService();
-  }
-
   /**
    * Authenticates a user via phone number by sending an OTP
    * @param phone The phone number to authenticate
@@ -26,7 +18,7 @@ export class AuthService {
 
     if (error) {
       printError("auth-authenticate-error", error);
-      throw new Error(ERROR_CODES.AUTH.AUTHENTICATION_FAILED);
+      throw getSupabaseErrorCode(error);
     }
 
     return data;
@@ -46,7 +38,7 @@ export class AuthService {
 
     if (error) {
       printError("auth-resendCode-error", error);
-      throw new Error(ERROR_CODES.AUTH.RESEND_CODE_FAILED);
+      throw getSupabaseErrorCode(error);
     }
 
     return data;
@@ -67,19 +59,10 @@ export class AuthService {
 
     if (error) {
       printError("auth-verifyCode-error", error);
-      throw new Error(ERROR_CODES.AUTH.VERIFY_CODE_FAILED);
+      throw getSupabaseErrorCode(error);
     }
 
-    if (!data || !data.user) {
-      printError("auth-verifyCode-error", new Error("User not found"));
-      throw new Error(ERROR_CODES.USER.NOT_FOUND);
-    }
-
-    const body = { id: data.user.id, phone: data.user.phone || phone };
-
-    const accountService = new AccountService();
-    const account = await accountService.upsert(body, data.user.id);
-    return { ...data, account };
+    return data;
   }
 }
 

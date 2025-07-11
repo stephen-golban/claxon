@@ -1,5 +1,4 @@
 import { useRouter } from "expo-router";
-import { isEmpty } from "lodash";
 import { useForm } from "react-hook-form";
 import { Keyboard } from "react-native";
 import { useVerifyCode } from "@/services/api/auth";
@@ -24,13 +23,11 @@ export function useVerifyPhoneScreen(phone: string) {
     await verify.mutateAsync(
       { phone, code: dto.otp },
       {
-        onSuccess: ({ account, session, user }) => {
-          if (!isEmpty(account)) {
-            const isAuthenticated = !!session && !!user;
+        onSuccess: ({ session, user }) => {
+          const isAuthenticated = !!session && !!user;
 
-            setAppStoreKey("isAuthenticated", isAuthenticated);
-            return router.dismissTo("/(protected)");
-          }
+          setAppStoreKey("isAuthenticated", isAuthenticated);
+          return router.dismissTo("/(protected)");
         },
       },
     );

@@ -37,6 +37,7 @@ export class AccountService {
 
     if (error) {
       printError(`account-getMe-error`, error);
+      await supabase.auth.signOut();
       throw new Error(ERROR_CODES.USER.RETRIEVAL_FAILED);
     }
 

@@ -1,4 +1,5 @@
 import { Image } from "expo-image";
+import { isEmpty } from "lodash";
 import { memo, useCallback, useEffect, useMemo, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -20,7 +21,7 @@ const ProfileAvatar = memo<ProfileAvatarProps>(({ first_name, last_name, bucket_
   const { downloadMutation, isDownloading, downloadedImagePath } = useQueryImage("profile-avatar");
 
   useEffect(() => {
-    if (bucket_avatar_url) {
+    if (bucket_avatar_url && !isEmpty(bucket_avatar_url)) {
       downloadMutation.mutateAsync(bucket_avatar_url);
     }
   }, [bucket_avatar_url, downloadMutation]);

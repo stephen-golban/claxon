@@ -87,8 +87,8 @@ export const getProtectedHeader = (pathname: string) => {
   }
 
   return {
-    headerLeft: HeaderLeft,
-    headerRight: HeaderRight,
+    headerLeft: () => <HeaderLeft />,
+    headerRight: () => <HeaderRight />,
     headerTitleStyle,
     headerBackground,
   };

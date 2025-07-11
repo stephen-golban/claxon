@@ -1,3 +1,4 @@
+import type { AuthError } from "@supabase/supabase-js";
 import type { ClassValue } from "clsx";
 import { clsx } from "clsx";
 import type { TOptionsBase } from "i18next";
@@ -7,6 +8,7 @@ import { twMerge } from "tailwind-merge";
 import i18n from "@/translations";
 import type { I18nKey } from "@/translations/types";
 import type { ValidateMessageObject } from "@/typings/validation";
+import { ERROR_CODES, SUPABASE_ERROR_CODES } from "../constants";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -73,4 +75,13 @@ export const translateError = (error: string) => {
 
 export const printError = (text: string, error: Error) => {
   console.error(`${text}: ${JSON.stringify(error, null, 2)}`);
+};
+
+export const getSupabaseErrorCode = (error: AuthError) => {
+  const code = SUPABASE_ERROR_CODES.auth.find((item) => error.code === item);
+  if (code) {
+    return new Error(code);
+  }
+
+  return new Error(ERROR_CODES.SOMETHING_WENT_WRONG);
 };
