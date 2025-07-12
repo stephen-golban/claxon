@@ -1,0 +1,72 @@
+---
+alwaysApply: true
+---
+
+# Claxon Backend Project Structure
+
+This is a Cloudflare Workers backend built with Hono, Better Auth, and Drizzle ORM.
+
+## Key Architecture Components
+
+- **Entry Point**: [backend/src/index.ts](mdc:backend/src/index.ts) - Main Hono app with Cloudflare Workers bindings
+- **Authentication**: [backend/src/lib/better-auth/index.ts](mdc:backend/src/lib/better-auth/index.ts) and [backend/src/lib/better-auth/options.ts](mdc:backend/src/lib/better-auth/options.ts)
+- **Database**: Drizzle ORM with PostgreSQL (Neon), schemas in [backend/src/db/schemas/](mdc:backend/src/db/schemas/)
+- **Configuration**: [backend/better-auth.config.ts](mdc:backend/better-auth.config.ts) and [backend/drizzle.config.ts](mdc:backend/drizzle.config.ts)
+
+## Technology Stack
+
+- **Runtime**: Cloudflare Workers
+- **Framework**: Hono with TypeScript
+- **Database**: PostgreSQL with Drizzle ORM
+- **Authentication**: Better Auth
+- **Validation**: Zod schemas
+- **SMS/OTP**: Twilio integration
+- **Formatting**: Biome (not Prettier/ESLint)
+- **Package Manager**: Bun
+
+## Key Directories
+
+- `src/db/schemas/` - Database table definitions
+- `src/db/queries/` - Database query functions
+- `src/lib/` - Shared utilities and configurations
+- `drizzle/` - Database migrations
+
+## Environment Configuration
+
+- Uses [backend/wrangler.jsonc](mdc:backend/wrangler.jsonc) for Cloudflare Workers config
+- Environment variables managed through `.dev.vars` files
+- R2 bucket binding named "claxon"
+# Claxon Backend Project Structure
+
+This is a Cloudflare Workers backend built with Hono, Better Auth, and Drizzle ORM.
+
+## Key Architecture Components
+
+- **Entry Point**: [backend/src/index.ts](mdc:backend/src/index.ts) - Main Hono app with Cloudflare Workers bindings
+- **Authentication**: [backend/src/lib/better-auth/index.ts](mdc:backend/src/lib/better-auth/index.ts) and [backend/src/lib/better-auth/options.ts](mdc:backend/src/lib/better-auth/options.ts)
+- **Database**: Drizzle ORM with PostgreSQL (Neon), schemas in [backend/src/db/schemas/](mdc:backend/src/db/schemas/)
+- **Configuration**: [backend/better-auth.config.ts](mdc:backend/better-auth.config.ts) and [backend/drizzle.config.ts](mdc:backend/drizzle.config.ts)
+
+## Technology Stack
+
+- **Runtime**: Cloudflare Workers
+- **Framework**: Hono with TypeScript
+- **Database**: PostgreSQL with Drizzle ORM
+- **Authentication**: Better Auth
+- **Validation**: Zod schemas
+- **SMS/OTP**: Twilio integration
+- **Formatting**: Biome (not Prettier/ESLint)
+- **Package Manager**: Bun
+
+## Key Directories
+
+- `src/db/schemas/` - Database table definitions
+- `src/db/queries/` - Database query functions
+- `src/lib/` - Shared utilities and configurations
+- `drizzle/` - Database migrations
+
+## Environment Configuration
+
+- Uses [backend/wrangler.jsonc](mdc:backend/wrangler.jsonc) for Cloudflare Workers config
+- Environment variables managed through `.dev.vars` files
+- R2 bucket binding named "claxon"

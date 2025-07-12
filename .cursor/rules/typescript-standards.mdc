@@ -1,0 +1,56 @@
+---
+alwaysApply: true
+---
+
+# TypeScript Standards
+
+## Configuration
+- Use strict TypeScript mode as configured in [backend/tsconfig.json](mdc:backend/tsconfig.json)
+- Target ESNext with Bundler module resolution
+- JSX configured for Hono JSX (not React)
+
+## Type Safety
+- Always use explicit types for function parameters and return values
+- Use `CloudflareBindings` type for Hono app bindings: `new Hono<{ Bindings: CloudflareBindings }>()`
+- Prefer `const` assertions for immutable objects
+- Use Zod schemas for runtime validation and type inference
+
+## Import Organization
+- Use absolute imports from `src/` when possible
+- Group imports: external packages first, then internal modules
+- Biome will auto-organize imports on save
+
+## Cloudflare Workers Specific
+- Always type Hono apps with Cloudflare bindings
+- Use `c.env` to access environment variables and bindings
+- Return `Response` objects or use Hono's response helpers
+
+## Better Auth Integration
+- Import auth instance from [backend/src/lib/better-auth/index.ts](mdc:backend/src/lib/better-auth/index.ts)
+- Use Better Auth's TypeScript types for user sessions and auth states
+# TypeScript Standards
+
+## Configuration
+- Use strict TypeScript mode as configured in [backend/tsconfig.json](mdc:backend/tsconfig.json)
+- Target ESNext with Bundler module resolution
+- JSX configured for Hono JSX (not React)
+
+## Type Safety
+- Always use explicit types for function parameters and return values
+- Use `CloudflareBindings` type for Hono app bindings: `new Hono<{ Bindings: CloudflareBindings }>()`
+- Prefer `const` assertions for immutable objects
+- Use Zod schemas for runtime validation and type inference
+
+## Import Organization
+- Use absolute imports from `src/` when possible
+- Group imports: external packages first, then internal modules
+- Biome will auto-organize imports on save
+
+## Cloudflare Workers Specific
+- Always type Hono apps with Cloudflare bindings
+- Use `c.env` to access environment variables and bindings
+- Return `Response` objects or use Hono's response helpers
+
+## Better Auth Integration
+- Import auth instance from [backend/src/lib/better-auth/index.ts](mdc:backend/src/lib/better-auth/index.ts)
+- Use Better Auth's TypeScript types for user sessions and auth states

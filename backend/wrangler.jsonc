@@ -4,6 +4,7 @@
   "main": "src/index.ts",
   "compatibility_date": "2025-07-11",
   "minify": true,
+  "compatibility_flags": ["nodejs_compat"],
 
   "r2_buckets": [
     {

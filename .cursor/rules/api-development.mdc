@@ -1,0 +1,110 @@
+---
+alwaysApply: true
+---
+
+# API Development with Hono
+
+## Hono App Structure
+- Initialize with Cloudflare bindings: `new Hono<{ Bindings: CloudflareBindings }>()`
+- Use TypeScript for full type safety
+- Access environment via `c.env` in route handlers
+
+## Route Organization
+- Group related routes by feature/domain
+- Use descriptive route paths
+- Implement proper HTTP methods (GET, POST, PUT, DELETE)
+- Follow RESTful conventions where appropriate
+
+## Request Validation
+- Use `@hono/zod-validator` for request validation
+- Validate request body, query parameters, and headers
+- Return structured error responses for validation failures
+
+```typescript
+import { zValidator } from '@hono/zod-validator';
+
+app.post('/api/verify-otp', 
+  zValidator('json', verifyOTPSchema),
+  async (c) => {
+    const { phone, code } = c.req.valid('json');
+    // Handle validated request
+  }
+);
+```
+
+## Response Patterns
+- Return consistent JSON response structure
+- Include success/error status
+- Use appropriate HTTP status codes
+- Include descriptive error messages
+
+## Error Handling
+- Use try/catch blocks for async operations
+- Return proper HTTP status codes
+- Log errors for debugging
+- Use error codes from [backend/src/lib/constants.ts](mdc:backend/src/lib/constants.ts)
+
+## Middleware Usage
+- Implement authentication middleware for protected routes
+- Use CORS middleware for cross-origin requests
+- Add logging middleware for request tracking
+- Implement rate limiting where needed
+
+## Context Usage
+- Access request data via `c.req`
+- Access environment bindings via `c.env`
+- Use `c.json()` for JSON responses
+- Use `c.text()` for plain text responses
+# API Development with Hono
+
+## Hono App Structure
+- Initialize with Cloudflare bindings: `new Hono<{ Bindings: CloudflareBindings }>()`
+- Use TypeScript for full type safety
+- Access environment via `c.env` in route handlers
+
+## Route Organization
+- Group related routes by feature/domain
+- Use descriptive route paths
+- Implement proper HTTP methods (GET, POST, PUT, DELETE)
+- Follow RESTful conventions where appropriate
+
+## Request Validation
+- Use `@hono/zod-validator` for request validation
+- Validate request body, query parameters, and headers
+- Return structured error responses for validation failures
+
+```typescript
+import { zValidator } from '@hono/zod-validator';
+
+app.post('/api/verify-otp', 
+  zValidator('json', verifyOTPSchema),
+  async (c) => {
+    const { phone, code } = c.req.valid('json');
+    // Handle validated request
+  }
+);
+```
+
+## Response Patterns
+- Return consistent JSON response structure
+- Include success/error status
+- Use appropriate HTTP status codes
+- Include descriptive error messages
+
+## Error Handling
+- Use try/catch blocks for async operations
+- Return proper HTTP status codes
+- Log errors for debugging
+- Use error codes from [backend/src/lib/constants.ts](mdc:backend/src/lib/constants.ts)
+
+## Middleware Usage
+- Implement authentication middleware for protected routes
+- Use CORS middleware for cross-origin requests
+- Add logging middleware for request tracking
+- Implement rate limiting where needed
+
+## Context Usage
+- Access request data via `c.req`
+- Access environment bindings via `c.env`
+- Use `c.json()` for JSON responses
+- Use `c.text()` for plain text responses

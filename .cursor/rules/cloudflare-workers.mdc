@@ -1,0 +1,82 @@
+---
+alwaysApply: true
+---
+
+# Cloudflare Workers Development
+
+## Configuration
+- Wrangler config in [backend/wrangler.jsonc](mdc:backend/wrangler.jsonc)
+- Main entry: [backend/src/index.ts](mdc:backend/src/index.ts)
+- Compatibility date: 2025-07-11
+- Minification enabled for production
+
+## Environment Setup
+- Local development: `localhost:3000` (HTTP)
+- Upstream protocol: HTTPS
+- Use `.dev.vars` for local environment variables
+- Use `.dev.vars.production` for production secrets
+
+## R2 Storage
+- Bucket binding: "claxon"
+- Access via `c.env.claxon` in Hono context
+- Use for file storage and static assets
+
+## Development Workflow
+- Start dev server: `bun run dev` (uses `wrangler dev`)
+- Generate types: `bun run cf-gen-types`
+- Deploy: `bun run deploy` (includes secret management)
+
+## Type Generation
+- Generate CloudflareBindings interface with `wrangler types`
+- Use in Hono app: `new Hono<{ Bindings: CloudflareBindings }>()`
+- Types stored in `worker-configuration.d.ts`
+
+## Deployment
+- Automatic minification in production
+- Secret management via `wrangler secret bulk`
+- Use environment-specific configuration
+
+## Performance Considerations
+- Minimize bundle size for faster cold starts
+- Use edge-optimized database connections (Neon serverless)
+- Implement proper caching strategies
+- Keep request handlers lightweight
+# Cloudflare Workers Development
+
+## Configuration
+- Wrangler config in [backend/wrangler.jsonc](mdc:backend/wrangler.jsonc)
+- Main entry: [backend/src/index.ts](mdc:backend/src/index.ts)
+- Compatibility date: 2025-07-11
+- Minification enabled for production
+
+## Environment Setup
+- Local development: `localhost:3000` (HTTP)
+- Upstream protocol: HTTPS
+- Use `.dev.vars` for local environment variables
+- Use `.dev.vars.production` for production secrets
+
+## R2 Storage
+- Bucket binding: "claxon"
+- Access via `c.env.claxon` in Hono context
+- Use for file storage and static assets
+
+## Development Workflow
+- Start dev server: `bun run dev` (uses `wrangler dev`)
+- Generate types: `bun run cf-gen-types`
+- Deploy: `bun run deploy` (includes secret management)
+
+## Type Generation
+- Generate CloudflareBindings interface with `wrangler types`
+- Use in Hono app: `new Hono<{ Bindings: CloudflareBindings }>()`
+- Types stored in `worker-configuration.d.ts`
+
+## Deployment
+- Automatic minification in production
+- Secret management via `wrangler secret bulk`
+- Use environment-specific configuration
+
+## Performance Considerations
+- Minimize bundle size for faster cold starts
+- Use edge-optimized database connections (Neon serverless)
+- Implement proper caching strategies
+- Keep request handlers lightweight

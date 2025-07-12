@@ -9,6 +9,7 @@ export const ERROR_CODES = {
 
   // Generic errors
   INTERNAL_SERVER_ERROR: "INTERNAL_SERVER_ERROR",
+  UNAUTHORIZED: "UNAUTHORIZED",
 } as const;
 
 // Success codes

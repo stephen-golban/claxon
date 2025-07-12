@@ -1,0 +1,74 @@
+---
+alwaysApply: true
+---
+
+# Database Patterns with Drizzle ORM
+
+## Schema Organization
+- Define schemas in [backend/src/db/schemas/](mdc:backend/src/db/schemas/) directory
+- Export all schemas from [backend/src/db/schemas/index.ts](mdc:backend/src/db/schemas/index.ts)
+- Use consistent naming: camelCase for fields, snake_case for database columns
+
+## Schema Definitions
+- Use Drizzle's PostgreSQL types from `drizzle-orm/pg-core`
+- Include proper relationships using `relations()`
+- Add timestamps with `createdAt` and `updatedAt` fields
+- Use `varchar()` with length limits, `text()` for long content
+- Use `boolean().default(false)` for flags
+
+## Query Organization
+- Place query functions in [backend/src/db/queries/](mdc:backend/src/db/queries/) directory
+- Group related queries by domain (user, profile, etc.)
+- Export query functions from [backend/src/db/queries/index.ts](mdc:backend/src/db/queries/index.ts)
+
+## Database Connection
+- Use the configured database instance from [backend/src/db/instance.ts](mdc:backend/src/db/instance.ts)
+- Always use the Neon serverless driver for Cloudflare Workers compatibility
+- Pass the database instance to Better Auth adapter
+
+## Migration Workflow
+- Use `drizzle-kit generate` to create migrations
+- Migrations stored in [backend/drizzle/](mdc:backend/drizzle/) directory
+- Configuration in [backend/drizzle.config.ts](mdc:backend/drizzle.config.ts)
+
+## Query Patterns
+- Use Drizzle's query builder syntax
+- Prefer `select()` with explicit field selection
+- Use `where()` clauses with proper operators
+- Handle errors with try/catch blocks
+- Return typed results using schema inference
+# Database Patterns with Drizzle ORM
+
+## Schema Organization
+- Define schemas in [backend/src/db/schemas/](mdc:backend/src/db/schemas/) directory
+- Export all schemas from [backend/src/db/schemas/index.ts](mdc:backend/src/db/schemas/index.ts)
+- Use consistent naming: camelCase for fields, snake_case for database columns
+
+## Schema Definitions
+- Use Drizzle's PostgreSQL types from `drizzle-orm/pg-core`
+- Include proper relationships using `relations()`
+- Add timestamps with `createdAt` and `updatedAt` fields
+- Use `varchar()` with length limits, `text()` for long content
+- Use `boolean().default(false)` for flags
+
+## Query Organization
+- Place query functions in [backend/src/db/queries/](mdc:backend/src/db/queries/) directory
+- Group related queries by domain (user, profile, etc.)
+- Export query functions from [backend/src/db/queries/index.ts](mdc:backend/src/db/queries/index.ts)
+
+## Database Connection
+- Use the configured database instance from [backend/src/db/instance.ts](mdc:backend/src/db/instance.ts)
+- Always use the Neon serverless driver for Cloudflare Workers compatibility
+- Pass the database instance to Better Auth adapter
+
+## Migration Workflow
+- Use `drizzle-kit generate` to create migrations
+- Migrations stored in [backend/drizzle/](mdc:backend/drizzle/) directory
+- Configuration in [backend/drizzle.config.ts](mdc:backend/drizzle.config.ts)
+
+## Query Patterns
+- Use Drizzle's query builder syntax
+- Prefer `select()` with explicit field selection
+- Use `where()` clauses with proper operators
+- Handle errors with try/catch blocks
+- Return typed results using schema inference

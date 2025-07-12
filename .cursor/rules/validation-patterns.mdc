@@ -1,0 +1,110 @@
+---
+alwaysApply: true
+---
+
+# Validation and Error Handling
+
+## Zod Schema Patterns
+- Define validation schemas in [backend/src/lib/validation.ts](mdc:backend/src/lib/validation.ts)
+- Use descriptive schema names ending with `Schema` (e.g., `phoneNumberSchema`)
+- Include helpful error messages for all validations
+- Use regex patterns for format validation (phone numbers, OTP codes)
+
+## Validation Examples
+```typescript
+// Phone validation
+export const phoneNumberSchema = z.object({
+  phone: z.string().min(1, "Phone number is required"),
+});
+
+// OTP validation with specific requirements
+export const verifyOTPSchema = z.object({
+  phone: z.string().min(1, "Phone number is required"),
+  code: z
+    .string()
+    .length(6, "OTP code must be 6 digits")
+    .regex(/^\d{6}$/, "OTP code must contain only digits"),
+});
+```
+
+## Error Handling
+- Use consistent error codes from [backend/src/lib/constants.ts](mdc:backend/src/lib/constants.ts)
+- Define both `ERROR_CODES` and `SUCCESS_CODES` constants
+- Use descriptive, uppercase snake_case for error codes
+- Return structured error responses with HTTP status codes
+
+## Hono Validation Integration
+- Use `@hono/zod-validator` for request validation
+- Validate request body, query params, and headers as needed
+- Return 400 status for validation errors
+- Use Hono's error handling middleware
+
+## Response Patterns
+```typescript
+// Success response
+return c.json({ 
+  success: true, 
+  code: SUCCESS_CODES.OTP_SENT,
+  message: "OTP sent successfully" 
+});
+
+// Error response
+return c.json({ 
+  success: false, 
+  code: ERROR_CODES.OTP_SEND_FAILED,
+  message: "Failed to send OTP" 
+}, 400);
+```
+# Validation and Error Handling
+
+## Zod Schema Patterns
+- Define validation schemas in [backend/src/lib/validation.ts](mdc:backend/src/lib/validation.ts)
+- Use descriptive schema names ending with `Schema` (e.g., `phoneNumberSchema`)
+- Include helpful error messages for all validations
+- Use regex patterns for format validation (phone numbers, OTP codes)
+
+## Validation Examples
+```typescript
+// Phone validation
+export const phoneNumberSchema = z.object({
+  phone: z.string().min(1, "Phone number is required"),
+});
+
+// OTP validation with specific requirements
+export const verifyOTPSchema = z.object({
+  phone: z.string().min(1, "Phone number is required"),
+  code: z
+    .string()
+    .length(6, "OTP code must be 6 digits")
+    .regex(/^\d{6}$/, "OTP code must contain only digits"),
+});
+```
+
+## Error Handling
+- Use consistent error codes from [backend/src/lib/constants.ts](mdc:backend/src/lib/constants.ts)
+- Define both `ERROR_CODES` and `SUCCESS_CODES` constants
+- Use descriptive, uppercase snake_case for error codes
+- Return structured error responses with HTTP status codes
+
+## Hono Validation Integration
+- Use `@hono/zod-validator` for request validation
+- Validate request body, query params, and headers as needed
+- Return 400 status for validation errors
+- Use Hono's error handling middleware
+
+## Response Patterns
+```typescript
+// Success response
+return c.json({ 
+  success: true, 
+  code: SUCCESS_CODES.OTP_SENT,
+  message: "OTP sent successfully" 
+});
+
+// Error response
+return c.json({ 
+  success: false, 
+  code: ERROR_CODES.OTP_SEND_FAILED,
+  message: "Failed to send OTP" 
+}, 400);
+```

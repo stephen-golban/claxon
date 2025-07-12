@@ -1,11 +1,16 @@
+import { clerkMiddleware } from "@hono/clerk-auth";
 import { Hono } from "hono";
-import { auth } from "./lib/better-auth";
+import { cors } from "hono/cors";
+import { logger } from "hono/logger";
+import { authMiddleware } from "./middlewares";
 
 const app = new Hono<{ Bindings: CloudflareBindings }>();
 
-// Better Auth routes (for other auth functionality)
-app.on(["GET", "POST"], "/api/*", (c) => {
-  return auth(c.env).handler(c.req.raw);
-});
+// Global middleware
+app.use("*", cors());
+app.use("*", logger());
+app.use("*", clerkMiddleware());
+
+app.use("*", authMiddleware);
 
 export default app;

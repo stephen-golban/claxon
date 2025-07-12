@@ -1,0 +1,76 @@
+---
+alwaysApply: true
+---
+
+# Code Formatting with Biome
+
+## Formatter Configuration
+- Use Biome (NOT Prettier or ESLint) as configured in [backend/biome.json](mdc:backend/biome.json)
+- Line width: 120 characters
+- Indent: 2 spaces
+- Quote style: double quotes for JavaScript/TypeScript
+
+## Formatting Rules
+- Enable automatic import organization
+- Use consistent indentation (2 spaces)
+- Follow Biome's recommended linting rules
+- Enable VCS integration with Git
+
+## Scripts
+- Format code: `bun run format` (runs `bunx biome check --write`)
+- Biome will auto-fix formatting and organize imports
+- Configure your editor to run Biome on save
+
+## File Patterns
+- Apply to all TypeScript/JavaScript files
+- Ignore unknown file types
+- Respect .gitignore patterns
+
+## Import Organization
+- External packages first
+- Internal modules second
+- Relative imports last
+- Biome automatically organizes imports
+
+## Code Style Guidelines
+- Use double quotes consistently
+- Prefer const over let when possible
+- Use meaningful variable and function names
+- Add JSDoc comments for public APIs
+- Keep functions focused and small
+# Code Formatting with Biome
+
+## Formatter Configuration
+- Use Biome (NOT Prettier or ESLint) as configured in [backend/biome.json](mdc:backend/biome.json)
+- Line width: 120 characters
+- Indent: 2 spaces
+- Quote style: double quotes for JavaScript/TypeScript
+
+## Formatting Rules
+- Enable automatic import organization
+- Use consistent indentation (2 spaces)
+- Follow Biome's recommended linting rules
+- Enable VCS integration with Git
+
+## Scripts
+- Format code: `bun run format` (runs `bunx biome check --write`)
+- Biome will auto-fix formatting and organize imports
+- Configure your editor to run Biome on save
+
+## File Patterns
+- Apply to all TypeScript/JavaScript files
+- Ignore unknown file types
+- Respect .gitignore patterns
+
+## Import Organization
+- External packages first
+- Internal modules second
+- Relative imports last
+- Biome automatically organizes imports
+
+## Code Style Guidelines
+- Use double quotes consistently
+- Prefer const over let when possible
+- Use meaningful variable and function names
+- Add JSDoc comments for public APIs
+- Keep functions focused and small

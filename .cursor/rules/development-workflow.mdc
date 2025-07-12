@@ -1,0 +1,92 @@
+---
+alwaysApply: true
+---
+
+# Development Workflow
+
+## Package Management
+- Use **Bun** as the package manager (not npm or yarn)
+- Install dependencies: `bun install`
+- Run scripts with `bun run <script>`
+
+## Development Scripts
+- `bun run dev` - Start local development server with Wrangler
+- `bun run format` - Format code with Biome
+- `bun run deploy` - Deploy to Cloudflare Workers
+- `bun run cf-gen-types` - Generate Cloudflare Workers types
+- `bun run better-auth-gen-schema` - Generate Better Auth database schemas
+
+## Database Management
+- Generate migrations: `bunx drizzle-kit generate`
+- Push schema changes: `bunx drizzle-kit push`
+- Database configuration in [backend/drizzle.config.ts](mdc:backend/drizzle.config.ts)
+
+## Environment Setup
+1. Copy `.dev.vars.example` to `.dev.vars` (if exists)
+2. Set required environment variables:
+   - `DATABASE_URL` - Neon PostgreSQL connection string
+   - `BETTER_AUTH_URL` - Auth service URL
+   - `BETTER_AUTH_SECRET` - Auth secret key
+   - Twilio credentials for SMS functionality
+
+## Code Quality
+- Run Biome formatting before commits
+- Use TypeScript strict mode
+- Follow established patterns in existing code
+- Write descriptive commit messages
+
+## Deployment Process
+1. Run tests (if implemented)
+2. Format code: `bun run format`
+3. Generate types: `bun run cf-gen-types`
+4. Deploy: `bun run deploy`
+
+## File Organization
+- Keep related files in the same directory
+- Use descriptive file and folder names
+- Follow the established project structure
+- Export from index files for clean imports
+# Development Workflow
+
+## Package Management
+- Use **Bun** as the package manager (not npm or yarn)
+- Install dependencies: `bun install`
+- Run scripts with `bun run <script>`
+
+## Development Scripts
+- `bun run dev` - Start local development server with Wrangler
+- `bun run format` - Format code with Biome
+- `bun run deploy` - Deploy to Cloudflare Workers
+- `bun run cf-gen-types` - Generate Cloudflare Workers types
+- `bun run better-auth-gen-schema` - Generate Better Auth database schemas
+
+## Database Management
+- Generate migrations: `bunx drizzle-kit generate`
+- Push schema changes: `bunx drizzle-kit push`
+- Database configuration in [backend/drizzle.config.ts](mdc:backend/drizzle.config.ts)
+
+## Environment Setup
+1. Copy `.dev.vars.example` to `.dev.vars` (if exists)
+2. Set required environment variables:
+   - `DATABASE_URL` - Neon PostgreSQL connection string
+   - `BETTER_AUTH_URL` - Auth service URL
+   - `BETTER_AUTH_SECRET` - Auth secret key
+   - Twilio credentials for SMS functionality
+
+## Code Quality
+- Run Biome formatting before commits
+- Use TypeScript strict mode
+- Follow established patterns in existing code
+- Write descriptive commit messages
+
+## Deployment Process
+1. Run tests (if implemented)
+2. Format code: `bun run format`
+3. Generate types: `bun run cf-gen-types`
+4. Deploy: `bun run deploy`
+
+## File Organization
+- Keep related files in the same directory
+- Use descriptive file and folder names
+- Follow the established project structure
+- Export from index files for clean imports

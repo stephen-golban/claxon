@@ -1,0 +1,80 @@
+---
+alwaysApply: true
+---
+
+# Authentication with Better Auth
+
+## Configuration
+- Better Auth options in [backend/src/lib/better-auth/options.ts](mdc:backend/src/lib/better-auth/options.ts)
+- CLI configuration in [backend/better-auth.config.ts](mdc:backend/better-auth.config.ts)
+- App name: "Claxon", base path: "/api"
+
+## Auth Instance
+- Create auth instance in [backend/src/lib/better-auth/index.ts](mdc:backend/src/lib/better-auth/index.ts)
+- Use Drizzle adapter with PostgreSQL provider
+- Pass Cloudflare environment bindings to auth constructor
+
+## Route Integration
+- Mount auth routes on `/api/*` path in main app
+- Handle both GET and POST requests for auth endpoints
+- Pass raw request to Better Auth handler:
+
+```typescript
+app.on(["GET", "POST"], "/api/*", (c) => {
+  return auth(c.env).handler(c.req.raw);
+});
+```
+
+## Schema Generation
+- Use Better Auth CLI to generate database schemas
+- Run: `bunx @better-auth/cli@latest generate --config ./better-auth.config.ts --output ./src/db/schema.ts`
+- Schemas include: user, account, session, verification tables
+
+## Session Management
+- Use Better Auth's session handling
+- Access user data through Better Auth client
+- Implement proper session validation for protected routes
+
+## Custom Authentication Flow
+- Integrate with Twilio for SMS-based OTP authentication
+- Use phone number as primary identifier
+- Implement custom verification flow alongside Better Auth
+- Store verification codes and handle expiration
+# Authentication with Better Auth
+
+## Configuration
+- Better Auth options in [backend/src/lib/better-auth/options.ts](mdc:backend/src/lib/better-auth/options.ts)
+- CLI configuration in [backend/better-auth.config.ts](mdc:backend/better-auth.config.ts)
+- App name: "Claxon", base path: "/api"
+
+## Auth Instance
+- Create auth instance in [backend/src/lib/better-auth/index.ts](mdc:backend/src/lib/better-auth/index.ts)
+- Use Drizzle adapter with PostgreSQL provider
+- Pass Cloudflare environment bindings to auth constructor
+
+## Route Integration
+- Mount auth routes on `/api/*` path in main app
+- Handle both GET and POST requests for auth endpoints
+- Pass raw request to Better Auth handler:
+
+```typescript
+app.on(["GET", "POST"], "/api/*", (c) => {
+  return auth(c.env).handler(c.req.raw);
+});
+```
+
+## Schema Generation
+- Use Better Auth CLI to generate database schemas
+- Run: `bunx @better-auth/cli@latest generate --config ./better-auth.config.ts --output ./src/db/schema.ts`
+- Schemas include: user, account, session, verification tables
+
+## Session Management
+- Use Better Auth's session handling
+- Access user data through Better Auth client
+- Implement proper session validation for protected routes
+
+## Custom Authentication Flow
+- Integrate with Twilio for SMS-based OTP authentication
+- Use phone number as primary identifier
+- Implement custom verification flow alongside Better Auth
+- Store verification codes and handle expiration
