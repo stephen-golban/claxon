@@ -10,12 +10,12 @@ export const createTwilioClient = (env: CloudflareBindings) => {
 /**
  * Send OTP via Twilio Verify API
  */
-export const sendOTP = async (env: CloudflareBindings, phoneNumber: string): Promise<boolean> => {
+export const sendOTP = async (env: CloudflareBindings, to: string): Promise<boolean> => {
   try {
     const client = createTwilioClient(env);
 
     const verification = await client.verify.v2.services(env.TWILIO_VERIFY_SERVICE_SID).verifications.create({
-      to: phoneNumber,
+      to,
       channel: "sms",
     });
 
@@ -29,12 +29,12 @@ export const sendOTP = async (env: CloudflareBindings, phoneNumber: string): Pro
 /**
  * Verify OTP via Twilio Verify API
  */
-export const verifyOTP = async (env: CloudflareBindings, phoneNumber: string, code: string): Promise<boolean> => {
+export const verifyOTP = async (env: CloudflareBindings, to: string, code: string): Promise<boolean> => {
   try {
     const client = createTwilioClient(env);
 
     const verificationCheck = await client.verify.v2.services(env.TWILIO_VERIFY_SERVICE_SID).verificationChecks.create({
-      to: phoneNumber,
+      to,
       code: code,
     });
 

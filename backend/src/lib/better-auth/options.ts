@@ -1,5 +1,4 @@
 import type { BetterAuthOptions } from "better-auth";
-import { phoneNumber } from "better-auth/plugins";
 
 /**
  * Custom options for Better Auth
@@ -16,16 +15,4 @@ export const betterAuthOptions: BetterAuthOptions = {
    * @default "/api/auth"
    */
   basePath: "/api",
-
-  plugins: [
-    phoneNumber({
-      sendOTP: async ({ phoneNumber, code }, request) => {
-        request.
-      },
-      
-      otpLength: 6,
-      expiresIn: 300, // 5 minutes
-      allowedAttempts: 3,
-    }),
-  ],
 };

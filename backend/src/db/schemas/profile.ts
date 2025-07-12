@@ -4,22 +4,22 @@ import { user } from "./user";
 
 export const profile = pgTable("profiles", {
   id: text("id").primaryKey(),
-  userId: text("user_id")
+  user_id: text("user_id")
     .notNull()
     .references(() => user.id, { onDelete: "cascade" })
     .unique(),
-  firstName: text("first_name").notNull(),
-  lastName: text("last_name").notNull(),
-  email: text("email").notNull(),
+  email: text("email"),
   dob: timestamp("dob"),
   gender: text("gender"),
-  avatarUrl: text("avatar_url"),
-  isPhonePublic: boolean("is_phone_public").$defaultFn(() => false),
-  language: text("language").$defaultFn(() => "en"),
-  createdAt: timestamp("created_at")
+  last_name: text("last_name"),
+  avatar_url: text("avatar_url"),
+  first_name: text("first_name"),
+  language: text("language").$defaultFn(() => "ro"),
+  is_phone_public: boolean("is_phone_public").$defaultFn(() => false),
+  created_at: timestamp("created_at")
     .$defaultFn(() => /* @__PURE__ */ new Date())
     .notNull(),
-  updatedAt: timestamp("updated_at")
+  updated_at: timestamp("updated_at")
     .$defaultFn(() => /* @__PURE__ */ new Date())
     .notNull(),
 });
