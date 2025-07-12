@@ -15,11 +15,14 @@ const ProfileAvatar = memo(() => {
   const [hasLoaded, setHasLoaded] = useState(false);
   const { downloadMutation, isDownloading, downloadedImagePath } = useQueryImage("profile-avatar");
 
+  // Check if user has avatar URL set
+  const hasAvatarUrl = !isEmpty(me.data?.avatar_url);
+
   useEffect(() => {
-    if (me.data?.avatar_url && !isEmpty(me.data.avatar_url)) {
+    if (hasAvatarUrl && me.data?.avatar_url) {
       downloadMutation.mutateAsync(me.data.avatar_url);
     }
-  }, [me.data?.avatar_url, downloadMutation]);
+  }, [me.data?.avatar_url, downloadMutation, hasAvatarUrl]);
 
   // Memoize initials calculation - only recalculate when name data changes
   const initials = useMemo(() => {
@@ -37,17 +40,21 @@ const ProfileAvatar = memo(() => {
     setHasLoaded(true);
   }, []);
 
-  // Early returns for loading and empty states
-  if (me.isLoading || me.isPending || isDownloading) {
+  // Show loading skeleton only when user data is loading
+  if (me.isLoading || me.isPending) {
     return <LoadingSkeleton />;
   }
 
-  if (!me.data?.first_name || !me.data?.last_name) {
-    return null;
-  }
+  // Show image loading state only when downloading avatar
+  const showImageLoading = hasAvatarUrl && isDownloading;
 
   return (
-    <Avatar alt="Profile Avatar">
+    <Avatar alt="Profile Avatar" className="h-12 w-12">
+      {showImageLoading && (
+        <View style={styles.loadingOverlay}>
+          <Skeleton className={SKELETON_CLASSES} />
+        </View>
+      )}
       {!hasLoaded && downloadedImagePath && (
         <View style={styles.loadingOverlay}>
           <Skeleton className={SKELETON_CLASSES} />
@@ -56,7 +63,7 @@ const ProfileAvatar = memo(() => {
       {downloadedImagePath && (
         <Image
           priority="high"
-          transition={1000}
+          transition={300}
           style={styles.image}
           cachePolicy="memory-disk"
           source={{ uri: downloadedImagePath }}

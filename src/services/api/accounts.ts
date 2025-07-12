@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
 import { toast } from "@/components/ui/toast";
 import { ERROR_CODES } from "@/lib/constants";
 import { printError, translateError } from "@/lib/utils";
@@ -107,8 +107,18 @@ export const useGetAccountById = (id: string) => {
   });
 };
 
-export const useGetMe = () => {
-  return useQuery({
+export const usePrefetchGetMe = () => {
+  const queryClient = useQueryClient();
+
+  return queryClient.prefetchQuery({
+    queryKey: ["accounts", "getMe"],
+    queryFn: accountService.getMe,
+  });
+};
+
+export const useGetMe = (isSuspense = false) => {
+  const hook = isSuspense ? useSuspenseQuery : useQuery;
+  return hook({
     queryKey: ["accounts", "getMe"],
     queryFn: accountService.getMe,
     throwOnError: (error) => {

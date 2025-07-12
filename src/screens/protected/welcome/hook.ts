@@ -34,8 +34,8 @@ export const useWelcomeActions = () => {
     },
     {
       id: "register-car",
-      title: "Register Your Car",
-      description: "Add your vehicle to receive claxon notifications",
+      title: "Register Your First Car",
+      description: "Add your first vehicle to receive claxon notifications",
       iconName: "plus",
       action: () => router.push("/tabs/my-cars"),
       variant: "outline",

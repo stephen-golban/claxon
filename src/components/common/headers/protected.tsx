@@ -2,7 +2,7 @@ import { usePathname, useRouter } from "expo-router";
 import { memo, type ReactNode, useMemo } from "react";
 import type { StyleProp, TextStyle } from "react-native";
 import { View } from "react-native";
-import { BellIcon, MoveLeftIcon } from "@/components/icons";
+import { MoveLeftIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { ProfileAvatar } from "../profile-avatar";
 import { ThemeSwitcher } from "../theme-switcher";
@@ -34,7 +34,7 @@ const HeaderLeft = memo((): ReactNode => {
   }
 
   return (
-    <Button size="icon" variant="ghost" onPress={() => router.back()} className="active:bg-transparent my-4">
+    <Button size="icon" variant="ghost" onPress={() => router.back()} className="active:bg-transparent my-auto -ml-2">
       <MoveLeftIcon className="text-primary" size={24} />
     </Button>
   );
@@ -52,11 +52,8 @@ const headerBackground = () => <View className="bg-background" />;
 
 const HeaderRight = memo((): ReactNode => {
   return (
-    <View className="flex-row items-center gap-3 py-4">
+    <View className="flex-row items-center gap-x-3">
       <ThemeSwitcher />
-      <Button size="icon" variant="ghost" onPress={() => {}} className="active:bg-transparent relative">
-        <BellIcon className="text-primary" size={24} />
-      </Button>
 
       <ProfileAvatar />
     </View>
