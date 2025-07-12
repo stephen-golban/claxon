@@ -19,11 +19,10 @@ export const betterAuthOptions: BetterAuthOptions = {
 
   plugins: [
     phoneNumber({
-      sendOTP: async ({ phoneNumber: _phoneNumber, code: _code }, _request) => {
-        // Twilio handles OTP generation, so we don't use the provided code
-        // We'll use our custom Twilio integration instead
-        return true;
+      sendOTP: async ({ phoneNumber, code }, request) => {
+        request.
       },
+      
       otpLength: 6,
       expiresIn: 300, // 5 minutes
       allowedAttempts: 3,

@@ -1,0 +1,20 @@
+// Error codes for consistent error handling across the application
+export const ERROR_CODES = {
+  // OTP related errors
+  OTP_SEND_FAILED: "OTP_SEND_FAILED",
+  OTP_INVALID_OR_EXPIRED: "OTP_INVALID_OR_EXPIRED",
+
+  // User related errors
+  USER_ALREADY_EXISTS: "USER_ALREADY_EXISTS",
+
+  // Generic errors
+  INTERNAL_SERVER_ERROR: "INTERNAL_SERVER_ERROR",
+} as const;
+
+// Success codes
+export const SUCCESS_CODES = {
+  OTP_SENT: "OTP_SENT",
+  USER_AUTHENTICATED: "USER_AUTHENTICATED",
+  PHONE_VERIFIED_COMPLETE_PROFILE: "PHONE_VERIFIED_COMPLETE_PROFILE",
+  ACCOUNT_CREATED: "ACCOUNT_CREATED",
+} as const;

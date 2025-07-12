@@ -1,6 +1,6 @@
 import { neon } from "@neondatabase/serverless";
 import { drizzle } from "drizzle-orm/neon-http";
-import * as schema from "./schema";
+import { schema } from "./schemas";
 
 /**
  * Create database instance with environment-specific connection

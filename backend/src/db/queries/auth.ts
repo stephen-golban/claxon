@@ -1,6 +1,7 @@
 import { eq } from "drizzle-orm";
+import type { z } from "zod";
 import type { Database } from "../instance";
-import { profiles, user } from "../schema";
+import { insertProfileSchema, insertUserSchema, profiles, user } from "../schemas";
 
 /**
  * Find user by phone number
@@ -33,63 +34,15 @@ export const findProfileByUserId = async (db: Database, userId: string) => {
 /**
  * Create new user account
  */
-export const createUser = async (
-  db: Database,
-  userData: {
-    id: string;
-    phoneNumber: string;
-    name: string;
-    email: string;
-  },
-) => {
-  return await db
-    .insert(user)
-    .values({
-      id: userData.id,
-      phoneNumber: userData.phoneNumber,
-      phoneNumberVerified: true,
-      name: userData.name,
-      email: userData.email,
-      emailVerified: false,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    })
-    .returning();
+export const createUser = async (db: Database, userData: z.infer<typeof insertUserSchema>) => {
+  const validatedData = insertUserSchema.parse(userData);
+  return await db.insert(user).values(validatedData).returning();
 };
 
 /**
  * Create user profile
  */
-export const createUserProfile = async (
-  db: Database,
-  profileData: {
-    id: string;
-    userId: string;
-    firstName: string;
-    lastName: string;
-    email: string;
-    dob: Date;
-    gender: string;
-    avatarUrl?: string;
-    language?: string;
-    isPhonePublic?: boolean;
-  },
-) => {
-  return await db
-    .insert(profiles)
-    .values({
-      id: profileData.id,
-      userId: profileData.userId,
-      firstName: profileData.firstName,
-      lastName: profileData.lastName,
-      email: profileData.email,
-      dob: profileData.dob,
-      gender: profileData.gender,
-      avatarUrl: profileData.avatarUrl,
-      language: profileData.language ?? "en",
-      isPhonePublic: profileData.isPhonePublic ?? false,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    })
-    .returning();
+export const createUserProfile = async (db: Database, profileData: z.infer<typeof insertProfileSchema>) => {
+  const validatedData = insertProfileSchema.parse(profileData);
+  return await db.insert(profiles).values(validatedData).returning();
 };
