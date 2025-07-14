@@ -8,17 +8,17 @@ export const getInitials = (firstName: string | null, lastName: string | null): 
     const lastInitial = lastName.charAt(0).toUpperCase();
     return `${firstInitial}${lastInitial}`;
   }
-  
+
   // If only first name is available
   if (firstName) {
     return firstName.charAt(0).toUpperCase();
   }
-  
+
   // If only last name is available
   if (lastName) {
     return lastName.charAt(0).toUpperCase();
   }
-  
+
   // Fallback for new users with no name set
   return "U";
 };

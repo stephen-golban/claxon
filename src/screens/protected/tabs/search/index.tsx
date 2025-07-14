@@ -1,10 +1,9 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { View } from "react-native";
 
 import { Container, EmptyState } from "@/components/common";
 import { Card, CardContent } from "@/components/ui/card";
 import { Text } from "@/components/ui/text";
-import { useTranslation } from "@/hooks";
 
 import { MessageComposer } from "./components/message-composer";
 import { RecentSearches } from "./components/recent-searches";
@@ -80,7 +79,6 @@ const mockRecentSearches: RecentSearch[] = [
 ];
 
 export function SearchTab() {
-  const { t } = useTranslation();
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const [recentSearches, setRecentSearches] = useState<RecentSearch[]>(mockRecentSearches);
   const [isSearching, setIsSearching] = useState(false);

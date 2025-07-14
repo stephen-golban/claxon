@@ -1,4 +1,5 @@
-import { manipulateAsync, SaveFormat } from "expo-image-manipulator";
+import * as FileSystem from "expo-file-system";
+import { ImageManipulator, SaveFormat } from "expo-image-manipulator";
 import * as ImagePicker from "expo-image-picker";
 import { useState } from "react";
 import { Dimensions, Platform } from "react-native";
@@ -9,7 +10,6 @@ export function useImagePick() {
 
   // Get the screen width for dynamic resizing
   const SCREEN_WIDTH = Dimensions.get("window").width;
-
   const pickImage = async () => {
     try {
       setUploading(true);
@@ -33,28 +33,22 @@ export function useImagePick() {
       }
 
       // Determine optimal width for mobile (adaptive sizing)
-      const MAX_WIDTH = SCREEN_WIDTH > 800 ? 800 : 600;
+      const MAX_SIZE = SCREEN_WIDTH > 800 ? 800 : 600;
 
       // Optimize image
-      const manipulatedImage = await manipulateAsync(
-        image.uri,
+      const context = ImageManipulator.manipulate(image.uri);
+      const rendered = await context.resize({ width: MAX_SIZE, height: MAX_SIZE }).renderAsync();
+      const imageResult = await rendered.saveAsync({
+        format: SaveFormat.PNG,
+        compress: Platform.OS === "ios" ? 0.7 : 0.6,
+      });
 
-        [{ resize: { width: MAX_WIDTH } }],
-        {
-          compress: Platform.OS === "ios" ? 0.7 : 0.6, // Slightly lower quality on Android for better compression
-          format: SaveFormat.JPEG, // Ensure JPEG format
-        },
-      );
+      const uri = imageResult.uri;
+      const fileName = `${Date.now()}.png`;
+      const mimeType = image.mimeType ?? "image/png";
+      const base64 = await FileSystem.readAsStringAsync(uri, { encoding: FileSystem.EncodingType.Base64 });
 
-      const optimizedUri = manipulatedImage.uri as string;
-      const path = `${Date.now()}.jpeg`;
-
-      // Fetch optimized image as an ArrayBuffer (for uploading)
-      const arraybuffer = await fetch(optimizedUri).then((res) => res.arrayBuffer());
-
-      const mimeType = image.mimeType ?? "image/jpeg";
-
-      return { path, arraybuffer, uri: optimizedUri, mimeType };
+      return { fileName, uri, mimeType, base64 };
     } catch (error) {
       if (error instanceof Error) {
         console.log(error.message);

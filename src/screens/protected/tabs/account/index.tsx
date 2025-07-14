@@ -1,18 +1,16 @@
 import { useRouter } from "expo-router";
-import React, { useState } from "react";
+import { useState } from "react";
 import { Alert, ScrollView, View } from "react-native";
 import { Container } from "@/components/common";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Text } from "@/components/ui/text";
-import { useTranslation } from "@/hooks";
 import { supabase } from "@/services/api/client";
 import { ProfileForm } from "./form";
 import type { ProfileFormData } from "./schema";
 
 export function AccountTab() {
-  const { t } = useTranslation();
   const router = useRouter();
   const [isEditing, setIsEditing] = useState(false);
 
@@ -23,7 +21,7 @@ export function AccountTab() {
   // const updateUserMutation = useUpdateUser();
   // const deleteUserMutation = useDeleteUser();
 
-  const handleSaveProfile = async (data: ProfileFormData) => {
+  const handleSaveProfile = async (_data: ProfileFormData) => {
     try {
       // await updateUserMutation.mutateAsync({
       // 	dob: data.dob?.toISOString(),

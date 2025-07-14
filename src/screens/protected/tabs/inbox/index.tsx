@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import React, { useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { FlatList, View } from "react-native";
 
 import { Container, EmptyState } from "@/components/common";

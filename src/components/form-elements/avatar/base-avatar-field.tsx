@@ -10,9 +10,9 @@ import { FieldError } from "../field-error";
 
 type ImageData = {
   uri: string;
-  path: string;
+  base64: string;
+  fileName: string;
   mimeType: string;
-  arraybuffer: ArrayBuffer;
 };
 
 export interface BaseAvatarFieldProps {
@@ -38,9 +38,12 @@ const BaseAvatarField = React.forwardRef<React.ComponentRef<typeof TouchableOpac
     async function handlePickImage() {
       const result = await pickImage();
 
-      if (result?.uri && result?.arraybuffer) {
-        onChange(result);
+      if (!result) {
+        return;
       }
+
+      onChange(result);
+      return;
     }
 
     const hasValue = typeof value === "object" ? !!value?.uri : !!value;

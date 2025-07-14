@@ -50,7 +50,7 @@ const BaseTextField = React.forwardRef<React.ComponentRef<typeof Input>, Extende
         onChangeText={handleChangeText}
         selectionColor={error ? "rgb(242, 62, 48)" : isDark ? "white" : "black"}
         className={cn(
-          "native:h-14 native:text-lg native:leading-[1.25] rounded-2xl border border-transparent bg-transparent-black px-4 text-black dark:bg-transparent-white dark:text-white",
+          "tracking-normal native:h-14 native:text-lg native:leading-[1.25] rounded-2xl border border-transparent bg-transparent-black px-4 text-black dark:bg-transparent-white dark:text-white",
           rightElement && "pr-10",
           error && "bg-destructive/10 text-destructive dark:bg-destructive/10",
           className,

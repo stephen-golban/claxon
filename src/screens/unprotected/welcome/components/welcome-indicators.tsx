@@ -19,7 +19,7 @@ const WelcomeIndicators: React.FC<IWelcomeIndicators> = ({ currentPage, length }
       {Array.from({ length }).map((_, index) => {
         const isActive = index === currentPage;
 
-        // eslint-disable-next-line react-hooks/rules-of-hooks
+        // biome-ignore lint/correctness/useHookAtTopLevel: Using hook here is intentional for animated styles
         const indicatorStyle = useAnimatedStyle(() => ({
           width: withSpring(isActive ? 32 : 16, {
             damping: 15,

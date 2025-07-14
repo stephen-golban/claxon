@@ -1,18 +1,16 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import React, { useState } from "react";
+import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { FlatList, View } from "react-native";
+import { View } from "react-native";
 import { z } from "zod";
 
 import { SubmitButton, TextField } from "@/components/form-elements";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Text } from "@/components/ui/text";
 import { VEHICLE_COLORS } from "@/lib/constants";
-import { cn } from "@/lib/utils";
 
 interface SearchResult {
   vehicle: {

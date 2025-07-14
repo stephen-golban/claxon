@@ -1,6 +1,5 @@
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import React from "react";
 import { FlatList, Pressable, View } from "react-native";
 
 import { Badge } from "@/components/ui/badge";

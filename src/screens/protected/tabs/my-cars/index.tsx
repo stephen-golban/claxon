@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import React, { useState } from "react";
+import { useState } from "react";
 import { FlatList, Pressable, View } from "react-native";
 
 import { Container, EmptyState } from "@/components/common";
@@ -247,7 +247,7 @@ export function MyCarsTab() {
     );
   };
 
-  const renderVehicle = ({ item, index }: { item: MockVehicle; index: number }) => (
+  const renderVehicle = ({ item }: { item: MockVehicle; index: number }) => (
     <View>
       <VehicleCard vehicle={item} />
     </View>

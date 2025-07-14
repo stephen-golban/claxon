@@ -27,22 +27,17 @@ const PersonalDetailsForm: React.FC<IPersonalDetailsForm> = ({ onSubmit, isUploa
             <FormElements.TextField
               control={hook.control}
               name="first_name"
-              placeholder="Enter First Name"
+              placeholder="First Name"
               label="First Name"
             />
           </View>
           <View className="flex-1">
-            <FormElements.TextField
-              control={hook.control}
-              name="last_name"
-              placeholder="Enter Last Name"
-              label="Last Name"
-            />
+            <FormElements.TextField control={hook.control} name="last_name" placeholder="Last Name" label="Last Name" />
           </View>
         </View>
         <View className="gap-y-4 flex-1">
           <View>
-            <FormElements.EmailField control={hook.control} name="email" placeholder="Enter Email" label="Email" />
+            <FormElements.EmailField control={hook.control} name="email" placeholder="Email" label="Email" />
           </View>
 
           <View>
@@ -61,9 +56,9 @@ const PersonalDetailsForm: React.FC<IPersonalDetailsForm> = ({ onSubmit, isUploa
           <View>
             <FormElements.DatePickerField control={hook.control} name="dob" label="Date of Birth" />
           </View>
-          {/* <View>
+          <View>
             <FormElements.AvatarField name="image" control={hook.control} />
-          </View> */}
+          </View>
         </View>
       </View>
 

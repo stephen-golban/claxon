@@ -33,12 +33,12 @@ export const personalDetailsSchema = z.object({
   first_name: nameSchema,
   last_name: nameSchema,
   dob: dobSchema,
-  // image: z.object({
-  //   path: z.string().min(1, stringifyObjectValidate({ keyT: "errors:required" })),
-  //   arraybuffer: z.instanceof(ArrayBuffer),
-  //   mimeType: z.string(),
-  //   uri: z.string(),
-  // }),
+  image: z.object({
+    fileName: z.string().min(1, stringifyObjectValidate({ keyT: "errors:required" })),
+    mimeType: z.string(),
+    uri: z.string(),
+    base64: z.string(),
+  }),
   gender: z.string().min(1, stringifyObjectValidate({ keyT: "errors:genderRequired" })),
 });
 
@@ -49,12 +49,12 @@ export const defaultValues: PersonalDetailsFormData = {
   gender: "",
   last_name: "",
   first_name: "",
-  // image: {
-  //   path: "",
-  //   arraybuffer: new ArrayBuffer(0),
-  //   mimeType: "",
-  //   uri: "",
-  // },
+  image: {
+    fileName: "",
+    base64: "",
+    mimeType: "",
+    uri: "",
+  },
   dob: dayjs().subtract(12, "year").toDate(),
 };
 
