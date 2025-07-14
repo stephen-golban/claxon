@@ -1,12 +1,13 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import type React from "react";
-import { useEffect } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { View } from "react-native";
 import * as FormElements from "@/components/form-elements";
 import { useTranslation } from "@/hooks";
 import { useGetMe } from "@/services/api/accounts";
 import { createPersonalDetailsSchema, type PersonalDetailsFormData, transformAccountToFormData } from "./schema";
+import { hasFormDataChanged } from "./util";
 
 interface IPersonalDetailsForm {
   isUploading: boolean;
@@ -31,13 +32,29 @@ const PersonalDetailsForm: React.FC<IPersonalDetailsForm> = ({ onSubmit, isUploa
     mode: "onChange",
   });
 
+  // Store original values for change detection
+  const originalValuesRef = useRef<PersonalDetailsFormData | null>(null);
+
   // Reset form values when account data becomes available
   useEffect(() => {
     if (accountData) {
       const newFormData = transformAccountToFormData(accountData);
       hook.reset(newFormData);
+      // Store the original values for change detection
+      originalValuesRef.current = newFormData;
     }
   }, [accountData, hook]);
+
+  // Watch all form values to detect changes
+  const currentFormValues = hook.watch();
+
+  // Check if form has changes from original values
+  const hasChanges = useMemo(() => {
+    if (!originalValuesRef.current) {
+      return false;
+    }
+    return hasFormDataChanged(originalValuesRef.current, currentFormValues);
+  }, [currentFormValues]);
 
   return (
     <FormProvider {...hook}>
@@ -83,7 +100,7 @@ const PersonalDetailsForm: React.FC<IPersonalDetailsForm> = ({ onSubmit, isUploa
       </View>
 
       <FormElements.SubmitButton
-        isDisabled={!hook.formState.isValid}
+        isDisabled={!hook.formState.isValid || !hasChanges}
         onSubmit={hook.handleSubmit(onSubmit)}
         isSubmitting={hook.formState.isSubmitting || isUploading}
       />

@@ -92,6 +92,40 @@ export class AccountService {
     }
     return data;
   }
+
+  /**
+   * Deletes the current user's account and all associated data
+   * This will cascade delete all related records (vehicles, claxons, etc.)
+   * @throws Error if the account deletion fails
+   */
+  async deleteAccount(): Promise<void> {
+    try {
+      // Get current user session to get user ID
+      const {
+        data: { user },
+        error: userError,
+      } = await supabase.auth.getUser();
+
+      if (userError || !user) {
+        printError("account-delete-user-error", userError || new Error("No user found"));
+        throw new Error(ERROR_CODES.USER.RETRIEVAL_FAILED);
+      }
+
+      // Delete the account record (this will cascade delete all related data)
+      const { error: deleteError } = await supabase.from("accounts").delete().eq("id", user.id);
+
+      if (deleteError) {
+        printError("account-delete-error", deleteError);
+        throw new Error(ERROR_CODES.USER.UPDATE_FAILED);
+      }
+
+      // Sign out the user after successful deletion
+      await supabase.auth.signOut();
+    } catch (error) {
+      printError("account-delete-error", error as Error);
+      throw new Error(ERROR_CODES.USER.UPDATE_FAILED);
+    }
+  }
 }
 
 const accountService = new AccountService();
@@ -146,6 +180,22 @@ export const useUpdateAccount = () => {
   });
 };
 
+export const useUpdateAccountPhoneSharing = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ id, isPhonePublic }: { id: string; isPhonePublic: boolean }) =>
+      accountService.update({ is_phone_public: isPhonePublic }, id),
+    mutationKey: ["accounts", "updatePhoneSharing"],
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["accounts"] });
+    },
+    onError: (error) => {
+      toast.error(translateError(error.message));
+    },
+  });
+};
+
 export const useCreateAccount = () => {
   const queryClient = useQueryClient();
 
@@ -170,6 +220,114 @@ export const useUpsertAccount = () => {
       queryClient.invalidateQueries({ queryKey: ["accounts"] });
     },
     mutationKey: ["accounts", "upsert"],
+    onError: (error) => {
+      toast.error(translateError(error.message));
+    },
+  });
+};
+
+// ============================================================================
+// STATISTICS SERVICES
+// ============================================================================
+
+export interface AccountStatistics {
+  vehicleCount: number;
+  claxonsSent: number;
+  claxonsReceived: number;
+}
+
+export class AccountStatisticsService {
+  /**
+   * Gets statistics for the current user's account
+   * @returns Account statistics including vehicle count and claxon counts
+   * @throws Error if statistics retrieval fails
+   */
+  async getMyStatistics(): Promise<AccountStatistics> {
+    try {
+      // Get current user session to get user ID
+      const {
+        data: { user },
+        error: userError,
+      } = await supabase.auth.getUser();
+
+      if (userError || !user) {
+        printError("account-statistics-user-error", userError || new Error("No user found"));
+        throw new Error(ERROR_CODES.USER.RETRIEVAL_FAILED);
+      }
+
+      // Get vehicle count for current user (active vehicles only)
+      const { count: vehicleCount, error: vehicleError } = await supabase
+        .from("vehicles")
+        .select("*", { count: "exact", head: true })
+        .eq("user_id", user.id)
+        .eq("is_active", true);
+
+      if (vehicleError) {
+        printError("account-statistics-vehicles-error", vehicleError);
+        throw new Error(ERROR_CODES.USER.RETRIEVAL_FAILED);
+      }
+
+      // Get claxons sent count (where current user is sender)
+      const { count: claxonsSent, error: sentError } = await supabase
+        .from("claxons")
+        .select("*", { count: "exact", head: true })
+        .eq("sender_id", user.id);
+
+      if (sentError) {
+        printError("account-statistics-sent-error", sentError);
+        throw new Error(ERROR_CODES.USER.RETRIEVAL_FAILED);
+      }
+
+      // Get claxons received count (where current user is recipient)
+      const { count: claxonsReceived, error: receivedError } = await supabase
+        .from("claxons")
+        .select("*", { count: "exact", head: true })
+        .eq("recipient_id", user.id);
+
+      if (receivedError) {
+        printError("account-statistics-received-error", receivedError);
+        throw new Error(ERROR_CODES.USER.RETRIEVAL_FAILED);
+      }
+
+      return {
+        vehicleCount: vehicleCount || 0,
+        claxonsSent: claxonsSent || 0,
+        claxonsReceived: claxonsReceived || 0,
+      };
+    } catch (error) {
+      printError("account-statistics-error", error as Error);
+      throw new Error(ERROR_CODES.USER.RETRIEVAL_FAILED);
+    }
+  }
+}
+
+const accountStatisticsService = new AccountStatisticsService();
+
+export const useGetAccountStatistics = () => {
+  return useQuery({
+    queryKey: ["accounts", "statistics"],
+    queryFn: accountStatisticsService.getMyStatistics,
+    // Statistics change less frequently, keep fresh for 10 minutes
+    staleTime: 10 * 60 * 1000,
+    // Keep statistics in cache for 30 minutes
+    gcTime: 30 * 60 * 1000,
+    throwOnError: (error) => {
+      toast.error(translateError(error.message));
+      return true;
+    },
+  });
+};
+
+export const useDeleteAccount = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: accountService.deleteAccount,
+    mutationKey: ["accounts", "delete"],
+    onSuccess: () => {
+      // Clear all cached data since user is being deleted
+      queryClient.clear();
+    },
     onError: (error) => {
       toast.error(translateError(error.message));
     },

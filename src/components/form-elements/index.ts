@@ -9,5 +9,6 @@ export * from "./password";
 export * from "./phone";
 export * from "./select";
 export * from "./submit-button";
+export * from "./switch";
 export * from "./terms-acceptance";
 export * from "./text-field";

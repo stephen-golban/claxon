@@ -70,7 +70,7 @@ const HeaderRight = memo((): ReactNode => {
   const me = useGetMe();
 
   return (
-    <View className="flex-row items-center gap-x-3">
+    <View className="flex-row items-center gap-x-3 mt-2 mb-4">
       <ThemeSwitcher />
       {me.data && (
         <ProfileAvatar
