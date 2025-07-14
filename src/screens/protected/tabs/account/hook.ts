@@ -1,3 +1,4 @@
+import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
 import { Alert } from "react-native";
 import { useGetAccountStatistics, useGetMe, useUpdateAccountPhoneSharing } from "@/services/api/accounts";
@@ -6,6 +7,7 @@ import type { AccountFormData } from "./form/schema";
 
 export default function useAccountScreen() {
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   // Query current user data and statistics
   const { data: user, isPending, isLoading, error } = useGetMe();
@@ -21,6 +23,7 @@ export default function useAccountScreen() {
         text: "Sign Out",
         style: "destructive",
         onPress: async () => {
+          queryClient.clear();
           await supabase.auth.signOut();
           router.replace("/");
         },
@@ -39,7 +42,7 @@ export default function useAccountScreen() {
   };
 
   const handleNotificationSettings = () => {
-    Alert.alert("Coming Soon", "Notification preferences will be available in a future update");
+    router.push("/notification-settings");
   };
 
   const handleLanguageSettings = () => {

@@ -23,7 +23,6 @@ export type Database = {
           last_name: string | null;
           notification_preferences: Json | null;
           phone: string;
-          privacy_settings: Json | null;
           updated_at: string;
         };
         Insert: {
@@ -40,7 +39,6 @@ export type Database = {
           last_name?: string | null;
           notification_preferences?: Json | null;
           phone: string;
-          privacy_settings?: Json | null;
           updated_at?: string;
         };
         Update: {
@@ -57,7 +55,6 @@ export type Database = {
           last_name?: string | null;
           notification_preferences?: Json | null;
           phone?: string;
-          privacy_settings?: Json | null;
           updated_at?: string;
         };
         Relationships: [];

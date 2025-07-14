@@ -32,11 +32,12 @@ export class AccountService {
    * @returns The current user's profile
    * @throws Error if retrieval fails
    */
-  async getMe(): Promise<Account> {
+  async getMe(clear: () => void): Promise<Account> {
     const { data, error } = await supabase.from("accounts").select("*").single<Account>();
 
     if (error) {
       printError(`account-getMe-error`, error);
+      clear();
       await supabase.auth.signOut();
       throw new Error(ERROR_CODES.USER.RETRIEVAL_FAILED);
     }
@@ -141,19 +142,12 @@ export const useGetAccountById = (id: string) => {
   });
 };
 
-export const usePrefetchGetMe = () => {
-  const queryClient = useQueryClient();
-
-  return queryClient.prefetchQuery({
-    queryKey: ["accounts", "getMe"],
-    queryFn: accountService.getMe,
-  });
-};
-
 export const useGetMe = () => {
+  const { clear } = useQueryClient();
+
   return useQuery({
     queryKey: ["accounts", "getMe"],
-    queryFn: accountService.getMe,
+    queryFn: () => accountService.getMe(clear),
     // User data is relatively stable, keep it fresh for 5 minutes
     staleTime: 5 * 60 * 1000,
     // Keep user data in cache for 30 minutes
