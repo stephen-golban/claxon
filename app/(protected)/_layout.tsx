@@ -1,6 +1,4 @@
 import { Redirect, Stack, usePathname } from "expo-router";
-import { Suspense } from "react";
-import { CustomSplashScreen } from "@/components/common";
 import { getProtectedHeader } from "@/components/common/headers/protected";
 import { usePrefetchGetMe } from "@/services/api/accounts";
 import { useAppStore } from "@/stores/app";
@@ -17,13 +15,5 @@ export default function ProtectedLayout() {
     return <Redirect href="/(unprotected)" />;
   }
 
-  return (
-    <Suspense fallback={<CustomSplashScreen shouldFadeOut />}>
-      <Stack>
-        <Stack.Screen name="index" options={header} />
-        <Stack.Screen name="personal-details" options={header} />
-        <Stack.Screen name="tabs" options={header} />
-      </Stack>
-    </Suspense>
-  );
+  return <Stack screenOptions={header} />;
 }

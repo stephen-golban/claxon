@@ -1,16 +1,16 @@
+import type { NativeStackHeaderLeftProps } from "@react-navigation/native-stack";
 import { usePathname, useRouter } from "expo-router";
 import { memo, type ReactNode, useMemo } from "react";
 import type { StyleProp, TextStyle } from "react-native";
 import { View } from "react-native";
 import { MoveLeftIcon } from "@/components/icons";
-import { Button } from "@/components/ui/button";
 import { ProfileAvatar } from "../profile-avatar";
 import { ThemeSwitcher } from "../theme-switcher";
 
 // Configuration for header visibility
 const HEADER_CONFIG = {
-  HIDE_GO_BACK: new Set(["/tabs", "/tabs/inbox", "/tabs/my-cars", "/tabs/account"]),
-  HIDE_HEADER: new Set([""]),
+  HIDE_GO_BACK: new Set(),
+  HIDE_HEADER: new Set(),
 } as const;
 
 const getGoBackShouldHide = (pathname: string): boolean => {
@@ -21,23 +21,19 @@ const getHeaderShouldHide = (pathname: string): boolean => {
   return HEADER_CONFIG.HIDE_HEADER.has(pathname);
 };
 
-const HeaderLeft = memo((): ReactNode => {
+const HeaderLeft = memo((props: NativeStackHeaderLeftProps): ReactNode => {
   const router = useRouter();
   const pathname = usePathname();
 
   const shouldShow = useMemo(() => {
-    return router.canGoBack() && !getGoBackShouldHide(pathname);
-  }, [router, pathname]);
+    return props.canGoBack && !getGoBackShouldHide(pathname);
+  }, [pathname, props.canGoBack]);
 
   if (!shouldShow) {
     return null;
   }
 
-  return (
-    <Button size="icon" variant="ghost" onPress={() => router.back()} className="active:bg-transparent my-auto -ml-2">
-      <MoveLeftIcon className="text-primary" size={24} />
-    </Button>
-  );
+  return <MoveLeftIcon className="text-primary mt-2" size={24} onPress={() => router.back()} />;
 });
 
 const headerTitleStyle: StyleProp<
@@ -68,7 +64,7 @@ export const getProtectedHeader = (pathname: string) => {
   }
 
   return {
-    headerLeft: () => <HeaderLeft />,
+    headerLeft: (props: NativeStackHeaderLeftProps) => <HeaderLeft {...props} />,
     headerRight: () => <HeaderRight />,
     headerTitleStyle,
     headerBackground,

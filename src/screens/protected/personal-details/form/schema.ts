@@ -5,7 +5,7 @@ import { stringifyObjectValidate } from "@/lib/utils";
 
 const emailSchema = z.string().email(stringifyObjectValidate({ keyT: "errors:invalidEmail" }));
 
-const MIN_AGE = 16;
+const MIN_AGE = 12;
 const dobSchema = z.date().refine(
   (date) => {
     const today = new Date();
@@ -33,12 +33,12 @@ export const personalDetailsSchema = z.object({
   first_name: nameSchema,
   last_name: nameSchema,
   dob: dobSchema,
-  image: z.object({
-    path: z.string().min(1, stringifyObjectValidate({ keyT: "errors:required" })),
-    arraybuffer: z.instanceof(ArrayBuffer),
-    mimeType: z.string(),
-    uri: z.string(),
-  }),
+  // image: z.object({
+  //   path: z.string().min(1, stringifyObjectValidate({ keyT: "errors:required" })),
+  //   arraybuffer: z.instanceof(ArrayBuffer),
+  //   mimeType: z.string(),
+  //   uri: z.string(),
+  // }),
   gender: z.string().min(1, stringifyObjectValidate({ keyT: "errors:genderRequired" })),
 });
 
@@ -49,13 +49,13 @@ export const defaultValues: PersonalDetailsFormData = {
   gender: "",
   last_name: "",
   first_name: "",
-  image: {
-    path: "",
-    arraybuffer: new ArrayBuffer(0),
-    mimeType: "",
-    uri: "",
-  },
-  dob: dayjs().subtract(16, "year").toDate(),
+  // image: {
+  //   path: "",
+  //   arraybuffer: new ArrayBuffer(0),
+  //   mimeType: "",
+  //   uri: "",
+  // },
+  dob: dayjs().subtract(12, "year").toDate(),
 };
 
 export const resolver = zodResolver(personalDetailsSchema);

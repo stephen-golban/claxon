@@ -4,7 +4,7 @@ import { WelcomeScreen } from "@/screens/protected/welcome";
 import { useGetMe } from "@/services/api/accounts";
 
 export default function Page() {
-  const { data } = useGetMe(true);
+  const { data } = useGetMe(false);
 
   if (!isEmpty(data?.email)) {
     return <Redirect href="/tabs" />;

@@ -9,7 +9,7 @@ export function ThemeSwitcher() {
 
   return (
     <Button size="icon" variant="ghost" onPress={toggleColorScheme}>
-      <Icon size={24} className="text-foreground" />
+      <Icon size={20} className="text-foreground" />
     </Button>
   );
 }
