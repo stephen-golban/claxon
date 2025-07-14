@@ -1,6 +1,6 @@
+import { toast } from "@/components/ui/toast";
 import { useGetMe, useUpdateAccount } from "@/services/api/accounts";
 import type { NotificationPreferencesFormData } from "./form/schema";
-import { toast } from "@/components/ui/toast";
 
 export default function useNotificationSettingsScreen() {
   // Query current user data to get notification preferences

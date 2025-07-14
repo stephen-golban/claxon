@@ -1,9 +1,9 @@
+import type React from "react";
 import { useEffect, useMemo, useRef } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { View } from "react-native";
-import type React from "react";
 
-import { SwitchField, SubmitButton } from "@/components/form-elements";
+import { SubmitButton, SwitchField } from "@/components/form-elements";
 import { MessageSquareIcon, SmartphoneIcon } from "@/components/icons";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";

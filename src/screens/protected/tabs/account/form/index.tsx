@@ -1,6 +1,8 @@
+import { noop } from "lodash";
 import type React from "react";
 import { useState } from "react";
 import { View } from "react-native";
+import { BaseSwitchField } from "@/components/form-elements";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { type Option, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -8,8 +10,6 @@ import { Separator } from "@/components/ui/separator";
 import { Text } from "@/components/ui/text";
 import { useGetMe } from "@/services/api/accounts";
 import { getLanguageDisplayName, getLanguageOptions } from "../language-utils";
-import { BaseSwitchField } from "@/components/form-elements";
-import { noop } from "lodash";
 
 interface IAccountForm {
   isSubmitting: boolean;
