@@ -7,7 +7,7 @@ import type { AccountFormData } from "./schema";
  * @returns true if any field has changed, false otherwise
  */
 export const hasFormDataChanged = (original: AccountFormData, current: AccountFormData): boolean => {
-  return original.is_phone_public !== current.is_phone_public;
+  return original.is_phone_public !== current.is_phone_public || original.language !== current.language;
 };
 
 /**
@@ -16,7 +16,7 @@ export const hasFormDataChanged = (original: AccountFormData, current: AccountFo
  * @returns true if the data is valid for submission
  */
 export const isAccountFormDataValid = (data: AccountFormData): boolean => {
-  return typeof data.is_phone_public === "boolean";
+  return typeof data.is_phone_public === "boolean" && typeof data.language === "string";
 };
 
 /**
@@ -26,12 +26,19 @@ export const isAccountFormDataValid = (data: AccountFormData): boolean => {
  * @returns An object describing what fields have changed
  */
 export const getFormDataChanges = (original: AccountFormData, current: AccountFormData) => {
-  const changes: Record<string, { from: boolean; to: boolean }> = {};
+  const changes: Record<string, { from: boolean | string; to: boolean | string }> = {};
 
   if (original.is_phone_public !== current.is_phone_public) {
     changes.is_phone_public = {
       from: original.is_phone_public,
       to: current.is_phone_public,
+    };
+  }
+
+  if (original.language !== current.language) {
+    changes.language = {
+      from: original.language,
+      to: current.language,
     };
   }
 

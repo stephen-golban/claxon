@@ -3,7 +3,11 @@ import LottieView from "lottie-react-native";
 import { StyleSheet, View } from "react-native";
 import { Text } from "@/components/ui/text";
 
-export function ErrorScreen() {
+interface ErrorScreenProps {
+  message?: string;
+}
+
+export const ErrorScreen: React.FC<ErrorScreenProps> = ({ message = "Something went wrong" }) => {
   return (
     <View style={StyleSheet.absoluteFillObject} className="flex-1 items-center justify-center bg-background">
       <StatusBar style="auto" animated />
@@ -13,7 +17,7 @@ export function ErrorScreen() {
         loop
         style={{ width: 200, height: 200 }}
       />
-      <Text className="text-2xl font-bold">Something went wrong</Text>
+      <Text className="text-2xl font-bold">{message}</Text>
     </View>
   );
-}
+};

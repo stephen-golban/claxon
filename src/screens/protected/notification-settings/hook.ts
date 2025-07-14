@@ -1,28 +1,26 @@
-import { useState } from "react";
-import { useGetMe } from "@/services/api/accounts";
+import { useGetMe, useUpdateAccount } from "@/services/api/accounts";
 import type { NotificationPreferencesFormData } from "./form/schema";
 
 export default function useNotificationSettingsScreen() {
   // Query current user data to get notification preferences
   const { data: user, isPending, isLoading, error } = useGetMe();
 
-  // Mock mutation state - in real implementation this would be a mutation hook
-  const [isSubmitting] = useState(false);
+  // Mutation hook for updating account
+  const updateAccountMutation = useUpdateAccount();
 
   // Get notification preferences from user data or use defaults
   const notificationPreferences = user?.notification_preferences;
 
   const onSubmit = async (data: NotificationPreferencesFormData) => {
-    if (!user) return;
+    if (!user || updateAccountMutation.isPending) return;
 
-    // In real implementation, this would trigger an API call to save the preferences
-    console.log("Saving notification preferences:", data);
-
-    // Example API call structure:
-    // await updateNotificationPreferences.mutateAsync({
-    //   userId: user.id,
-    //   preferences: data,
-    // });
+    // Update the user's notification preferences
+    await updateAccountMutation.mutateAsync({
+      id: user.id,
+      dto: {
+        notification_preferences: data,
+      },
+    });
   };
 
   return {
@@ -34,7 +32,7 @@ export default function useNotificationSettingsScreen() {
     isPending,
     isLoading,
     error,
-    isSubmitting,
+    isSubmitting: updateAccountMutation.isPending,
 
     // Handlers
     onSubmit,

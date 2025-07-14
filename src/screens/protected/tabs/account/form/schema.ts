@@ -5,18 +5,14 @@ import type { Account } from "@/services/api/accounts";
 // Account form schema for settings that can be modified
 export const accountFormSchema = z.object({
   is_phone_public: z.boolean(),
-  // Future settings can be added here:
-  // notification_preferences: z.object({
-  //   email_notifications: z.boolean(),
-  //   push_notifications: z.boolean(),
-  // }),
-  // language: z.enum(["en", "ro", "ru"]),
+  language: z.enum(["en", "ro", "ru"]),
 });
 
 export type AccountFormData = z.infer<typeof accountFormSchema>;
 
 export const defaultValues: AccountFormData = {
   is_phone_public: false,
+  language: "ro",
 };
 
 export const resolver = zodResolver(accountFormSchema);
@@ -33,5 +29,6 @@ export const transformAccountToFormData = (account: Account | undefined): Accoun
 
   return {
     is_phone_public: account.is_phone_public || false,
+    language: (account.language as "en" | "ro" | "ru") || defaultValues.language,
   };
 };

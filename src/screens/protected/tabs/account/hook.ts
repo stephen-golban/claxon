@@ -1,9 +1,8 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
 import { Alert } from "react-native";
-import { useGetAccountStatistics, useGetMe, useUpdateAccountPhoneSharing } from "@/services/api/accounts";
+import { useGetAccountStatistics, useGetMe, useUpdateAccount } from "@/services/api/accounts";
 import { supabase } from "@/services/api/client";
-import type { AccountFormData } from "./form/schema";
 
 export default function useAccountScreen() {
   const router = useRouter();
@@ -14,7 +13,7 @@ export default function useAccountScreen() {
   const { data: statistics, isLoading: statsLoading } = useGetAccountStatistics();
 
   // Mutations
-  const updatePhoneSharingMutation = useUpdateAccountPhoneSharing();
+  const updateAccountMutation = useUpdateAccount();
 
   const handleSignOut = () => {
     Alert.alert("Sign Out", "Are you sure you want to sign out?", [
@@ -34,7 +33,19 @@ export default function useAccountScreen() {
   const handleTogglePhoneSharing = async (enabled: boolean) => {
     if (!user) return;
 
-    await updatePhoneSharingMutation.mutateAsync({ isPhonePublic: enabled, id: user.id });
+    await updateAccountMutation.mutateAsync({
+      dto: { is_phone_public: enabled },
+      id: user.id,
+    });
+  };
+
+  const handleLanguageChange = async (language: "en" | "ro" | "ru") => {
+    if (!user) return;
+
+    await updateAccountMutation.mutateAsync({
+      dto: { language },
+      id: user.id,
+    });
   };
 
   const handleEditProfile = () => {
@@ -43,17 +54,6 @@ export default function useAccountScreen() {
 
   const handleNotificationSettings = () => {
     router.push("/notification-settings");
-  };
-
-  const handleLanguageSettings = () => {
-    Alert.alert("Coming Soon", "Language preferences will be available in a future update");
-  };
-
-  const onSubmit = async (data: AccountFormData) => {
-    if (!user) return;
-
-    // Handle form submission for account settings
-    await handleTogglePhoneSharing(data.is_phone_public);
   };
 
   return {
@@ -66,14 +66,13 @@ export default function useAccountScreen() {
     isLoading,
     error,
     statsLoading,
-    isSubmitting: updatePhoneSharingMutation.isPending,
+    isSubmitting: updateAccountMutation.isPending,
 
     // Handlers
     handleSignOut,
     handleTogglePhoneSharing,
+    handleLanguageChange,
     handleEditProfile,
     handleNotificationSettings,
-    handleLanguageSettings,
-    onSubmit,
   };
 }

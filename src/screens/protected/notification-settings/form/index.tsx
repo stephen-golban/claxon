@@ -1,8 +1,8 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { MessageSquare, Smartphone } from "lucide-react-native";
-import type React from "react";
-import { useEffect, useMemo, useRef } from "react";
-import { FormProvider, useForm } from "react-hook-form";
+import React from "react";
+import { useCallback, useEffect, useRef } from "react";
+import { FormProvider, useForm, useWatch, type Control } from "react-hook-form";
 import { View } from "react-native";
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -16,13 +16,109 @@ import {
   notificationPreferencesSchema,
   transformPreferencesToFormData,
 } from "./schema";
-import { getSettingDescription, getSettingTitle, hasNotificationPreferencesChanged } from "./util";
+import { hasNotificationPreferencesChanged } from "./util";
 
 interface INotificationPreferencesForm {
   isSubmitting: boolean;
   onSubmit: (data: NotificationPreferencesFormData) => void;
   initialData: Json | undefined;
 }
+
+type NotificationFieldPath =
+  | "sms.claxons"
+  | "sms.directMessages"
+  | "push.newClaxons"
+  | "push.directMessages"
+  | "push.appUpdates";
+
+// Isolated component for individual notification toggles to prevent re-renders
+const NotificationToggle = React.memo<{
+  control: Control<NotificationPreferencesFormData>;
+  fieldPath: NotificationFieldPath;
+  title: string;
+  description: string;
+  isSubmitting: boolean;
+  onFieldChange: (fieldPath: NotificationFieldPath, value: boolean) => void;
+}>(({ control, fieldPath, title, description, isSubmitting, onFieldChange }) => {
+  // Only watch this specific field to isolate re-renders
+  const fieldValue = useWatch({
+    control,
+    name: fieldPath,
+    defaultValue: false,
+  });
+
+  return (
+    <View className="flex-row items-center justify-between">
+      <View className="flex-1">
+        <Text className="font-medium">{title}</Text>
+        <Text className="text-sm text-muted-foreground">{description}</Text>
+      </View>
+      <Switch
+        checked={fieldValue}
+        onCheckedChange={(checked) => onFieldChange(fieldPath, checked)}
+        disabled={isSubmitting}
+      />
+    </View>
+  );
+});
+
+// Isolated section component to prevent cross-section re-renders
+const NotificationSection = React.memo<{
+  control: Control<NotificationPreferencesFormData>;
+  section: "sms" | "push";
+  title: string;
+  description: string;
+  icon: React.ReactNode;
+  isSubmitting: boolean;
+  onFieldChange: (fieldPath: NotificationFieldPath, value: boolean) => void;
+}>(({ control, section, title, description, icon, isSubmitting, onFieldChange }) => {
+  const sectionFields =
+    section === "sms"
+      ? [
+          { key: "claxons", title: "Receive SMS Claxons", description: "Get notified when someone sends you a claxon" },
+          {
+            key: "directMessages",
+            title: "Direct Messages",
+            description: "SMS notifications for direct messages from other users",
+          },
+        ]
+      : [
+          { key: "newClaxons", title: "New Claxons", description: "Push notifications when you receive new claxons" },
+          {
+            key: "directMessages",
+            title: "Direct Messages",
+            description: "Push notifications for direct messages from other users",
+          },
+          { key: "appUpdates", title: "App Updates", description: "Notifications about app updates and new features" },
+        ];
+
+  return (
+    <Card>
+      <CardHeader>
+        <View className="flex-row items-center gap-x-3">
+          {icon}
+          <CardTitle>{title}</CardTitle>
+        </View>
+        <CardDescription>{description}</CardDescription>
+      </CardHeader>
+      <CardContent className="gap-y-4">
+        {sectionFields.map((field, index) => (
+          <View key={field.key}>
+            <NotificationToggle
+              control={control}
+              fieldPath={`${section}.${field.key}` as NotificationFieldPath}
+              title={field.title}
+              description={field.description}
+              isSubmitting={isSubmitting}
+              onFieldChange={onFieldChange}
+            />
+            {index < sectionFields.length - 1 && <Separator />}
+          </View>
+        ))}
+      </CardContent>
+    </Card>
+  );
+});
 
 const NotificationPreferencesForm: React.FC<INotificationPreferencesForm> = ({
   onSubmit,
@@ -55,88 +151,50 @@ const NotificationPreferencesForm: React.FC<INotificationPreferencesForm> = ({
     }
   }, [initialData, hook]);
 
-  // Watch all form values to detect changes
-  const currentFormValues = hook.watch();
+  // Optimized change handler that submits immediately on field change
+  const handleFieldChange = useCallback(
+    async (fieldPath: NotificationFieldPath, value: boolean) => {
+      // Update the field value
+      hook.setValue(fieldPath, value);
 
-  // Check if form has changes from original values
-  const hasChanges = useMemo(() => {
-    if (!originalValuesRef.current) {
-      return false;
-    }
-    return hasNotificationPreferencesChanged(originalValuesRef.current, currentFormValues);
-  }, [currentFormValues]);
+      // Get current form values after the change
+      const currentValues = hook.getValues();
 
-  // Auto-submit when preferences change
-  useEffect(() => {
-    if (hasChanges && originalValuesRef.current) {
-      const submitData = async () => {
+      // Check if form has changes from original values
+      if (originalValuesRef.current && hasNotificationPreferencesChanged(originalValuesRef.current, currentValues)) {
         const isValid = await hook.trigger();
         if (isValid) {
-          onSubmit(currentFormValues);
+          onSubmit(currentValues);
         }
-      };
-      submitData();
-    }
-  }, [hasChanges, currentFormValues, hook, onSubmit]);
-
-  const renderNotificationSection = (
-    section: "sms" | "push",
-    title: string,
-    description: string,
-    icon: React.ReactNode,
-  ) => {
-    const sectionData = currentFormValues[section];
-    const sectionKeys = Object.keys(sectionData) as Array<keyof typeof sectionData>;
-
-    return (
-      <Card>
-        <CardHeader>
-          <View className="flex-row items-center gap-x-3">
-            {icon}
-            <CardTitle>{title}</CardTitle>
-          </View>
-          <CardDescription>{description}</CardDescription>
-        </CardHeader>
-        <CardContent className="gap-y-4">
-          {sectionKeys.map((setting, index) => (
-            <View key={setting}>
-              <View className="flex-row items-center justify-between">
-                <View className="flex-1">
-                  <Text className="font-medium">{getSettingTitle(section, setting)}</Text>
-                  <Text className="text-sm text-muted-foreground">{getSettingDescription(section, setting)}</Text>
-                </View>
-                <Switch
-                  checked={sectionData[setting]}
-                  onCheckedChange={(checked) => hook.setValue(`${section}.${setting}`, checked)}
-                  disabled={isSubmitting}
-                />
-              </View>
-              {index < sectionKeys.length - 1 && <Separator />}
-            </View>
-          ))}
-        </CardContent>
-      </Card>
-    );
-  };
+      }
+    },
+    [hook, onSubmit],
+  );
 
   return (
     <FormProvider {...hook}>
       <View className="gap-y-6">
         {/* SMS Notifications Section */}
-        {renderNotificationSection(
-          "sms",
-          "SMS Notifications",
-          "Receive notifications via text message to your phone",
-          <MessageSquare size={20} color={isDark ? "#ffffff" : "#000000"} />,
-        )}
+        <NotificationSection
+          control={hook.control}
+          section="sms"
+          title="SMS Notifications"
+          description="Receive notifications via text message to your phone"
+          icon={<MessageSquare size={20} color={isDark ? "#ffffff" : "#000000"} />}
+          isSubmitting={isSubmitting}
+          onFieldChange={handleFieldChange}
+        />
 
         {/* Push Notifications Section */}
-        {renderNotificationSection(
-          "push",
-          "Push Notifications",
-          "Receive notifications directly to your device",
-          <Smartphone size={20} color={isDark ? "#ffffff" : "#000000"} />,
-        )}
+        <NotificationSection
+          control={hook.control}
+          section="push"
+          title="Push Notifications"
+          description="Receive notifications directly to your device"
+          icon={<Smartphone size={20} color={isDark ? "#ffffff" : "#000000"} />}
+          isSubmitting={isSubmitting}
+          onFieldChange={handleFieldChange}
+        />
       </View>
     </FormProvider>
   );

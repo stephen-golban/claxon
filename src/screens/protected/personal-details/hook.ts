@@ -6,7 +6,7 @@ import type { PersonalDetailsFormData } from "./form/schema";
 
 export default function usePersonalDetailsScreen() {
   const router = useRouter();
-  const { data: currentUser } = useGetMe();
+  const { data: currentUser, isPending, isLoading, error } = useGetMe();
 
   const account = useUpdateAccount();
   const [, uploadMutation] = useUploadImage("account-avatar");
@@ -51,5 +51,5 @@ export default function usePersonalDetailsScreen() {
     return result;
   };
 
-  return { onSubmit, isUploading };
+  return { onSubmit, isUploading, isPending, isLoading, error, currentUser };
 }

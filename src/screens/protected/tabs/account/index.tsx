@@ -1,5 +1,5 @@
 import { ScrollView, View } from "react-native";
-import { Container } from "@/components/common";
+import { Container, ErrorScreen } from "@/components/common";
 import { ProfileAvatar } from "@/components/common/profile-avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -18,41 +18,19 @@ export function AccountTab() {
     statsLoading,
     isSubmitting,
     handleSignOut,
+    handleTogglePhoneSharing,
+    handleLanguageChange,
     handleEditProfile,
     handleNotificationSettings,
-    handleLanguageSettings,
-    onSubmit,
   } = useAccountScreen();
-
-  // Show loading state while fetching user data
-  if (isPending || isLoading) {
-    return (
-      <Container>
-        <Container.TopText title="Account" subtitle="Loading..." />
-        <View className="flex-1 items-center justify-center">
-          <Text>Loading profile...</Text>
-        </View>
-      </Container>
-    );
-  }
 
   // Show error state if user data failed to load
   if (error || !user) {
-    return (
-      <Container>
-        <Container.TopText title="Account" subtitle="Error loading profile" />
-        <View className="flex-1 items-center justify-center">
-          <Text>Failed to load profile data</Text>
-          <Button onPress={handleSignOut} className="mt-4">
-            <Text>Sign Out</Text>
-          </Button>
-        </View>
-      </Container>
-    );
+    return <ErrorScreen message="Failed to load profile data" />;
   }
 
   return (
-    <Container>
+    <Container loading={isPending || isLoading}>
       <Container.TopText title="Account" subtitle="Manage your profile and preferences" />
 
       <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
@@ -94,31 +72,11 @@ export function AccountTab() {
 
           {/* Privacy Settings */}
           <AccountForm
-            onSubmit={onSubmit}
+            onPhoneToggle={handleTogglePhoneSharing}
+            onLanguageChange={handleLanguageChange}
             isSubmitting={isSubmitting}
             onNotificationSettings={handleNotificationSettings}
           />
-
-          {/* Language Preferences */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Language Preferences</CardTitle>
-              <CardDescription>Choose your preferred language for the app</CardDescription>
-            </CardHeader>
-            <CardContent className="gap-y-4">
-              <View className="flex-row items-center justify-between">
-                <View className="flex-1">
-                  <Text className="font-medium">App Language</Text>
-                  <Text className="text-sm text-muted-foreground">
-                    Current: {user.language === "ro" ? "Romanian" : user.language === "ru" ? "Russian" : "English"}
-                  </Text>
-                </View>
-                <Button variant="outline" size="sm" onPress={handleLanguageSettings}>
-                  <Text>Change</Text>
-                </Button>
-              </View>
-            </CardContent>
-          </Card>
 
           {/* Account Statistics */}
           <Card>
