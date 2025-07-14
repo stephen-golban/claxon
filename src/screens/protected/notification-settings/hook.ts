@@ -1,5 +1,6 @@
 import { useGetMe, useUpdateAccount } from "@/services/api/accounts";
 import type { NotificationPreferencesFormData } from "./form/schema";
+import { toast } from "@/components/ui/toast";
 
 export default function useNotificationSettingsScreen() {
   // Query current user data to get notification preferences
@@ -15,12 +16,19 @@ export default function useNotificationSettingsScreen() {
     if (!user || updateAccountMutation.isPending) return;
 
     // Update the user's notification preferences
-    await updateAccountMutation.mutateAsync({
-      id: user.id,
-      dto: {
-        notification_preferences: data,
+    await updateAccountMutation.mutateAsync(
+      {
+        id: user.id,
+        dto: {
+          notification_preferences: data,
+        },
       },
-    });
+      {
+        onSuccess: () => {
+          toast.success("Notification preferences have been updated");
+        },
+      },
+    );
   };
 
   return {
@@ -32,7 +40,6 @@ export default function useNotificationSettingsScreen() {
     isPending,
     isLoading,
     error,
-    isSubmitting: updateAccountMutation.isPending,
 
     // Handlers
     onSubmit,

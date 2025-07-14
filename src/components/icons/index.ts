@@ -12,6 +12,8 @@ import {
   EyeOffIcon,
   GlobeIcon,
   HomeIcon,
+  MessageSquareIcon,
+  SmartphoneIcon,
   type LucideIcon,
   MoonIcon,
   MoveLeftIcon,
@@ -63,6 +65,8 @@ import { SwipeRightIcon } from "./swipe-right";
   ChevronRightIcon,
   EditIcon,
   TrashIcon,
+  SmartphoneIcon,
+  MessageSquareIcon,
 ].forEach(iconWithClassName);
 
 export {
@@ -97,4 +101,6 @@ export {
   TrashIcon,
   BetweenHorizontalEndIcon,
   MoveLeftIcon,
+  MessageSquareIcon,
+  SmartphoneIcon,
 };
