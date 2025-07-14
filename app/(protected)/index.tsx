@@ -14,5 +14,5 @@ export default function Page() {
     return <Redirect href="/tabs" />;
   }
 
-  return <WelcomeScreen />;
+  return <WelcomeScreen data={data} />;
 }

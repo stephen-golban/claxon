@@ -6,22 +6,29 @@ export interface WelcomeActionConfig {
   description: string;
   iconName: "car" | "search" | "plus";
   action: () => void;
-  variant: "default" | "secondary" | "outline";
-  priority: number;
 }
 
-export const useWelcomeActions = () => {
+export const useWelcomeActions = (isProfileComplete: boolean) => {
   const router = useRouter();
 
   const quickActions: WelcomeActionConfig[] = [
+    ...(isProfileComplete
+      ? []
+      : [
+          {
+            id: "complete-profile",
+            title: "Complete Profile",
+            description: "Finish setting up your personal details",
+            iconName: "car" as const,
+            action: () => router.push("/personal-details"),
+          } satisfies WelcomeActionConfig,
+        ]),
     {
-      id: "complete-profile",
-      title: "Complete Profile",
-      description: "Finish setting up your personal details",
-      iconName: "car",
-      action: () => router.push("/personal-details"),
-      variant: "default",
-      priority: 1,
+      id: "register-car",
+      title: "Register Your First Car",
+      description: "Add your first vehicle to receive claxon notifications",
+      iconName: "plus",
+      action: () => router.push("/tabs/my-cars"),
     },
     {
       id: "explore-app",
@@ -29,17 +36,6 @@ export const useWelcomeActions = () => {
       description: "Discover how to send messages via license plates",
       iconName: "search",
       action: () => router.push("/tabs"),
-      variant: "secondary",
-      priority: 2,
-    },
-    {
-      id: "register-car",
-      title: "Register Your First Car",
-      description: "Add your first vehicle to receive claxon notifications",
-      iconName: "plus",
-      action: () => router.push("/tabs/my-cars"),
-      variant: "outline",
-      priority: 3,
     },
   ];
 

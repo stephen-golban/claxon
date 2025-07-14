@@ -1,5 +1,5 @@
 import { Redirect, Stack, usePathname } from "expo-router";
-import { getProtectedHeader } from "@/components/common/headers/protected";
+import { getProtectedHeader } from "@/components/common/headers";
 import { useAppStore } from "@/stores/app";
 
 export default function ProtectedLayout() {
