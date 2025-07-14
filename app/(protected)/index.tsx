@@ -1,12 +1,16 @@
 import { Redirect } from "expo-router";
-import { isEmpty } from "lodash";
+import { FullScreenLoader } from "@/components/common";
 import { WelcomeScreen } from "@/screens/protected/welcome";
 import { useGetMe } from "@/services/api/accounts";
 
 export default function Page() {
-  const { data } = useGetMe(false);
+  const { data, isLoading } = useGetMe();
 
-  if (!isEmpty(data?.email)) {
+  if (isLoading || !data) {
+    return <FullScreenLoader />;
+  }
+
+  if (data.is_setup_finished) {
     return <Redirect href="/tabs" />;
   }
 

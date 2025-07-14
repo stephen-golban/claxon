@@ -1,6 +1,5 @@
 import type { AuthError } from "@supabase/supabase-js";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { decode } from "base64-arraybuffer";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { ImagePickerAsset } from "expo-image-picker";
 import { useState } from "react";
 import { toast } from "@/components/ui/toast";
@@ -9,8 +8,8 @@ import { getSupabaseErrorCode, printError, translateError } from "@/lib/utils";
 import { supabase } from "./client";
 
 export type UploadImageProps = Partial<{
-  base64: string;
-  fileName: string;
+  path: string;
+  arraybuffer: ArrayBuffer;
   mimeType: ImagePickerAsset["mimeType"];
 }>;
 
@@ -25,27 +24,31 @@ export class ImageService {
       throw getSupabaseErrorCode(error as unknown as AuthError);
     }
 
-    let downloadedImage: string | null = null;
-
     if (data instanceof Blob) {
-      const fr = new FileReader();
-      fr.readAsDataURL(data);
-      fr.onload = () => {
-        downloadedImage = fr.result as string;
-      };
+      return new Promise<string>((resolve, reject) => {
+        const fr = new FileReader();
+        fr.onload = () => {
+          const result = fr.result as string;
+          resolve(result);
+        };
+        fr.onerror = () => {
+          reject(new Error("Failed to read file"));
+        };
+        fr.readAsDataURL(data);
+      });
     }
 
-    return downloadedImage as unknown as string;
+    throw new Error("Downloaded data is not a Blob");
   }
 
-  async uploadImage({ base64, fileName, mimeType }: UploadImageProps) {
-    if (!base64 || !fileName || !mimeType) {
-      printError(`image-upload-error`, new Error(`Path, arraybuffer, fileName and mimeType are required`));
+  async uploadImage({ path, arraybuffer, mimeType }: UploadImageProps) {
+    if (!path || !arraybuffer || !mimeType) {
+      printError(`image-upload-error`, new Error(`Path, arraybuffer and mimeType are required`));
       throw new Error(ERROR_CODES.UPLOAD_FAILED);
     }
 
-    const { data, error } = await supabase.storage.from("avatars").upload(fileName, decode(base64), {
-      contentType: mimeType ?? "image/png",
+    const { data, error } = await supabase.storage.from("avatars").upload(path, arraybuffer, {
+      contentType: mimeType ?? "image/jpeg",
     });
 
     if (error) {
@@ -74,22 +77,30 @@ export function useUploadImage(queryKey: string) {
 
   return [path, mutation] as [string, typeof mutation];
 }
-export function useDownloadImage(queryKey: string, size: number | [number, number]) {
+
+// New optimized hook that uses React Query for proper caching
+export function useDownloadImage(
+  avatarUrl: string | null | undefined,
+  queryKey: string,
+  size: number | [number, number],
+) {
   const service = new ImageService();
-  const queryClient = useQueryClient();
-  const [path, setPath] = useState<string | null>(null);
 
-  const mutation = useMutation({
-    mutationFn: (vars: string) => service.downloadImage(vars, size),
-    mutationKey: ["image", queryKey, size],
-    onSuccess: (data) => {
-      if (data) {
-        setPath(data);
-        queryClient.invalidateQueries({ queryKey: ["image", queryKey, size] });
+  return useQuery({
+    queryKey: ["image", "download", queryKey, avatarUrl, size],
+    queryFn: () => {
+      if (!avatarUrl) {
+        throw new Error("Avatar URL is required");
       }
+      return service.downloadImage(avatarUrl, size);
     },
-    onError: (err) => toast.error(translateError(err.message)),
+    enabled: !!avatarUrl, // Only run query when avatarUrl exists
+    staleTime: 15 * 60 * 1000, // Consider data fresh for 15 minutes (longer for images)
+    gcTime: 60 * 60 * 1000, // Keep in cache for 1 hour
+    retry: 2, // Retry failed requests twice
+    retryDelay: (attemptIndex: number) => Math.min(1000 * 2 ** attemptIndex, 30000), // Exponential backoff
+    refetchOnWindowFocus: false, // Don't refetch on focus to prevent flickering
+    refetchOnReconnect: false, // Don't refetch on reconnect to prevent flickering
+    refetchOnMount: false, // Don't refetch on mount if data exists
   });
-
-  return [path, mutation] as [string, typeof mutation];
 }

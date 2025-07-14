@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Text } from "@/components/ui/text";
 import { useErrorMessageTranslation, useImagePick, useTranslation } from "@/hooks";
 import { cn } from "@/lib/utils";
+import { useDownloadImage } from "@/services/api/image";
 import { FieldError } from "../field-error";
 
 type ImageData = {
@@ -20,6 +21,7 @@ export interface BaseAvatarFieldProps {
   size?: number;
   error?: string;
   label?: string;
+  existingAvatarUrl?: string | null;
   onBlur: () => void;
   // biome-ignore lint/suspicious/noExplicitAny: any is used to allow for any type of event
   onChange: (...event: any[]) => void;
@@ -29,11 +31,14 @@ const blurhash =
   "|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[";
 
 const BaseAvatarField = React.forwardRef<React.ComponentRef<typeof TouchableOpacity>, BaseAvatarFieldProps>(
-  ({ value, onChange, onBlur, error, size = 80, label, ...rest }, ref) => {
-    const { pickImage, uploading } = useImagePick();
+  ({ value, onChange, onBlur, error, size = 80, label, existingAvatarUrl, ...rest }, ref) => {
+    const { pickImage } = useImagePick();
 
     const { t } = useTranslation();
     const errorMessage = useErrorMessageTranslation(error);
+
+    // Download existing avatar if available
+    const existingAvatarQuery = useDownloadImage(existingAvatarUrl, "avatar-field", 80);
 
     async function handlePickImage() {
       const result = await pickImage();
@@ -46,10 +51,16 @@ const BaseAvatarField = React.forwardRef<React.ComponentRef<typeof TouchableOpac
       return;
     }
 
-    const hasValue = typeof value === "object" ? !!value?.uri : !!value;
+    // Determine if we have a value - either a new image or an existing avatar
+    const hasNewImage = typeof value === "object" ? !!value?.uri : !!value;
+    const hasExistingAvatar = !!existingAvatarQuery.data;
+    const hasValue = hasNewImage || hasExistingAvatar;
+
+    // Determine which image source to use - prioritize new image over existing
+    const imageSource = hasNewImage ? value?.uri : existingAvatarQuery.data;
 
     const renderCarPhotoPreview = () => {
-      if (hasValue) {
+      if (hasValue && imageSource) {
         return (
           <View className="relative">
             <View className="w-20 h-20 rounded-xl overflow-hidden border-2 border-primary/20">
@@ -58,23 +69,15 @@ const BaseAvatarField = React.forwardRef<React.ComponentRef<typeof TouchableOpac
                 contentFit="cover"
                 placeholder={{ blurhash }}
                 cachePolicy="memory-disk"
-                source={{ uri: value?.uri }}
+                source={{ uri: imageSource }}
                 style={StyleSheet.absoluteFillObject}
               />
             </View>
-            {/* Success indicator - only show when upload is complete */}
-            {value?.uri && (
+            {/* Success indicator - only show when upload is complete or has new image */}
+            {hasNewImage && (
               <View className="absolute -top-1 -right-1">
                 <View className="w-6 h-6 bg-green-500 rounded-full items-center justify-center border-2 border-background">
                   <Text className="text-xs text-white font-bold">✓</Text>
-                </View>
-              </View>
-            )}
-            {/* Loading indicator during upload */}
-            {uploading && (
-              <View className="absolute -top-1 -right-1">
-                <View className="w-6 h-6 bg-blue-500 rounded-full items-center justify-center border-2 border-background">
-                  <Text className="text-xs text-white font-bold">⟳</Text>
                 </View>
               </View>
             )}
@@ -108,12 +111,10 @@ const BaseAvatarField = React.forwardRef<React.ComponentRef<typeof TouchableOpac
             "p-4 rounded-2xl border border-transparent bg-transparent-black dark:bg-transparent-white",
             "active:opacity-80 transition-opacity",
             error && "bg-destructive/10",
-            uploading && "opacity-50",
           )}
           onPress={handlePickImage}
           onBlur={onBlur}
           activeOpacity={0.7}
-          disabled={uploading}
           {...rest}
         >
           <View className="flex-row items-center gap-x-4">
@@ -127,14 +128,14 @@ const BaseAvatarField = React.forwardRef<React.ComponentRef<typeof TouchableOpac
                   error && "text-destructive",
                 )}
               >
-                {uploading ? "Uploading..." : hasValue ? t("avatar:success_tip") : t("avatar:initial_tip")}
+                {hasNewImage
+                  ? t("avatar:success_tip")
+                  : hasExistingAvatar
+                    ? t("avatar:change_tip")
+                    : t("avatar:initial_tip")}
               </Text>
               <Text className="text-sm text-muted-foreground">
-                {uploading
-                  ? "Please wait while your image is being uploaded"
-                  : hasValue
-                    ? t("avatar:change_tip2")
-                    : t("avatar:initial_tip2")}
+                {hasValue ? t("avatar:change_tip2") : t("avatar:initial_tip2")}
               </Text>
             </View>
 

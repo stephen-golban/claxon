@@ -1,9 +1,12 @@
+import { zodResolver } from "@hookform/resolvers/zod";
 import type React from "react";
+import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { View } from "react-native";
 import * as FormElements from "@/components/form-elements";
 import { useTranslation } from "@/hooks";
-import { defaultValues, type PersonalDetailsFormData, resolver } from "./schema";
+import { useGetMe } from "@/services/api/accounts";
+import { createPersonalDetailsSchema, type PersonalDetailsFormData, transformAccountToFormData } from "./schema";
 
 interface IPersonalDetailsForm {
   isUploading: boolean;
@@ -12,12 +15,29 @@ interface IPersonalDetailsForm {
 
 const PersonalDetailsForm: React.FC<IPersonalDetailsForm> = ({ onSubmit, isUploading }) => {
   const { t } = useTranslation();
+  const { data: accountData } = useGetMe();
+
+  // Transform account data to form data format
+  const formDefaultValues = transformAccountToFormData(accountData);
+
+  // Create resolver based on whether user has existing avatar
+  const hasExistingAvatar = !!accountData?.avatar_url;
+  const schema = createPersonalDetailsSchema(hasExistingAvatar);
+  const resolver = zodResolver(schema);
 
   const hook = useForm<PersonalDetailsFormData>({
     resolver,
-    defaultValues,
+    defaultValues: formDefaultValues,
     mode: "onChange",
   });
+
+  // Reset form values when account data becomes available
+  useEffect(() => {
+    if (accountData) {
+      const newFormData = transformAccountToFormData(accountData);
+      hook.reset(newFormData);
+    }
+  }, [accountData, hook]);
 
   return (
     <FormProvider {...hook}>
@@ -57,7 +77,7 @@ const PersonalDetailsForm: React.FC<IPersonalDetailsForm> = ({ onSubmit, isUploa
             <FormElements.DatePickerField control={hook.control} name="dob" label="Date of Birth" />
           </View>
           <View>
-            <FormElements.AvatarField name="image" control={hook.control} />
+            <FormElements.AvatarField name="image" control={hook.control} existingAvatarUrl={accountData?.avatar_url} />
           </View>
         </View>
       </View>

@@ -1,19 +1,14 @@
-import * as FileSystem from "expo-file-system";
 import { ImageManipulator, SaveFormat } from "expo-image-manipulator";
 import * as ImagePicker from "expo-image-picker";
-import { useState } from "react";
-import { Dimensions, Platform } from "react-native";
+import { Platform } from "react-native";
 import { toast } from "@/components/ui/toast";
 
-export function useImagePick() {
-  const [uploading, setUploading] = useState(false);
+const getFileExt = (uri: string) => uri.split(".").pop()?.toLowerCase() ?? "jpeg";
 
+export function useImagePick() {
   // Get the screen width for dynamic resizing
-  const SCREEN_WIDTH = Dimensions.get("window").width;
   const pickImage = async () => {
     try {
-      setUploading(true);
-
       const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ["images"],
         allowsMultipleSelection: false,
@@ -33,22 +28,23 @@ export function useImagePick() {
       }
 
       // Determine optimal width for mobile (adaptive sizing)
-      const MAX_SIZE = SCREEN_WIDTH > 800 ? 800 : 600;
+      const MAX_SIZE = 328;
 
       // Optimize image
       const context = ImageManipulator.manipulate(image.uri);
       const rendered = await context.resize({ width: MAX_SIZE, height: MAX_SIZE }).renderAsync();
       const imageResult = await rendered.saveAsync({
-        format: SaveFormat.PNG,
+        format: SaveFormat.JPEG,
         compress: Platform.OS === "ios" ? 0.7 : 0.6,
       });
 
       const uri = imageResult.uri;
-      const fileName = `${Date.now()}.png`;
-      const mimeType = image.mimeType ?? "image/png";
-      const base64 = await FileSystem.readAsStringAsync(uri, { encoding: FileSystem.EncodingType.Base64 });
+      const fileExt = getFileExt(uri);
+      const path = `${Date.now()}.${fileExt}`;
+      const mimeType = image.mimeType ?? "image/jpeg";
+      const arraybuffer = await fetch(uri).then((res) => res.arrayBuffer());
 
-      return { fileName, uri, mimeType, base64 };
+      return { path, uri, mimeType, arraybuffer };
     } catch (error) {
       if (error instanceof Error) {
         console.log(error.message);
@@ -57,10 +53,8 @@ export function useImagePick() {
       } else {
         throw error;
       }
-    } finally {
-      setUploading(false);
     }
   };
 
-  return { pickImage, uploading };
+  return { pickImage };
 }

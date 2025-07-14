@@ -17,7 +17,29 @@ function onAppStateChange(status: AppStateStatus) {
 }
 
 const TanstackQueryClientProvider: React.FC<ITanstackQueryClientProvider> = ({ children }) => {
-  const [queryClient] = React.useState(() => new QueryClient());
+  const [queryClient] = React.useState(
+    () =>
+      new QueryClient({
+        defaultOptions: {
+          queries: {
+            // Consider data fresh for 2 minutes by default
+            staleTime: 2 * 60 * 1000,
+            // Keep data in cache for 10 minutes by default
+            gcTime: 10 * 60 * 1000,
+            // Retry failed requests once by default
+            retry: 1,
+            // Don't refetch on window focus for better performance
+            refetchOnWindowFocus: false,
+            // Don't refetch on reconnect unless data is stale
+            refetchOnReconnect: "always",
+          },
+          mutations: {
+            // Retry failed mutations once
+            retry: 1,
+          },
+        },
+      }),
+  );
 
   // Reset query cache every 5 minutes
   // React.useEffect(() => {

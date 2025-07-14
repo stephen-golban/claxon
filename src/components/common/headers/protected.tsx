@@ -36,6 +36,8 @@ const HeaderLeft = memo((props: NativeStackHeaderLeftProps): ReactNode => {
   return <MoveLeftIcon className="text-primary mt-2" size={24} onPress={() => router.back()} />;
 });
 
+HeaderLeft.displayName = "HeaderLeft";
+
 const headerTitleStyle: StyleProp<
   Pick<TextStyle, "fontFamily" | "fontSize" | "fontWeight"> & {
     color?: string;
@@ -50,11 +52,16 @@ const HeaderRight = memo((): ReactNode => {
   return (
     <View className="flex-row items-center gap-x-3">
       <ThemeSwitcher />
-
       <ProfileAvatar />
     </View>
   );
 });
+
+HeaderRight.displayName = "HeaderRight";
+
+// Memoized header components to prevent recreation
+const memoizedHeaderLeft = (props: NativeStackHeaderLeftProps) => <HeaderLeft {...props} />;
+const memoizedHeaderRight = () => <HeaderRight />;
 
 export const getProtectedHeader = (pathname: string) => {
   const shouldHideHeader = getHeaderShouldHide(pathname);
@@ -64,8 +71,8 @@ export const getProtectedHeader = (pathname: string) => {
   }
 
   return {
-    headerLeft: (props: NativeStackHeaderLeftProps) => <HeaderLeft {...props} />,
-    headerRight: () => <HeaderRight />,
+    headerLeft: memoizedHeaderLeft,
+    headerRight: memoizedHeaderRight,
     headerTitleStyle,
     headerBackground,
   };

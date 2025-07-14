@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "@/components/ui/toast";
 import { ERROR_CODES } from "@/lib/constants";
 import { printError, translateError } from "@/lib/utils";
@@ -116,11 +116,14 @@ export const usePrefetchGetMe = () => {
   });
 };
 
-export const useGetMe = (isSuspense = false) => {
-  const hook = isSuspense ? useSuspenseQuery : useQuery;
-  return hook({
+export const useGetMe = () => {
+  return useQuery({
     queryKey: ["accounts", "getMe"],
     queryFn: accountService.getMe,
+    // User data is relatively stable, keep it fresh for 5 minutes
+    staleTime: 5 * 60 * 1000,
+    // Keep user data in cache for 30 minutes
+    gcTime: 30 * 60 * 1000,
     throwOnError: (error) => {
       toast.error(translateError(error.message));
       return true;

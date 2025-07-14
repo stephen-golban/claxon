@@ -1,11 +1,8 @@
 import { Redirect, Stack, usePathname } from "expo-router";
 import { getProtectedHeader } from "@/components/common/headers/protected";
-import { usePrefetchGetMe } from "@/services/api/accounts";
 import { useAppStore } from "@/stores/app";
 
 export default function ProtectedLayout() {
-  usePrefetchGetMe();
-
   const pathname = usePathname();
   const header = getProtectedHeader(pathname);
 
