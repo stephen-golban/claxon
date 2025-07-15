@@ -1,15 +1,16 @@
-import type { NativeStackHeaderLeftProps } from "@react-navigation/native-stack";
-import { memo, type ReactNode } from "react";
+import { usePathname, useRouter } from "expo-router";
+import { memo, type ReactNode, useMemo } from "react";
 import type { StyleProp, TextStyle } from "react-native";
-import { Pressable, View } from "react-native";
+import { View } from "react-native";
 import { MoveLeftIcon } from "@/components/icons";
-import type { Account } from "@/services/api/accounts";
+import { Button } from "@/components/ui/button";
+import { useGetMe } from "@/services/api/accounts";
 import { ProfileAvatar } from "../profile-avatar";
 import { ThemeSwitcher } from "../theme-switcher";
 
 // Configuration for header visibility
 const HEADER_CONFIG = {
-  HIDE_GO_BACK: new Set(["/tabs", "/tabs/[name]"]),
+  HIDE_GO_BACK: new Set(["/", "/inbox", "/my-cars", "/account"]),
   HIDE_HEADER: new Set(),
 } as const;
 
@@ -19,42 +20,26 @@ const getGoBackShouldHide = (pathname: string): boolean => {
     return true;
   }
 
-  // Check pattern matches for routes with [name] wildcards
-  for (const route of HEADER_CONFIG.HIDE_GO_BACK) {
-    if (route.includes("[") && route.includes("]")) {
-      // Convert route pattern to regex by replacing [name] with [^/]+
-      const regexPattern = route.replace(/\[([^\]]+)\]/g, "[^/]+");
-      const regex = new RegExp(`^${regexPattern}$`);
-      if (regex.test(pathname)) {
-        return true;
-      }
-    }
-  }
-
   return false;
 };
 
-const getHeaderShouldHide = (pathname: string): boolean => {
-  return HEADER_CONFIG.HIDE_HEADER.has(pathname);
-};
+const HeaderLeft = memo((): ReactNode => {
+  const router = useRouter();
+  const pathname = usePathname();
+  const canGoBack = router.canGoBack();
 
-interface IHeaderLeftProps extends NativeStackHeaderLeftProps {
-  pathname: string;
-  goBack: () => void;
-}
+  const shouldShow = useMemo(() => {
+    return canGoBack && !getGoBackShouldHide(pathname);
+  }, [pathname, canGoBack]);
 
-const HeaderLeft = memo((props: IHeaderLeftProps): ReactNode => {
-  const { pathname, goBack, canGoBack } = props;
-  console.log("render-left");
-
-  const shouldShow = canGoBack && !getGoBackShouldHide(pathname);
-
-  if (!shouldShow) return null;
+  if (!shouldShow) {
+    return null;
+  }
 
   return (
-    <Pressable onPress={goBack} className="mt-2">
-      <MoveLeftIcon className="text-primary" size={24} />
-    </Pressable>
+    <Button onPress={() => router.back()} size="icon" variant="ghost" className="ml-2 mt-4">
+      <MoveLeftIcon size={24} />
+    </Button>
   );
 });
 
@@ -70,48 +55,38 @@ const headerTitleStyle: StyleProp<
 
 const headerBackground = () => <View className="bg-background" />;
 
-interface IHeaderRightProps {
-  isLoading: boolean;
-  data: Account | undefined;
-}
+const HeaderRight = memo((): ReactNode => {
+  const me = useGetMe();
 
-const HeaderRight = memo(
-  (props: IHeaderRightProps): ReactNode => {
-    const { data, isLoading } = props;
-
-    return (
+  return (
+    <View className="mr-5">
+      <View className="h-4" />
       <View className="flex-row items-center gap-x-3">
         <ThemeSwitcher />
-        <ProfileAvatar
-          isMeLoading={isLoading || !data}
-          last_name={data?.last_name ?? ""}
-          first_name={data?.first_name ?? ""}
-          avatar_url={data?.avatar_url ?? ""}
-        />
+        {me.data && (
+          <ProfileAvatar
+            last_name={me.data?.last_name}
+            first_name={me.data?.first_name}
+            avatar_url={me.data?.avatar_url}
+            isMeLoading={me.isPending || me.isLoading}
+          />
+        )}
       </View>
-    );
-  },
-  (prev, next) => {
-    return prev.isLoading === next.isLoading && prev.data?.id === next.data?.id;
-  },
-);
+    </View>
+  );
+});
 
 HeaderRight.displayName = "HeaderRight";
 
-export const getProtectedHeader = (
-  pathname: string,
-  goBack: () => void,
-  me: Account | undefined,
-  isLoading: boolean,
-) => {
-  const shouldHideHeader = getHeaderShouldHide(pathname);
+// Memoized header components to prevent recreation
+const memoizedHeaderLeft = () => <HeaderLeft />;
+const memoizedHeaderRight = () => <HeaderRight />;
 
-  if (shouldHideHeader) return { headerShown: false };
-
+export const getProtectedHeader = () => {
   return {
+    headerLeft: memoizedHeaderLeft,
+    headerRight: memoizedHeaderRight,
     headerTitleStyle,
     headerBackground,
-    headerRight: () => <HeaderRight data={me} isLoading={isLoading} />,
-    headerLeft: (props: NativeStackHeaderLeftProps) => <HeaderLeft {...props} pathname={pathname} goBack={goBack} />,
   };
 };

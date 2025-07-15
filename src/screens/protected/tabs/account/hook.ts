@@ -49,11 +49,11 @@ export default function useAccountScreen() {
   };
 
   const handleEditProfile = () => {
-    router.push("/personal-details");
+    router.push("/account/personal-details");
   };
 
   const handleNotificationSettings = () => {
-    router.push("/notification-settings");
+    router.push("/account/notification-settings");
   };
 
   return {

@@ -27,7 +27,6 @@ export const defaultValues: AddVehicleFormData = {
   color: "",
   vin_code: "",
 };
-
 /**
  * Transforms a vehicle record to form data format
  * @param vehicle - The vehicle record from the database

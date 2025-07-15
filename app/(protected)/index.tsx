@@ -1,18 +1,5 @@
-import { Redirect } from "expo-router";
-import { FullScreenLoader } from "@/components/common";
-import { WelcomeScreen } from "@/screens/protected/welcome";
-import { useGetMe } from "@/services/api/accounts";
+import { SearchTab } from "@/screens/protected/tabs";
 
 export default function Page() {
-  const { data, isLoading } = useGetMe();
-
-  if (isLoading || !data) {
-    return <FullScreenLoader />;
-  }
-
-  if (data.is_setup_finished) {
-    return <Redirect href="/tabs" />;
-  }
-
-  return <WelcomeScreen data={data} />;
+  return <SearchTab />;
 }

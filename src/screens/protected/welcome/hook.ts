@@ -20,7 +20,7 @@ export const useWelcomeActions = (isProfileComplete: boolean) => {
             title: "Complete Profile",
             description: "Finish setting up your personal details",
             iconName: "car" as const,
-            action: () => router.push("/personal-details"),
+            action: () => router.push("/account/personal-details"),
           } satisfies WelcomeActionConfig,
         ]),
     {
@@ -28,14 +28,14 @@ export const useWelcomeActions = (isProfileComplete: boolean) => {
       title: "Register Your First Car",
       description: "Add your first vehicle to receive claxon notifications",
       iconName: "plus",
-      action: () => router.push("/add-new-vehicle"),
+      action: () => router.push("/my-cars/add-new"),
     },
     {
       id: "explore-app",
       title: "Explore Claxon",
       description: "Discover how to send messages via license plates",
       iconName: "search",
-      action: () => router.push("/tabs"),
+      action: () => router.push("/(protected)"),
     },
   ];
 
