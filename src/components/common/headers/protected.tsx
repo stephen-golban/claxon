@@ -78,19 +78,16 @@ interface IHeaderRightProps {
 const HeaderRight = memo(
   (props: IHeaderRightProps): ReactNode => {
     const { data, isLoading } = props;
-    console.log("render-right");
 
     return (
       <View className="flex-row items-center gap-x-3">
         <ThemeSwitcher />
-        {data && (
-          <ProfileAvatar
-            isMeLoading={isLoading}
-            last_name={data?.last_name}
-            first_name={data?.first_name}
-            avatar_url={data?.avatar_url}
-          />
-        )}
+        <ProfileAvatar
+          isMeLoading={isLoading || !data}
+          last_name={data?.last_name ?? ""}
+          first_name={data?.first_name ?? ""}
+          avatar_url={data?.avatar_url ?? ""}
+        />
       </View>
     );
   },

@@ -15,10 +15,7 @@ export default function AddNewVehicleScreen() {
   return (
     <Container loading={isSubmitting}>
       <KeyboardAware>
-        <Container.TopText 
-          title={t("vehicleDetails:screenTitle")} 
-          subtitle={t("vehicleDetails:subtitle")} 
-        />
+        <Container.TopText title={t("vehicleDetails:screenTitle")} subtitle={t("vehicleDetails:subtitle")} />
         <AddVehicleForm onSubmit={onSubmit} isSubmitting={isSubmitting} />
       </KeyboardAware>
     </Container>

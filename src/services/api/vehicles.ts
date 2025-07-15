@@ -127,11 +127,7 @@ export class VehicleService {
       throw new Error(ERROR_CODES.USER.RETRIEVAL_FAILED);
     }
 
-    const { error } = await supabase
-      .from("vehicles")
-      .delete()
-      .eq("id", id)
-      .eq("user_id", user.id); // Ensure user can only delete their own vehicles
+    const { error } = await supabase.from("vehicles").delete().eq("id", id).eq("user_id", user.id); // Ensure user can only delete their own vehicles
 
     if (error) {
       printError("vehicle-delete-error", error);

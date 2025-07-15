@@ -6,7 +6,7 @@ import { View } from "react-native";
 import * as FormElements from "@/components/form-elements";
 import { Text } from "@/components/ui/text";
 import { useTranslation } from "@/hooks";
-import { addVehicleSchema, defaultValues, type AddVehicleFormData } from "./schema";
+import { type AddVehicleFormData, addVehicleSchema, defaultValues } from "./schema";
 import { hasFormDataChanged } from "./util";
 
 interface IAddVehicleForm {
@@ -88,14 +88,7 @@ const AddVehicleForm: React.FC<IAddVehicleForm> = ({ onSubmit, isSubmitting, ini
           </View>
 
           {/* Color */}
-          <View>
-            <FormElements.ColorSelectField
-              control={hook.control}
-              name="color"
-              placeholder={t("placeholders:color")}
-              label={t("labels:selectColor")}
-            />
-          </View>
+          <View></View>
 
           {/* VIN Code */}
           <View>
@@ -107,9 +100,7 @@ const AddVehicleForm: React.FC<IAddVehicleForm> = ({ onSubmit, isSubmitting, ini
               autoCapitalize="characters"
               maxLength={17}
             />
-            <Text className="text-xs text-muted-foreground mt-1">
-              Vehicle Identification Number (17 characters)
-            </Text>
+            <Text className="text-xs text-muted-foreground mt-1">Vehicle Identification Number (17 characters)</Text>
           </View>
         </View>
       </View>
