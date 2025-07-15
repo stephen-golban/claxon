@@ -15,9 +15,9 @@ const ModalFooter: React.FC<IModalFooter> = ({ onColorSelect, disabled }) => {
   const { bottom } = useSafeAreaInsets();
 
   return (
-    <View style={{ marginBottom: bottom }} className="pt-4 px-6 border-t border-dark/10 dark:border-light/20">
+    <View style={{ marginBottom: bottom }} className="border-t px-6 pt-4">
       <Button size="lg" onPress={onColorSelect} disabled={disabled}>
-        <Text className="text-light dark:text-dark">{t("buttons:confirm")}</Text>
+        <Text>{t("buttons:confirm")}</Text>
       </Button>
     </View>
   );

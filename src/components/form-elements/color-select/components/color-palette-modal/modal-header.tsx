@@ -20,15 +20,13 @@ const ModalHeader: React.FC<IModalHeader> = ({ selectedColor, onClose }) => {
   const backgroundColor = getBackgroundColor(selectedColor, isDark) as string;
 
   return (
-    <View className="flex-row items-center gap-x-4 border-b border-dark/10 px-6 py-4 dark:border-light/20">
+    <View className="flex-row items-center gap-x-4 border-b px-6 py-4">
       <View className="flex-1 flex-row items-center gap-x-4">
         <Button size="icon" variant="ghost" className="h-16 w-16" style={{ backgroundColor }}>
           <CarIcon size={34} color={itemColor} />
         </Button>
 
-        <Text className="flex-1 text-xl font-bold text-dark dark:text-light">
-          {t(`options:color:${selectedColor?.code}`)}
-        </Text>
+        <Text className="flex-1 text-xl font-bold text-foreground">{t(`options:color:${selectedColor?.code}`)}</Text>
       </View>
       <XIcon size={24} onPress={onClose} className="text-foreground" />
     </View>

@@ -125,7 +125,7 @@ const ColorPreview: React.FC<IColorPreview> = ({
         <View
           {...panResponder.panHandlers}
           className={cn(
-            "h-16 flex-1 flex-row items-center justify-between rounded-2xl border border-transparent px-4",
+            "native:h-14 flex-1 flex-row items-center justify-between rounded-2xl border border-transparent px-4 shadow-lg shadow-black/10",
             error && "border-destructive bg-destructive/10 text-destructive dark:bg-destructive/10",
           )}
           style={{ backgroundColor: currentColor }}
@@ -178,10 +178,10 @@ const ColorPreview: React.FC<IColorPreview> = ({
       </View>
 
       <Button
-        onPress={onOpenPalette}
         disabled={disabled}
+        className="native:h-14 rounded-2xl shadow-lg shadow-black/10"
+        onPress={onOpenPalette}
         style={{ backgroundColor: currentColor }}
-        className="rounded-2xl"
       >
         {isMulticolor && (
           <LinearGradient

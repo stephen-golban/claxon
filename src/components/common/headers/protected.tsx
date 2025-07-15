@@ -1,10 +1,9 @@
 import type { NativeStackHeaderLeftProps } from "@react-navigation/native-stack";
-import { usePathname, useRouter } from "expo-router";
-import { memo, type ReactNode, useMemo } from "react";
+import { memo, type ReactNode } from "react";
 import type { StyleProp, TextStyle } from "react-native";
-import { View } from "react-native";
+import { Pressable, View } from "react-native";
 import { MoveLeftIcon } from "@/components/icons";
-import { useGetMe } from "@/services/api/accounts";
+import type { Account } from "@/services/api/accounts";
 import { ProfileAvatar } from "../profile-avatar";
 import { ThemeSwitcher } from "../theme-switcher";
 
@@ -39,19 +38,24 @@ const getHeaderShouldHide = (pathname: string): boolean => {
   return HEADER_CONFIG.HIDE_HEADER.has(pathname);
 };
 
-const HeaderLeft = memo((props: NativeStackHeaderLeftProps): ReactNode => {
-  const router = useRouter();
-  const pathname = usePathname();
+interface IHeaderLeftProps extends NativeStackHeaderLeftProps {
+  pathname: string;
+  goBack: () => void;
+}
 
-  const shouldShow = useMemo(() => {
-    return props.canGoBack && !getGoBackShouldHide(pathname);
-  }, [pathname, props.canGoBack]);
+const HeaderLeft = memo((props: IHeaderLeftProps): ReactNode => {
+  const { pathname, goBack, canGoBack } = props;
+  console.log("render-left");
 
-  if (!shouldShow) {
-    return null;
-  }
+  const shouldShow = canGoBack && !getGoBackShouldHide(pathname);
 
-  return <MoveLeftIcon className="text-primary mt-2" size={24} onPress={() => router.back()} />;
+  if (!shouldShow) return null;
+
+  return (
+    <Pressable onPress={goBack} className="mt-2">
+      <MoveLeftIcon className="text-primary" size={24} />
+    </Pressable>
+  );
 });
 
 HeaderLeft.displayName = "HeaderLeft";
@@ -66,41 +70,51 @@ const headerTitleStyle: StyleProp<
 
 const headerBackground = () => <View className="bg-background" />;
 
-const HeaderRight = memo((): ReactNode => {
-  const me = useGetMe();
+interface IHeaderRightProps {
+  isLoading: boolean;
+  data: Account | undefined;
+}
 
-  return (
-    <View className="flex-row items-center gap-x-3 mt-2 mb-4">
-      <ThemeSwitcher />
-      {me.data && (
-        <ProfileAvatar
-          last_name={me.data?.last_name}
-          first_name={me.data?.first_name}
-          avatar_url={me.data?.avatar_url}
-          isMeLoading={me.isPending || me.isLoading}
-        />
-      )}
-    </View>
-  );
-});
+const HeaderRight = memo(
+  (props: IHeaderRightProps): ReactNode => {
+    const { data, isLoading } = props;
+    console.log("render-right");
+
+    return (
+      <View className="flex-row items-center gap-x-3">
+        <ThemeSwitcher />
+        {data && (
+          <ProfileAvatar
+            isMeLoading={isLoading}
+            last_name={data?.last_name}
+            first_name={data?.first_name}
+            avatar_url={data?.avatar_url}
+          />
+        )}
+      </View>
+    );
+  },
+  (prev, next) => {
+    return prev.isLoading === next.isLoading && prev.data?.id === next.data?.id;
+  },
+);
 
 HeaderRight.displayName = "HeaderRight";
 
-// Memoized header components to prevent recreation
-const memoizedHeaderLeft = (props: NativeStackHeaderLeftProps) => <HeaderLeft {...props} />;
-const memoizedHeaderRight = () => <HeaderRight />;
-
-export const getProtectedHeader = (pathname: string) => {
+export const getProtectedHeader = (
+  pathname: string,
+  goBack: () => void,
+  me: Account | undefined,
+  isLoading: boolean,
+) => {
   const shouldHideHeader = getHeaderShouldHide(pathname);
 
-  if (shouldHideHeader) {
-    return { headerShown: false };
-  }
+  if (shouldHideHeader) return { headerShown: false };
 
   return {
-    headerLeft: memoizedHeaderLeft,
-    headerRight: memoizedHeaderRight,
     headerTitleStyle,
     headerBackground,
+    headerRight: () => <HeaderRight data={me} isLoading={isLoading} />,
+    headerLeft: (props: NativeStackHeaderLeftProps) => <HeaderLeft {...props} pathname={pathname} goBack={goBack} />,
   };
 };

@@ -1,4 +1,5 @@
 import dayjs from "dayjs";
+import { useRouter } from "expo-router";
 import { useState } from "react";
 import { FlatList, Pressable, View } from "react-native";
 
@@ -10,16 +11,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Text } from "@/components/ui/text";
 import { VEHICLE_COLORS } from "@/lib/constants";
 import { cn } from "@/lib/utils";
-
-import { VehicleForm } from "./components";
-
-type VehicleFormData = {
-  brand: string;
-  model: string;
-  manufacture_year: number;
-  color: string;
-  vin_code: string;
-};
 
 // Mock vehicle data based on your database schema
 interface MockVehicle {
@@ -95,9 +86,9 @@ const mockVehicles: MockVehicle[] = [
 ];
 
 export function MyCarsTab() {
+  const router = useRouter();
   const [vehicles, setVehicles] = useState(mockVehicles);
   const [selectedFilter, setSelectedFilter] = useState<"all" | "active" | "incomplete">("all");
-  const [showAddForm, setShowAddForm] = useState(false);
 
   const filteredVehicles = vehicles.filter((vehicle) => {
     switch (selectedFilter) {
@@ -128,32 +119,7 @@ export function MyCarsTab() {
   };
 
   const handleAddVehicle = () => {
-    setShowAddForm(true);
-  };
-
-  const handleSaveVehicle = (data: VehicleFormData) => {
-    console.log("Save vehicle:", data);
-    // In real app, this would save to the database
-    const newVehicle: MockVehicle = {
-      _id: `vehicle_${Date.now()}`,
-      _creationTime: Date.now(),
-      brand: data.brand,
-      model: data.model,
-      vin_code: data.vin_code,
-      updated_at: Date.now(),
-      is_active: true,
-      profile_id: "current_user",
-      manufacture_year: data.manufacture_year,
-      color: data.color,
-      phase: "vehicle_plate", // Next step would be license plate
-    };
-
-    setVehicles((prev) => [newVehicle, ...prev]);
-    setShowAddForm(false);
-  };
-
-  const handleCancelAdd = () => {
-    setShowAddForm(false);
+    router.push("/(protected)/add-new-vehicle");
   };
 
   const handleVehiclePress = (vehicle: MockVehicle) => {
@@ -261,14 +227,10 @@ export function MyCarsTab() {
       <Container.TopText title="My Cars" subtitle="Manage your registered vehicles" />
 
       <View className="flex-1 gap-4">
-        {/* Add Vehicle Form or Button */}
-        {showAddForm ? (
-          <VehicleForm onSubmit={handleSaveVehicle} onCancel={handleCancelAdd} />
-        ) : (
-          <Button onPress={handleAddVehicle} className="rounded-full" size="lg">
-            <Text className="font-medium">+ Add New Vehicle</Text>
-          </Button>
-        )}
+        {/* Add Vehicle Button */}
+        <Button onPress={handleAddVehicle} className="rounded-full" size="lg">
+          <Text className="font-medium">+ Add New Vehicle</Text>
+        </Button>
 
         {/* Filter Tabs */}
         <View className="flex-row gap-2">

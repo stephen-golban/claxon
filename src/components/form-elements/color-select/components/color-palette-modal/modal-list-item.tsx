@@ -31,10 +31,9 @@ const ModalListItem: React.FC<IModalListItem> = ({ item, onPress, isSelected }) 
       size="icon"
       variant="ghost"
       onPress={onPress}
-      style={isGradient ? undefined : { backgroundColor: backgroundColor || undefined }}
+      style={{ shadowColor: itemColor }}
       className={cn(
-        "h-28 w-28 border border-transparent relative overflow-hidden",
-        isSelected && "border-dark/10 dark:border-light/20",
+        "h-28 w-28 border border-transparent relative overflow-hidden shadow-lg",
         (item.code as string) === "placeholder" && "opacity-0",
       )}
     >

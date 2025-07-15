@@ -93,7 +93,7 @@ const BaseColorSelectField = React.forwardRef<View, BaseColorSelectFieldProps>(
       <View ref={ref as React.RefObject<View>} className="w-full">
         {/* Input Label */}
         {!hideLabel && label && (
-          <Text className="mb-2 text-xl font-medium text-dark dark:text-light">
+          <Text className="mb-2 text-lg font-medium text-foreground">
             {label} <Text className="text-destructive">*</Text>
           </Text>
         )}
