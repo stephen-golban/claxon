@@ -6,21 +6,21 @@ import type { PersonalDetailsFormData } from "./form/schema";
 
 export default function usePersonalDetailsScreen() {
   const router = useRouter();
-  const { data: currentUser, isPending: isUserPending, isLoading: isUserLoading, error } = useGetMe();
 
+  const me = useGetMe();
   const updateAccount = useUpdateAccount();
-  const [, uploadImage] = useUploadImage("account-avatar");
   const deleteImage = useDeleteImage("account-avatar");
+  const [, uploadImage] = useUploadImage("account-avatar");
 
-  const isLoading = uploadImage.isPending || updateAccount.isPending;
+  const isUploading = uploadImage.isPending || deleteImage.isPending;
 
   const handleAvatarUpload = async (image: PersonalDetailsFormData["image"]) => {
-    if (!image.uri || !image.path) return currentUser?.avatar_url || "";
+    if (!image.uri || !image.path) return me.data?.avatar_url || "";
 
     // Delete existing avatar before uploading new one
-    if (currentUser?.avatar_url) {
+    if (me.data?.avatar_url) {
       try {
-        await deleteImage.mutateAsync(currentUser.avatar_url);
+        await deleteImage.mutateAsync(me.data.avatar_url);
       } catch (error) {
         console.warn("Failed to delete existing avatar:", error);
       }
@@ -31,7 +31,7 @@ export default function usePersonalDetailsScreen() {
   };
 
   const onSubmit = async (formData: PersonalDetailsFormData) => {
-    if (isLoading) return;
+    if (me.isPending || updateAccount.isPending || uploadImage.isPending) return;
 
     const { data } = await supabase.auth.getUser();
     if (!data.user) return;
@@ -40,7 +40,7 @@ export default function usePersonalDetailsScreen() {
 
     const avatarUrl = await handleAvatarUpload(image);
 
-    return updateAccount.mutateAsync(
+    await updateAccount.mutateAsync(
       {
         id: data.user.id,
         dto: {
@@ -50,17 +50,16 @@ export default function usePersonalDetailsScreen() {
         },
       },
       {
-        onSuccess: () => router.dismissTo("/(protected)"),
+        onSuccess: () => router.back(),
       },
     );
   };
 
   return {
     onSubmit,
-    isLoading,
-    isPending: isUserPending,
-    isUserLoading,
-    error,
-    currentUser,
+    isUploading,
+    currentUser: me.data,
+    error: updateAccount.error,
+    isLoading: me.isPending || me.isLoading,
   };
 }

@@ -3,7 +3,7 @@ import { stringifyObjectValidate } from "@/lib/utils";
 import type { Vehicle } from "@/services/api/vehicles";
 
 // Vehicle form validation schema
-export const addVehicleSchema = z.object({
+export const upsertVehicleSchema = z.object({
   brand: z.string().min(1, stringifyObjectValidate({ keyT: "errors:required" })),
   model: z.string().min(1, stringifyObjectValidate({ keyT: "errors:required" })),
   manufacture_year: z
@@ -18,9 +18,9 @@ export const addVehicleSchema = z.object({
     .regex(/^[A-HJ-NPR-Z0-9]{17}$/, "VIN code contains invalid characters"),
 });
 
-export type AddVehicleFormData = z.infer<typeof addVehicleSchema>;
+export type UpsertVehicleFormData = z.infer<typeof upsertVehicleSchema>;
 
-export const defaultValues: AddVehicleFormData = {
+export const defaultValues: UpsertVehicleFormData = {
   brand: "",
   model: "",
   manufacture_year: new Date().getFullYear(),
@@ -32,7 +32,7 @@ export const defaultValues: AddVehicleFormData = {
  * @param vehicle - The vehicle record from the database
  * @returns Form data object
  */
-export const transformVehicleToFormData = (vehicle?: Vehicle | null): AddVehicleFormData => {
+export const transformVehicleToFormData = (vehicle?: Vehicle | null): UpsertVehicleFormData => {
   if (!vehicle) {
     return defaultValues;
   }

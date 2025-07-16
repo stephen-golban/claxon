@@ -30,12 +30,7 @@ export class VehicleService {
 
     const { data, error } = await supabase
       .from("vehicles")
-      .insert({
-        ...dto,
-        user_id: user.id,
-        phase: "vehicle_plate", // Next step after vehicle details
-        is_active: true,
-      })
+      .insert({ ...dto, user_id: user.id })
       .select()
       .single<Vehicle>();
 

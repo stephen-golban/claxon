@@ -1,4 +1,4 @@
-import type { AddVehicleFormData } from "./schema";
+import type { UpsertVehicleFormData } from "./schema";
 
 /**
  * Compares two AddVehicleFormData objects to detect changes
@@ -6,8 +6,8 @@ import type { AddVehicleFormData } from "./schema";
  * @param current - The current form data values
  * @returns true if any field has changed, false otherwise
  */
-export const hasFormDataChanged = (original: AddVehicleFormData, current: AddVehicleFormData): boolean => {
-  const fieldsToCompare: (keyof AddVehicleFormData)[] = ["brand", "model", "manufacture_year", "color", "vin_code"];
+export const hasFormDataChanged = (original: UpsertVehicleFormData, current: UpsertVehicleFormData): boolean => {
+  const fieldsToCompare: (keyof UpsertVehicleFormData)[] = ["brand", "model", "manufacture_year", "color", "vin_code"];
 
   for (const field of fieldsToCompare) {
     if (original[field] !== current[field]) {
@@ -23,7 +23,7 @@ export const hasFormDataChanged = (original: AddVehicleFormData, current: AddVeh
  * @param data - The form data to validate
  * @returns true if the data is valid for submission
  */
-export const isVehicleFormDataValid = (data: AddVehicleFormData): boolean => {
+export const isVehicleFormDataValid = (data: UpsertVehicleFormData): boolean => {
   return !!(
     data.brand &&
     data.model &&
@@ -40,14 +40,14 @@ export const isVehicleFormDataValid = (data: AddVehicleFormData): boolean => {
  * @param current - The current form data values
  * @returns An object describing what fields have changed
  */
-export const getFormDataChanges = (original: AddVehicleFormData, current: AddVehicleFormData) => {
+export const getFormDataChanges = (original: UpsertVehicleFormData, current: UpsertVehicleFormData) => {
   const changes: Record<string, { from: string | number; to: string | number }> = {};
 
-  const fieldsToCompare: (keyof AddVehicleFormData)[] = ["brand", "model", "manufacture_year", "color", "vin_code"];
+  const fieldsToCompare: (keyof UpsertVehicleFormData)[] = ["brand", "model", "manufacture_year", "color", "vin_code"];
 
   for (const field of fieldsToCompare) {
     if (original[field] !== current[field]) {
-      changes[field] = {
+      changes[field as keyof typeof changes] = {
         from: original[field],
         to: current[field],
       };
@@ -65,9 +65,9 @@ export const getFormDataChanges = (original: AddVehicleFormData, current: AddVeh
  * @returns true if the specified field has changed
  */
 export const hasFieldChanged = (
-  original: AddVehicleFormData,
-  current: AddVehicleFormData,
-  fieldName: keyof AddVehicleFormData,
+  original: UpsertVehicleFormData,
+  current: UpsertVehicleFormData,
+  fieldName: keyof UpsertVehicleFormData,
 ): boolean => {
   return original[fieldName] !== current[fieldName];
 };

@@ -6,29 +6,28 @@ import { View } from "react-native";
 import * as FormElements from "@/components/form-elements";
 import { Text } from "@/components/ui/text";
 import { useTranslation } from "@/hooks";
-import { type AddVehicleFormData, addVehicleSchema, defaultValues } from "./schema";
+import { defaultValues, type UpsertVehicleFormData, upsertVehicleSchema } from "./schema";
 import { hasFormDataChanged } from "./util";
 
-interface IAddVehicleForm {
-  isSubmitting: boolean;
-  onSubmit: (data: AddVehicleFormData) => void;
-  initialData?: AddVehicleFormData;
+interface IUpsertVehicleForm {
+  onSubmit: (data: UpsertVehicleFormData) => void;
+  initialData?: UpsertVehicleFormData;
 }
 
-const AddVehicleForm: React.FC<IAddVehicleForm> = ({ onSubmit, isSubmitting, initialData }) => {
+const UpsertVehicleForm: React.FC<IUpsertVehicleForm> = ({ onSubmit, initialData }) => {
   const { t } = useTranslation();
 
   // Use provided initial data or default values
   const formDefaultValues = initialData || defaultValues;
 
-  const hook = useForm<AddVehicleFormData>({
-    resolver: zodResolver(addVehicleSchema),
+  const hook = useForm<UpsertVehicleFormData>({
+    resolver: zodResolver(upsertVehicleSchema),
     defaultValues: formDefaultValues,
     mode: "onChange",
   });
 
   // Store original values for change detection
-  const originalValuesRef = useRef<AddVehicleFormData | null>(null);
+  const originalValuesRef = useRef<UpsertVehicleFormData | null>(null);
 
   // Set original values when component mounts
   useEffect(() => {
@@ -108,13 +107,13 @@ const AddVehicleForm: React.FC<IAddVehicleForm> = ({ onSubmit, isSubmitting, ini
       </View>
 
       <FormElements.SubmitButton
-        isDisabled={!hook.formState.isValid || !hasChanges}
         onSubmit={hook.handleSubmit(onSubmit)}
-        isSubmitting={hook.formState.isSubmitting || isSubmitting}
-        title="Save Vehicle"
+        isSubmitting={hook.formState.isSubmitting}
+        isDisabled={!hook.formState.isValid || !hasChanges}
+        title="Next"
       />
     </FormProvider>
   );
 };
 
-export default AddVehicleForm;
+export default UpsertVehicleForm;

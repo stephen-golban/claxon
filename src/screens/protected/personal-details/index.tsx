@@ -5,7 +5,7 @@ import usePersonalDetailsScreen from "./hook";
 
 export default function PersonalDetailsScreen() {
   const { t } = useTranslation();
-  const { onSubmit, isUploading, isPending, isLoading, error, currentUser } = usePersonalDetailsScreen();
+  const { onSubmit, isLoading, error, currentUser, isUploading } = usePersonalDetailsScreen();
 
   // Show error state if user data failed to load
   if (error || !currentUser) {
@@ -13,7 +13,7 @@ export default function PersonalDetailsScreen() {
   }
 
   return (
-    <Container loading={isPending || isLoading}>
+    <Container loading={isLoading}>
       <KeyboardAware>
         <Container.TopText title={t("personalDetails:screenTitle")} subtitle={t("personalDetails:subtitle")} />
         <PersonalDetailsForm onSubmit={onSubmit} isUploading={isUploading} />

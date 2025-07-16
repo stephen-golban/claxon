@@ -1,11 +1,11 @@
 import { Container, ErrorScreen, KeyboardAware } from "@/components/common";
 import { useTranslation } from "@/hooks";
-import AddVehicleForm from "./form";
-import useAddNewVehicleScreen from "./hook";
+import UpsertVehicleForm from "./form";
+import useUpsertVehicleScreen from "./hook";
 
-export default function AddNewVehicleScreen() {
+export default function UpsertVehicleScreen() {
   const { t } = useTranslation();
-  const { onSubmit, isSubmitting, error } = useAddNewVehicleScreen();
+  const { onSubmit, error } = useUpsertVehicleScreen();
 
   // Show error state if there's an error
   if (error) {
@@ -13,10 +13,10 @@ export default function AddNewVehicleScreen() {
   }
 
   return (
-    <Container loading={isSubmitting}>
+    <Container>
       <KeyboardAware>
         <Container.TopText title={t("vehicleDetails:screenTitle")} subtitle={t("vehicleDetails:subtitle")} />
-        <AddVehicleForm onSubmit={onSubmit} isSubmitting={isSubmitting} />
+        <UpsertVehicleForm onSubmit={onSubmit} />
       </KeyboardAware>
     </Container>
   );
