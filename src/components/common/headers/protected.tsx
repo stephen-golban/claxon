@@ -1,5 +1,5 @@
-import { usePathname, useRouter } from "expo-router";
-import { CarIcon } from "lucide-react-native";
+import { router, usePathname } from "expo-router";
+
 import { memo, type ReactNode, useMemo } from "react";
 import type { StyleProp, TextStyle } from "react-native";
 import { View } from "react-native";
@@ -11,7 +11,7 @@ import { ThemeSwitcher } from "../theme-switcher";
 
 // Configuration for header visibility
 const HEADER_CONFIG = {
-  HIDE_GO_BACK: new Set(["/", "/inbox", "/my-cars", "/account"]),
+  HIDE_GO_BACK: new Set(["/(tabs)/[name]"]),
   HIDE_HEADER: new Set(),
 } as const;
 
@@ -21,11 +21,22 @@ const getGoBackShouldHide = (pathname: string): boolean => {
     return true;
   }
 
+  // Check pattern matches for routes with [name] wildcards
+  for (const route of HEADER_CONFIG.HIDE_GO_BACK) {
+    if (route.includes("[") && route.includes("]")) {
+      // Convert route pattern to regex by replacing [name] with [^/]+
+      const regexPattern = route.replace(/\[([^\]]+)\]/g, "[^/]+");
+      const regex = new RegExp(`^${regexPattern}$`);
+      if (regex.test(pathname)) {
+        return true;
+      }
+    }
+  }
+
   return false;
 };
 
 const HeaderLeft = memo((): ReactNode => {
-  const router = useRouter();
   const pathname = usePathname();
   const canGoBack = router.canGoBack();
 
@@ -38,7 +49,7 @@ const HeaderLeft = memo((): ReactNode => {
   }
 
   return (
-    <Button onPress={() => router.back()} size="icon" variant="ghost" className="ml-2 mt-4">
+    <Button onPress={() => router.back()} size="icon" variant="ghost" className="-ml-2 mt-2">
       <MoveLeftIcon size={24} />
     </Button>
   );
@@ -58,16 +69,10 @@ const headerBackground = () => <View className="bg-background" />;
 
 const HeaderRight = memo((): ReactNode => {
   const me = useGetMe();
-  const router = useRouter();
 
   return (
-    <View className="mr-5">
-      <View className="h-4" />
-      <View className="flex-row items-center gap-x-3">
-        <Button size="icon" variant="ghost" onPress={() => router.replace("/(protected)")}>
-          <CarIcon size={24} disabled />
-          <View className="absolute top-0 right-0 w-3 h-3 rounded-full bg-destructive" />
-        </Button>
+    <View>
+      <View className="flex-row items-center gap-x-4">
         <ThemeSwitcher />
         {me.data && (
           <ProfileAvatar

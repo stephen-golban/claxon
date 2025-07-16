@@ -1,4 +1,6 @@
+import { useRouter } from "expo-router";
 import { memo, useMemo } from "react";
+import { Pressable } from "react-native";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Text } from "@/components/ui/text";
 import type { Account } from "@/services/api/accounts";
@@ -12,6 +14,7 @@ interface IProfileAvatar extends Pick<Account, "avatar_url" | "first_name" | "la
 }
 
 const ProfileAvatar = memo(({ avatar_url, first_name, last_name, isMeLoading }: IProfileAvatar) => {
+  const router = useRouter();
   const imageQuery = useDownloadImage(avatar_url, "profile-avatar", 64);
 
   // Memoize initials calculation - only recalculate when name data changes
@@ -31,12 +34,14 @@ const ProfileAvatar = memo(({ avatar_url, first_name, last_name, isMeLoading }: 
   }
 
   return (
-    <Avatar alt="Profile Avatar" className="h-12 w-12">
-      {imageSource && <ProfileAvatarImg uri={imageSource.uri} />}
-      <AvatarFallback>
-        <Text>{initials}</Text>
-      </AvatarFallback>
-    </Avatar>
+    <Pressable onPress={() => router.push("/(protected)/account")}>
+      <Avatar alt="Profile Avatar" className="h-12 w-12">
+        {imageSource && <ProfileAvatarImg uri={imageSource.uri} />}
+        <AvatarFallback>
+          <Text>{initials}</Text>
+        </AvatarFallback>
+      </Avatar>
+    </Pressable>
   );
 });
 

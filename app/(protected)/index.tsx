@@ -1,18 +1,21 @@
 import { Redirect } from "expo-router";
 import { FullScreenLoader } from "@/components/common";
 import { WelcomeScreen } from "@/screens/protected/welcome";
-import { useGetMe } from "@/services/api/accounts";
+import { useGetAccountStatistics, useGetMe } from "@/services/api/accounts";
 
 export default function Page() {
-  const { data, isLoading } = useGetMe();
+  const me = useGetMe();
+  const statistics = useGetAccountStatistics();
 
-  if (isLoading || !data) {
+  if (me.isLoading || statistics.isLoading || !me.data || !statistics.data) {
     return <FullScreenLoader />;
   }
 
-  if (data.is_setup_finished) {
-    return <Redirect href="/(protected)/search" />;
+  if (me.data.is_setup_finished) {
+    return <Redirect href="/(protected)/tabs" />;
   }
 
-  return <WelcomeScreen data={data} />;
+  const vehicleCount = statistics.data.vehicleCount || 0;
+
+  return <WelcomeScreen data={me.data} vehicleCount={vehicleCount} />;
 }

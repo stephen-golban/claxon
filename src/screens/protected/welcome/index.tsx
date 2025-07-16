@@ -2,6 +2,7 @@ import type React from "react";
 import { ScrollView, View } from "react-native";
 
 import { Container } from "@/components/common";
+import { isProfileComplete } from "@/lib/utils";
 import type { Account } from "@/services/api/accounts";
 import { FeatureHighlights } from "./feature-highlights";
 import { useWelcomeActions } from "./hook";
@@ -10,16 +11,14 @@ import { WelcomeHeader } from "./welcome-header";
 
 interface IWelcomeScreen {
   data: Account;
+  vehicleCount: number;
 }
 
-const isProfileComplete = (account: Account): boolean => {
-  const requiredFields = ["email", "first_name", "last_name", "dob", "gender", "avatar_url"] as const;
-  return requiredFields.every((field) => !!account[field]);
-};
-
-const WelcomeScreen: React.FC<IWelcomeScreen> = ({ data }) => {
+const WelcomeScreen: React.FC<IWelcomeScreen> = ({ data, vehicleCount }) => {
+  const hasVehicles = vehicleCount > 0;
   const shouldShowProfile = isProfileComplete(data);
-  const { quickActions } = useWelcomeActions(shouldShowProfile);
+
+  const { quickActions } = useWelcomeActions(shouldShowProfile, hasVehicles);
 
   return (
     <Container removeEdges={["top"]}>

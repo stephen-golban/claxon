@@ -90,7 +90,7 @@ const AccountForm: React.FC<IAccountForm> = ({
               onValueChange={handleLanguageChange}
             >
               <SelectTrigger className="h-12">
-                <SelectValue placeholder="Select a language" />
+                <SelectValue placeholder="Select a language" className="text-foreground" />
               </SelectTrigger>
               <SelectContent sideOffset={8} style={{ width: languageSelectWidth }}>
                 {getLanguageOptions().map((option, idx) => (

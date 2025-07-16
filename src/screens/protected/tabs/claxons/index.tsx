@@ -17,7 +17,7 @@ import type { ClaxonMessage } from "./types";
 
 dayjs.extend(relativeTime);
 
-export function InboxTab() {
+export function ClaxonsTab() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedFilter, setSelectedFilter] = useState<"all" | "unread" | "received" | "sent">("all");
   const [messages, setMessages] = useState(mockMessages);
