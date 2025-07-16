@@ -31,7 +31,7 @@ export const useWelcomeActions = (isProfileComplete: boolean, hasVehicles: boole
             title: "Register Your First Car",
             description: "Add your first vehicle to receive claxon notifications",
             iconName: "plus",
-            action: () => router.push("/add-new-car"),
+            action: () => router.push("/vehicle/create"),
           } satisfies WelcomeActionConfig,
         ]),
     {

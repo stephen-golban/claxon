@@ -1,4 +1,4 @@
-import type { AuthError } from "@supabase/supabase-js";
+import type { AuthError, PostgrestError } from "@supabase/supabase-js";
 import type { ClassValue } from "clsx";
 import { clsx } from "clsx";
 import type { TOptionsBase } from "i18next";
@@ -78,8 +78,8 @@ export const printError = (text: string, error: Error) => {
   console.error(`${text}: ${JSON.stringify(error, null, 2)}`);
 };
 
-export const getSupabaseErrorCode = (error: AuthError) => {
-  const code = SUPABASE_ERROR_CODES.auth.find((item) => error.code === item);
+export const getSupabaseErrorCode = (error: AuthError | PostgrestError, type: "auth" | "database" = "auth") => {
+  const code = SUPABASE_ERROR_CODES[type].find((item) => error.code === item);
   if (code) {
     return new Error(code);
   }

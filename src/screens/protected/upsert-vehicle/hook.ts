@@ -9,13 +9,13 @@ export default function useUpsertVehicleScreen() {
   const onSubmit = async (dto: UpsertVehicleFormData) => {
     if (createVehicle.isPending) return;
 
-    const vehicle = await createVehicle.mutateAsync(
+    await createVehicle.mutateAsync(
       { ...dto, phase: "pending" },
       {
-        onSuccess: () => {
+        onSuccess: ({ id }) => {
           router.push({
-            pathname: "/upsert-license-plate",
-            params: { vehicleId: vehicle.id },
+            pathname: "/vehicle/license-plate/[id]",
+            params: { id },
           });
         },
       },
@@ -24,6 +24,5 @@ export default function useUpsertVehicleScreen() {
 
   return {
     onSubmit,
-    error: createVehicle.error,
   };
 }

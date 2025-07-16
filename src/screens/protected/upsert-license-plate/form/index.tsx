@@ -8,19 +8,22 @@ import * as FormElements from "@/components/form-elements";
 import { LicensePlateField } from "@/components/form-elements/license-plate";
 import { Text } from "@/components/ui/text";
 import type { LicensePlateType } from "@/lib/constants";
-import { createResolver, defaultValues, type UpsertLicensePlateFormData } from "./schema";
+import type { Vehicle } from "@/services/api/vehicles";
+import { createDefaultValues, createResolver, type UpsertLicensePlateFormData } from "./schema";
 
 interface IUpsertLicensePlateForm {
   onSubmit: (data: UpsertLicensePlateFormData) => void;
+  initialData?: Vehicle;
 }
 
-const UpsertLicensePlateForm: React.FC<IUpsertLicensePlateForm> = ({ onSubmit }) => {
-  const [plateType, setPlateType] = useState<LicensePlateType>(defaultValues.plate_type);
+const UpsertLicensePlateForm: React.FC<IUpsertLicensePlateForm> = ({ onSubmit, initialData }) => {
+  const defaultValues = createDefaultValues(initialData);
+  const [plateType, setPlateType] = useState<LicensePlateType>(defaultValues.plate_type as LicensePlateType);
 
   const hook = useForm<UpsertLicensePlateFormData>({
-    resolver: zodResolver(createResolver(plateType)),
-    defaultValues: { ...defaultValues, plate_type: plateType },
+    defaultValues,
     mode: "onChange",
+    resolver: zodResolver(createResolver(plateType)),
   });
 
   const handleTypeChange = (type: LicensePlateType) => {
@@ -32,6 +35,8 @@ const UpsertLicensePlateForm: React.FC<IUpsertLicensePlateForm> = ({ onSubmit })
     // Update the resolver for the new plate type
     hook.clearErrors();
   };
+
+  console.log(hook.getValues());
 
   return (
     <FormProvider {...hook}>

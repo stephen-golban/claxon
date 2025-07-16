@@ -2,11 +2,11 @@ import _ from "lodash";
 import { z } from "zod";
 import { LICENSE_PLATE_TYPES, type LicensePlateType } from "@/lib/constants";
 import { stringifyObjectValidate } from "@/lib/utils";
+import type { Vehicle } from "@/services/api/vehicles";
 
 // License plate form validation schema
 export const upsertLicensePlateSchema = (leftLength: number, rightLength: number) =>
   z.object({
-    plate_type: z.string().min(1, stringifyObjectValidate({ keyT: "errors:required" })) as z.ZodType<LicensePlateType>,
     plate: z.object({
       left: z.string().min(leftLength, stringifyObjectValidate({ keyT: "errors:required" })),
       right: z
@@ -19,16 +19,32 @@ export const upsertLicensePlateSchema = (leftLength: number, rightLength: number
           }),
         ),
     }),
+    plate_type: z.string().min(1, stringifyObjectValidate({ keyT: "errors:required" })) as z.ZodType<LicensePlateType>,
   });
 
-export type UpsertLicensePlateFormData = z.infer<ReturnType<typeof upsertLicensePlateSchema>>;
+export type UpsertLicensePlateFormData = z.infer<ReturnType<typeof upsertLicensePlateSchema>> & {
+  plate_type: LicensePlateType;
+};
 
-export const defaultValues: UpsertLicensePlateFormData = {
-  plate_type: "cars.standard.default" as LicensePlateType,
+const schemaValues: UpsertLicensePlateFormData = {
+  plate_type: "cars.standard.default",
   plate: {
     left: "",
     right: "",
   },
+};
+
+export const createDefaultValues = (vehicle?: Vehicle | undefined) => {
+  if (!vehicle) {
+    return schemaValues;
+  }
+  return {
+    plate_type: (vehicle.plate_type || schemaValues.plate_type) as LicensePlateType,
+    plate: {
+      left: vehicle.plate_left_part || schemaValues.plate.left,
+      right: vehicle.plate_right_part || schemaValues.plate.right,
+    },
+  };
 };
 
 export const createResolver = (type: LicensePlateType) => {

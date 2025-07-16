@@ -1,7 +1,7 @@
+import type { AuthError } from "@supabase/supabase-js";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "@/components/ui/toast";
-import { ERROR_CODES } from "@/lib/constants";
-import { printError, translateError } from "@/lib/utils";
+import { getSupabaseErrorCode, printError, translateError } from "@/lib/utils";
 import type { Database } from "@/typings/database";
 import { supabase } from "./client";
 
@@ -25,7 +25,7 @@ export class VehicleService {
 
     if (userError || !user) {
       printError("vehicle-create-user-error", userError || new Error("No user found"));
-      throw new Error(ERROR_CODES.USER.RETRIEVAL_FAILED);
+      throw getSupabaseErrorCode(userError as AuthError, "auth");
     }
 
     const { data, error } = await supabase
@@ -36,7 +36,7 @@ export class VehicleService {
 
     if (error) {
       printError("vehicle-create-error", error);
-      throw new Error("Failed to create vehicle");
+      throw getSupabaseErrorCode(error, "database");
     }
 
     return data;
@@ -55,7 +55,7 @@ export class VehicleService {
 
     if (userError || !user) {
       printError("vehicle-getMyVehicles-user-error", userError || new Error("No user found"));
-      throw new Error(ERROR_CODES.USER.RETRIEVAL_FAILED);
+      throw getSupabaseErrorCode(userError as AuthError, "auth");
     }
 
     const { data, error } = await supabase
@@ -66,7 +66,7 @@ export class VehicleService {
 
     if (error) {
       printError("vehicle-getMyVehicles-error", error);
-      throw new Error("Failed to retrieve vehicles");
+      throw getSupabaseErrorCode(error, "database");
     }
 
     return data || [];
@@ -87,7 +87,7 @@ export class VehicleService {
 
     if (userError || !user) {
       printError("vehicle-update-user-error", userError || new Error("No user found"));
-      throw new Error(ERROR_CODES.USER.RETRIEVAL_FAILED);
+      throw getSupabaseErrorCode(userError as AuthError, "auth");
     }
 
     const { data, error } = await supabase
@@ -100,7 +100,39 @@ export class VehicleService {
 
     if (error) {
       printError("vehicle-update-error", error);
-      throw new Error("Failed to update vehicle");
+      throw getSupabaseErrorCode(error, "database");
+    }
+
+    return data;
+  }
+
+  /**
+   * Gets a vehicle by ID (must belong to current user)
+   * @param id The vehicle ID to retrieve
+   * @returns The vehicle record
+   * @throws Error if the vehicle retrieval fails
+   */
+  async getById(id: string): Promise<Vehicle> {
+    const {
+      data: { user },
+      error: userError,
+    } = await supabase.auth.getUser();
+
+    if (userError || !user) {
+      printError("vehicle-getById-user-error", userError || new Error("No user found"));
+      throw getSupabaseErrorCode(userError as AuthError, "auth");
+    }
+
+    const { data, error } = await supabase
+      .from("vehicles")
+      .select("*")
+      .eq("id", id)
+      .eq("user_id", user.id) // Ensure user can only access their own vehicles
+      .single<Vehicle>();
+
+    if (error) {
+      printError("vehicle-getById-error", error);
+      throw getSupabaseErrorCode(error, "database");
     }
 
     return data;
@@ -119,14 +151,14 @@ export class VehicleService {
 
     if (userError || !user) {
       printError("vehicle-delete-user-error", userError || new Error("No user found"));
-      throw new Error(ERROR_CODES.USER.RETRIEVAL_FAILED);
+      throw getSupabaseErrorCode(userError as AuthError, "auth");
     }
 
     const { error } = await supabase.from("vehicles").delete().eq("id", id).eq("user_id", user.id); // Ensure user can only delete their own vehicles
 
     if (error) {
       printError("vehicle-delete-error", error);
-      throw new Error("Failed to delete vehicle");
+      throw getSupabaseErrorCode(error, "database");
     }
   }
 }
@@ -177,6 +209,19 @@ export const useUpdateVehicle = () => {
     },
     onError: (error) => {
       toast.error(translateError(error.message));
+    },
+  });
+};
+
+export const useGetVehicleById = (id: string) => {
+  return useQuery({
+    queryKey: ["vehicles", "getById", id],
+    queryFn: () => vehicleService.getById(id),
+    staleTime: 5 * 60 * 1000, // Consider data fresh for 5 minutes
+    gcTime: 30 * 60 * 1000, // Keep in cache for 30 minutes
+    throwOnError: (error) => {
+      toast.error(translateError(error.message));
+      return true;
     },
   });
 };

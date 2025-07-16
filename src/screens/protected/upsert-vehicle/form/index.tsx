@@ -6,24 +6,25 @@ import { View } from "react-native";
 import * as FormElements from "@/components/form-elements";
 import { Text } from "@/components/ui/text";
 import { useTranslation } from "@/hooks";
-import { defaultValues, type UpsertVehicleFormData, upsertVehicleSchema } from "./schema";
-import { hasFormDataChanged } from "./util";
+import type { Vehicle } from "@/services/api/vehicles";
+import { type UpsertVehicleFormData, upsertVehicleSchema } from "./schema";
+import { getFormDataFromVehicle, hasFormDataChanged } from "./util";
 
 interface IUpsertVehicleForm {
   onSubmit: (data: UpsertVehicleFormData) => void;
-  initialData?: UpsertVehicleFormData;
+  initialData?: Vehicle;
 }
 
 const UpsertVehicleForm: React.FC<IUpsertVehicleForm> = ({ onSubmit, initialData }) => {
   const { t } = useTranslation();
 
   // Use provided initial data or default values
-  const formDefaultValues = initialData || defaultValues;
+  const defaultValues = getFormDataFromVehicle(initialData);
 
   const hook = useForm<UpsertVehicleFormData>({
-    resolver: zodResolver(upsertVehicleSchema),
-    defaultValues: formDefaultValues,
+    defaultValues,
     mode: "onChange",
+    resolver: zodResolver(upsertVehicleSchema),
   });
 
   // Store original values for change detection
@@ -31,8 +32,8 @@ const UpsertVehicleForm: React.FC<IUpsertVehicleForm> = ({ onSubmit, initialData
 
   // Set original values when component mounts
   useEffect(() => {
-    originalValuesRef.current = formDefaultValues;
-  }, [formDefaultValues]);
+    originalValuesRef.current = defaultValues;
+  }, [defaultValues]);
 
   // Watch all form values to detect changes
   const currentFormValues = hook.watch();

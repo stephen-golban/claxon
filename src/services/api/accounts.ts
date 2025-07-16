@@ -1,7 +1,8 @@
+import type { AuthError } from "@supabase/supabase-js";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "@/components/ui/toast";
 import { ERROR_CODES } from "@/lib/constants";
-import { printError, translateError } from "@/lib/utils";
+import { getSupabaseErrorCode, printError, translateError } from "@/lib/utils";
 import type { Database } from "@/typings/database";
 import { supabase } from "./client";
 
@@ -39,7 +40,7 @@ export class AccountService {
       printError(`account-getMe-error`, error);
       clear();
       await supabase.auth.signOut();
-      throw new Error(ERROR_CODES.USER.RETRIEVAL_FAILED);
+      throw getSupabaseErrorCode(error, "database");
     }
 
     return data;
@@ -56,7 +57,7 @@ export class AccountService {
 
     if (error) {
       printError(`account-update-error`, error);
-      throw new Error(ERROR_CODES.USER.UPDATE_FAILED);
+      throw getSupabaseErrorCode(error, "database");
     }
     return data;
   }
@@ -72,7 +73,7 @@ export class AccountService {
 
     if (error) {
       printError(`account-create-error`, error);
-      throw new Error(ERROR_CODES.USER.CREATION_FAILED);
+      throw getSupabaseErrorCode(error, "database");
     }
     return data;
   }
@@ -89,7 +90,7 @@ export class AccountService {
 
     if (error) {
       printError(`account-upsert-error`, error);
-      throw new Error(ERROR_CODES.USER.CREATION_FAILED);
+      throw getSupabaseErrorCode(error, "database");
     }
     return data;
   }
@@ -100,32 +101,27 @@ export class AccountService {
    * @throws Error if the account deletion fails
    */
   async deleteAccount(): Promise<void> {
-    try {
-      // Get current user session to get user ID
-      const {
-        data: { user },
-        error: userError,
-      } = await supabase.auth.getUser();
+    // Get current user session to get user ID
+    const {
+      data: { user },
+      error: userError,
+    } = await supabase.auth.getUser();
 
-      if (userError || !user) {
-        printError("account-delete-user-error", userError || new Error("No user found"));
-        throw new Error(ERROR_CODES.USER.RETRIEVAL_FAILED);
-      }
-
-      // Delete the account record (this will cascade delete all related data)
-      const { error: deleteError } = await supabase.from("accounts").delete().eq("id", user.id);
-
-      if (deleteError) {
-        printError("account-delete-error", deleteError);
-        throw new Error(ERROR_CODES.USER.UPDATE_FAILED);
-      }
-
-      // Sign out the user after successful deletion
-      await supabase.auth.signOut();
-    } catch (error) {
-      printError("account-delete-error", error as Error);
-      throw new Error(ERROR_CODES.USER.UPDATE_FAILED);
+    if (userError || !user) {
+      printError("account-delete-user-error", userError || new Error("No user found"));
+      throw getSupabaseErrorCode(userError as AuthError, "auth");
     }
+
+    // Delete the account record (this will cascade delete all related data)
+    const { error: deleteError } = await supabase.from("accounts").delete().eq("id", user.id);
+
+    if (deleteError) {
+      printError("account-delete-error", deleteError);
+      throw getSupabaseErrorCode(deleteError, "database");
+    }
+
+    // Sign out the user after successful deletion
+    await supabase.auth.signOut();
   }
 }
 

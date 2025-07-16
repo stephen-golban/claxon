@@ -4,15 +4,15 @@ import type { UpsertLicensePlateFormData } from "./form/schema";
 
 export default function useUpsertLicensePlateScreen() {
   const router = useRouter();
-  const { vehicleId } = useLocalSearchParams<{ vehicleId: string }>();
   const updateVehicle = useUpdateVehicle();
+  const { id } = useLocalSearchParams<{ id: string }>();
 
   const onSubmit = async (dto: UpsertLicensePlateFormData) => {
-    if (updateVehicle.isPending || !vehicleId) return;
+    if (updateVehicle.isPending || !id) return;
 
     await updateVehicle.mutateAsync(
       {
-        id: vehicleId,
+        id,
         dto: {
           plate_type: dto.plate_type,
           plate_left_part: dto.plate.left,
@@ -33,8 +33,7 @@ export default function useUpsertLicensePlateScreen() {
   };
 
   return {
+    id,
     onSubmit,
-    vehicleId,
-    error: updateVehicle.error,
   };
 }

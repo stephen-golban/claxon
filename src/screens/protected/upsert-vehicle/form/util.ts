@@ -1,4 +1,5 @@
-import type { UpsertVehicleFormData } from "./schema";
+import type { Vehicle } from "@/services/api/vehicles";
+import { defaultValues, type UpsertVehicleFormData } from "./schema";
 
 /**
  * Compares two AddVehicleFormData objects to detect changes
@@ -70,4 +71,18 @@ export const hasFieldChanged = (
   fieldName: keyof UpsertVehicleFormData,
 ): boolean => {
   return original[fieldName] !== current[fieldName];
+};
+
+export const getFormDataFromVehicle = (vehicle?: Vehicle | null): UpsertVehicleFormData => {
+  if (!vehicle) {
+    return defaultValues;
+  }
+
+  return {
+    brand: vehicle.brand || defaultValues.brand,
+    model: vehicle.model || defaultValues.model,
+    color: vehicle.color || defaultValues.color,
+    vin_code: vehicle.vin_code || defaultValues.vin_code,
+    manufacture_year: vehicle.manufacture_year || defaultValues.manufacture_year,
+  };
 };
