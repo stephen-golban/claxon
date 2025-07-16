@@ -7,13 +7,7 @@ import type { AddVehicleFormData } from "./schema";
  * @returns true if any field has changed, false otherwise
  */
 export const hasFormDataChanged = (original: AddVehicleFormData, current: AddVehicleFormData): boolean => {
-  const fieldsToCompare: (keyof AddVehicleFormData)[] = [
-    "brand",
-    "model",
-    "manufacture_year",
-    "color",
-    "vin_code",
-  ];
+  const fieldsToCompare: (keyof AddVehicleFormData)[] = ["brand", "model", "manufacture_year", "color", "vin_code"];
 
   for (const field of fieldsToCompare) {
     if (original[field] !== current[field]) {
@@ -49,13 +43,7 @@ export const isVehicleFormDataValid = (data: AddVehicleFormData): boolean => {
 export const getFormDataChanges = (original: AddVehicleFormData, current: AddVehicleFormData) => {
   const changes: Record<string, { from: string | number; to: string | number }> = {};
 
-  const fieldsToCompare: (keyof AddVehicleFormData)[] = [
-    "brand",
-    "model",
-    "manufacture_year",
-    "color",
-    "vin_code",
-  ];
+  const fieldsToCompare: (keyof AddVehicleFormData)[] = ["brand", "model", "manufacture_year", "color", "vin_code"];
 
   for (const field of fieldsToCompare) {
     if (original[field] !== current[field]) {

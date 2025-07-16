@@ -10,5 +10,9 @@ export default function ProtectedLayout() {
     return <Redirect href="/(unprotected)" />;
   }
 
-  return <Stack screenOptions={header} />;
+  return (
+    <Stack screenOptions={header}>
+      <Stack.Screen name="index" options={{ headerShown: false }} />
+    </Stack>
+  );
 }

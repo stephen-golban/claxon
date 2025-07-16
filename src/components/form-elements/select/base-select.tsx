@@ -34,7 +34,7 @@ const BaseSelectField = React.forwardRef<React.ComponentRef<typeof Select>, Base
     return (
       <View className="w-full gap-y-3" onLayout={(event) => setInputWidth(event.nativeEvent.layout.width)}>
         {!hideLabel && label && (
-          <Text className="text-xl font-medium text-dark dark:text-light">
+          <Text className="text-xl font-medium text-foreground">
             {label} <Text className="text-destructive">*</Text>
           </Text>
         )}

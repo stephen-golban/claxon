@@ -37,7 +37,7 @@ export const useWelcomeActions = (isProfileComplete: boolean, hasVehicles: boole
     {
       id: "explore-app",
       title: "Explore Claxon",
-      description: "Discover how to send messages via license plates",
+      description: "Discover how to send claxons via license plates",
       iconName: "search",
       action: () => router.push("/tabs"),
     },

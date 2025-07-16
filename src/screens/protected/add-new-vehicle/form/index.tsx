@@ -88,7 +88,9 @@ const AddVehicleForm: React.FC<IAddVehicleForm> = ({ onSubmit, isSubmitting, ini
           </View>
 
           {/* Color */}
-          <View></View>
+          <View>
+            <FormElements.ColorSelectField control={hook.control} name="color" label="Color" />
+          </View>
 
           {/* VIN Code */}
           <View>

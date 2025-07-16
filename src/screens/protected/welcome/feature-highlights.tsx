@@ -13,7 +13,7 @@ const FeatureHighlights: React.FC<FeatureHighlightsProps> = ({ title = "What you
       id: "search",
       icon: <SearchIcon size={16} className="text-green-600 dark:text-green-400" />,
       iconBg: "bg-green-100 dark:bg-green-900/30",
-      description: "Search any license plate and send instant messages",
+      description: "Search any license plate and send instant claxons",
     },
     {
       id: "notifications",

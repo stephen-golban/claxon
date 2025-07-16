@@ -5,7 +5,7 @@ import type { TOptionsBase } from "i18next";
 import type { LucideIcon } from "lucide-react-native";
 import { cssInterop } from "nativewind";
 import { twMerge } from "tailwind-merge";
-import { Account } from "@/services/api/accounts";
+import type { Account } from "@/services/api/accounts";
 import i18n from "@/translations";
 import type { I18nKey } from "@/translations/types";
 import type { ValidateMessageObject } from "@/typings/validation";

@@ -25,7 +25,7 @@ const FullScreenLoader: React.FC<IFullScreenLoader> = ({
       className={cn("z-50 flex-1 items-center justify-center", !disableBackground && "bg-background", className)}
     >
       <LottieView
-        source={require("@/assets/animations/loading.lottie")}
+        source={require("@/assets/animations/car.lottie")}
         autoPlay
         loop
         style={{ width: 200, height: 200 }}

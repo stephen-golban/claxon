@@ -58,6 +58,15 @@ export class ImageService {
 
     return data;
   }
+
+  async deleteImage(path: string) {
+    const { error } = await supabase.storage.from("avatars").remove([path]);
+
+    if (error) {
+      printError(`image-delete-error`, error);
+      throw getSupabaseErrorCode(error as unknown as AuthError);
+    }
+  }
 }
 
 export function useUploadImage(queryKey: string) {
@@ -102,5 +111,19 @@ export function useDownloadImage(
     refetchOnWindowFocus: false, // Don't refetch on focus to prevent flickering
     refetchOnReconnect: false, // Don't refetch on reconnect to prevent flickering
     refetchOnMount: false, // Don't refetch on mount if data exists
+  });
+}
+
+export function useDeleteImage(queryKey: string) {
+  const service = new ImageService();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: service.deleteImage,
+    mutationKey: ["image", "delete", queryKey],
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["image", queryKey] });
+    },
+    onError: (err) => toast.error(translateError(err.message)),
   });
 }

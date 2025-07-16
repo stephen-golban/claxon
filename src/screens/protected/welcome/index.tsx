@@ -21,7 +21,7 @@ const WelcomeScreen: React.FC<IWelcomeScreen> = ({ data, vehicleCount }) => {
   const { quickActions } = useWelcomeActions(shouldShowProfile, hasVehicles);
 
   return (
-    <Container removeEdges={["top"]}>
+    <Container removeEdges={[]}>
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ flexGrow: 1 }} className="flex-1">
         <WelcomeHeader />
 

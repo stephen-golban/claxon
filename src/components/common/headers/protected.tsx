@@ -49,8 +49,8 @@ const HeaderLeft = memo((): ReactNode => {
   }
 
   return (
-    <Button onPress={() => router.back()} size="icon" variant="ghost" className="-ml-2 mt-2">
-      <MoveLeftIcon size={24} />
+    <Button onPress={() => router.back()} size="icon" variant="ghost" className="-ml-2 mt-5">
+      <MoveLeftIcon size={24} className="text-foreground" />
     </Button>
   );
 });
@@ -72,7 +72,7 @@ const HeaderRight = memo((): ReactNode => {
 
   return (
     <View>
-      <View className="flex-row items-center gap-x-4">
+      <View className="flex-row items-center gap-x-4 mt-4">
         <ThemeSwitcher />
         {me.data && (
           <ProfileAvatar

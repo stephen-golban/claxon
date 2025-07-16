@@ -1,5 +1,6 @@
 export * from "./avatar";
 export * from "./checkbox";
+export * from "./color-select";
 export * from "./date-picker";
 export * from "./email";
 export * from "./license-plate";
