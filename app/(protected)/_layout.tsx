@@ -14,7 +14,7 @@ export default function ProtectedTabsLayout() {
 
   return (
     <Tabs tabBar={(props) => <TabBar {...props} />} screenOptions={header}>
-      <Tabs.Screen name="index" options={{ title: "Home" }} />
+      <Tabs.Screen name="search" options={{ title: "Search" }} />
       <Tabs.Screen name="inbox" options={{ title: "Inbox" }} />
       <Tabs.Screen name="my-cars" options={{ title: "My Cars" }} />
       <Tabs.Screen name="account" options={{ title: "Account" }} />

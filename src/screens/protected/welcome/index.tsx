@@ -22,7 +22,7 @@ const WelcomeScreen: React.FC<IWelcomeScreen> = ({ data }) => {
   const { quickActions } = useWelcomeActions(shouldShowProfile);
 
   return (
-    <Container>
+    <Container removeEdges={["top"]}>
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ flexGrow: 1 }} className="flex-1">
         <WelcomeHeader />
 

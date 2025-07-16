@@ -1,5 +1,5 @@
 import type { BottomTabBarProps } from "@react-navigation/bottom-tabs";
-import { Car, Home, Mail, User } from "lucide-react-native";
+import { Car, Mail, Search, User } from "lucide-react-native";
 import { View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useColorScheme } from "@/hooks";
@@ -8,7 +8,7 @@ import { TabBarItem } from "./tab-bar-item";
 import type { TabInfo } from "./type";
 
 const tabs: TabInfo[] = [
-  { name: "index", title: "Home", icon: Home },
+  { name: "search", title: "Search", icon: Search },
   { name: "inbox", title: "Inbox", icon: Mail },
   { name: "my-cars", title: "My Car", icon: Car },
   { name: "account", title: "Account", icon: User },

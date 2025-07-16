@@ -35,7 +35,7 @@ export const useWelcomeActions = (isProfileComplete: boolean) => {
       title: "Explore Claxon",
       description: "Discover how to send messages via license plates",
       iconName: "search",
-      action: () => router.push("/(protected)"),
+      action: () => router.push("/(protected)/search"),
     },
   ];
 

@@ -1,4 +1,5 @@
 import { usePathname, useRouter } from "expo-router";
+import { CarIcon } from "lucide-react-native";
 import { memo, type ReactNode, useMemo } from "react";
 import type { StyleProp, TextStyle } from "react-native";
 import { View } from "react-native";
@@ -57,11 +58,16 @@ const headerBackground = () => <View className="bg-background" />;
 
 const HeaderRight = memo((): ReactNode => {
   const me = useGetMe();
+  const router = useRouter();
 
   return (
     <View className="mr-5">
       <View className="h-4" />
       <View className="flex-row items-center gap-x-3">
+        <Button size="icon" variant="ghost" onPress={() => router.replace("/(protected)")}>
+          <CarIcon size={24} disabled />
+          <View className="absolute top-0 right-0 w-3 h-3 rounded-full bg-destructive" />
+        </Button>
         <ThemeSwitcher />
         {me.data && (
           <ProfileAvatar
