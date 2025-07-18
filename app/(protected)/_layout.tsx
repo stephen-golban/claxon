@@ -15,7 +15,6 @@ export default function ProtectedLayout() {
       <Stack.Screen name="index" options={{ headerShown: false }} />
       <Stack.Screen name="account" options={{ headerShown: false }} />
       <Stack.Screen name="vehicle" options={{ headerShown: false }} />
-      {/* <Stack.Screen name="upsert-license-plate" options={{ headerShown: false }} /> */}
     </Stack>
   );
 }

@@ -5,10 +5,10 @@ export default function VehicleLayout() {
   const header = getProtectedHeader();
 
   return (
-    <Stack screenOptions={header}>
-      <Stack.Screen name="create" />
-      <Stack.Screen name="[id]" />
-      <Stack.Screen name="license-plate/[id]" options={{ presentation: "modal", headerRight: () => null }} />
+    <Stack>
+      <Stack.Screen name="create" options={header} />
+      <Stack.Screen name="[id]" options={header} />
+      <Stack.Screen name="license-plate" options={{ presentation: "modal", ...header, headerRight: () => null }} />
     </Stack>
   );
 }

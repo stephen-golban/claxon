@@ -22,9 +22,7 @@ export const upsertLicensePlateSchema = (leftLength: number, rightLength: number
     plate_type: z.string().min(1, stringifyObjectValidate({ keyT: "errors:required" })) as z.ZodType<LicensePlateType>,
   });
 
-export type UpsertLicensePlateFormData = z.infer<ReturnType<typeof upsertLicensePlateSchema>> & {
-  plate_type: LicensePlateType;
-};
+export type UpsertLicensePlateFormData = z.infer<ReturnType<typeof upsertLicensePlateSchema>>;
 
 const schemaValues: UpsertLicensePlateFormData = {
   plate_type: "cars.standard.default",
@@ -49,6 +47,7 @@ export const createDefaultValues = (vehicle?: Vehicle | undefined) => {
 
 export const createResolver = (type: LicensePlateType) => {
   const plate = _.get(LICENSE_PLATE_TYPES, type);
+  console.log("dsadasdas", plate);
   if (!plate) {
     return upsertLicensePlateSchema(3, 3);
   }

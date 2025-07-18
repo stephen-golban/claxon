@@ -19,7 +19,7 @@ export default function VehicleById() {
   }
 
   if (vehicle.data?.phase === "pending") {
-    return <Redirect href={`/vehicle/license-plate/${vehicle.data.id}`} />;
+    return <Redirect href={`/vehicle/license-plate?id=${vehicle.data.id}`} />;
   }
 
   return <UpsertVehicleScreen data={vehicle.data} />;
