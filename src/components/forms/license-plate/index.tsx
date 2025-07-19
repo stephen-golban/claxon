@@ -6,18 +6,20 @@ import { LicensePlateField, SubmitButton } from "@/components/form-elements";
 import { useTranslation } from "@/hooks";
 import type { LicensePlateType } from "@/lib/constants";
 import useVehiclePlateForm from "./hook";
-import type { SearchVehiclePlateFormData } from "./schema";
+import type { LicensePlateFormData } from "./schema";
 
-interface ISearchVehiclePlateForm {
+interface ILicensePlateForm {
+  isLoading?: boolean;
+  buttonTitle?: string;
   initialData?: Partial<unknown> | null;
-  onSubmit: (args: SearchVehiclePlateFormData) => void;
+  onSubmit: (args: LicensePlateFormData) => void;
 }
 
-const SearchVehiclePlateForm: React.FC<ISearchVehiclePlateForm> = ({ onSubmit, initialData }) => {
+const LicensePlateForm: React.FC<ILicensePlateForm> = ({ onSubmit, initialData, buttonTitle, isLoading }) => {
   const { t } = useTranslation();
   const { type, setType, resetForm, ...formMethods } = useVehiclePlateForm(initialData);
 
-  const onSubmitFull = (data: Omit<SearchVehiclePlateFormData, "type">) => {
+  const onSubmitFull = (data: Omit<LicensePlateFormData, "type">) => {
     onSubmit({ ...data, type });
   };
 
@@ -45,14 +47,16 @@ const SearchVehiclePlateForm: React.FC<ISearchVehiclePlateForm> = ({ onSubmit, i
           />
         </LicensePlatePicker>
         <SubmitButton
-          title={t("buttons:search")}
+          title={buttonTitle || t("buttons:search")}
           isDisabled={!formMethods.formState.isValid}
           onSubmit={formMethods.handleSubmit(onSubmitFull)}
-          isSubmitting={formMethods.formState.isSubmitting}
+          isSubmitting={formMethods.formState.isSubmitting || isLoading}
         />
       </View>
     </FormProvider>
   );
 };
 
-export default SearchVehiclePlateForm;
+export default LicensePlateForm;
+
+export type { LicensePlateFormData };

@@ -1,4 +1,3 @@
-import { zodResolver } from "@hookform/resolvers/zod";
 import type React from "react";
 import { useEffect, useMemo, useRef } from "react";
 import { FormProvider, useForm } from "react-hook-form";
@@ -7,28 +6,29 @@ import * as FormElements from "@/components/form-elements";
 import { Text } from "@/components/ui/text";
 import { useTranslation } from "@/hooks";
 import type { Vehicle } from "@/services/api/vehicles";
-import { type UpsertVehicleFormData, upsertVehicleSchema } from "./schema";
-import { getFormDataFromVehicle, hasFormDataChanged } from "./util";
+import { createDefaultValues, resolver, type VehicleFormData } from "./schema";
+import { hasFormDataChanged } from "./util";
 
-interface IUpsertVehicleForm {
-  onSubmit: (data: UpsertVehicleFormData) => void;
+interface IVehicleForm {
   initialData?: Vehicle;
+  buttonTitle?: string;
+  onSubmit: (data: VehicleFormData) => void;
 }
 
-const UpsertVehicleForm: React.FC<IUpsertVehicleForm> = ({ onSubmit, initialData }) => {
+const VehicleForm: React.FC<IVehicleForm> = ({ onSubmit, initialData, buttonTitle }) => {
   const { t } = useTranslation();
 
   // Use provided initial data or default values
-  const defaultValues = getFormDataFromVehicle(initialData);
+  const defaultValues = createDefaultValues(initialData);
 
-  const hook = useForm<UpsertVehicleFormData>({
+  const hook = useForm<VehicleFormData>({
+    resolver,
     defaultValues,
     mode: "onChange",
-    resolver: zodResolver(upsertVehicleSchema),
   });
 
   // Store original values for change detection
-  const originalValuesRef = useRef<UpsertVehicleFormData | null>(null);
+  const originalValuesRef = useRef<VehicleFormData | null>(null);
 
   // Set original values when component mounts
   useEffect(() => {
@@ -52,7 +52,7 @@ const UpsertVehicleForm: React.FC<IUpsertVehicleForm> = ({ onSubmit, initialData
 
   return (
     <FormProvider {...hook}>
-      <View className="flex-1 gap-y-4 mt-5">
+      <View className="flex-1 gap-y-4 my-5">
         {/* Brand and Model */}
         <View className="flex-row items-start gap-x-4">
           <View className="flex-1">
@@ -108,13 +108,15 @@ const UpsertVehicleForm: React.FC<IUpsertVehicleForm> = ({ onSubmit, initialData
       </View>
 
       <FormElements.SubmitButton
+        title={buttonTitle || "Next"}
         onSubmit={hook.handleSubmit(onSubmit)}
         isSubmitting={hook.formState.isSubmitting}
         isDisabled={!hook.formState.isValid || !hasChanges}
-        title="Next"
       />
     </FormProvider>
   );
 };
 
-export default UpsertVehicleForm;
+export default VehicleForm;
+
+export type { VehicleFormData };

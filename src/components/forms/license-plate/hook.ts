@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { useUpdateEffect } from "@/hooks";
 import type { LicensePlateType } from "@/lib/constants";
 import type { VehiclePlate } from "@/typings/vehicle";
-import type { SearchVehiclePlateFormData } from "./schema";
+import type { LicensePlateFormData } from "./schema";
 import { createDefaultValues, createResolver } from "./util";
 
 /**
@@ -20,15 +20,17 @@ export default function useVehiclePlateForm(initialData?: Partial<VehiclePlate> 
   const resolver = zodResolver(createResolver(type));
   const defaultValues = createDefaultValues(initialData);
 
-  const formMethods = useForm<Omit<SearchVehiclePlateFormData, "type">>({
+  const formMethods = useForm<Omit<LicensePlateFormData, "type">>({
     resolver,
     defaultValues,
     mode: "onChange",
   });
+
   useUpdateEffect(() => {
     const initialValues = createDefaultValues();
     formMethods.reset(initialValues);
   }, [type]);
+
   // Reset the form with new data if needed
   const resetForm = useCallback(
     (data?: Partial<VehiclePlate>) => {

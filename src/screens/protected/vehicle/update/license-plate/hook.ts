@@ -1,20 +1,19 @@
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
+import type { LicensePlateFormData } from "@/components/forms/license-plate";
 import { useUpdateVehicle } from "@/services/api/vehicles";
-import type { UpsertLicensePlateFormData } from "./form/schema";
 
-export default function useUpsertLicensePlateScreen() {
+export default function useUpdateLicensePlateScreen(id: string) {
   const router = useRouter();
   const updateVehicle = useUpdateVehicle();
-  const { id } = useLocalSearchParams<{ id: string }>();
 
-  const onSubmit = async (dto: UpsertLicensePlateFormData) => {
+  const onSubmit = async (dto: LicensePlateFormData) => {
     if (updateVehicle.isPending || !id) return;
 
     await updateVehicle.mutateAsync(
       {
         id,
         dto: {
-          plate_type: dto.plate_type,
+          plate_type: dto.type,
           plate_left_part: dto.plate.left,
           plate_right_part: dto.plate.right,
           plate_number: `${dto.plate.left}${dto.plate.right}`, // Combined plate number
@@ -26,14 +25,14 @@ export default function useUpsertLicensePlateScreen() {
       {
         onSuccess: () => {
           // Navigate back to the vehicles list or main screen
-          router.replace("/(protected)/tabs/my-cars");
+          router.replace("/tabs/garage");
         },
       },
     );
   };
 
   return {
-    id,
     onSubmit,
+    isLoading: updateVehicle.isPending,
   };
 }

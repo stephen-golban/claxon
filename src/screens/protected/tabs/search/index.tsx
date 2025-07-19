@@ -2,14 +2,12 @@ import { useState } from "react";
 import { View } from "react-native";
 
 import { Container, EmptyState } from "@/components/common";
+import LicensePlateForm, { type LicensePlateFormData } from "@/components/forms/license-plate";
 import { Card, CardContent } from "@/components/ui/card";
 import { Text } from "@/components/ui/text";
-
 import { MessageComposer } from "./components/message-composer";
 import { RecentSearches } from "./components/recent-searches";
 import { SearchResults } from "./components/search-results";
-import SearchVehiclePlateForm from "./form";
-import type { SearchVehiclePlateFormData } from "./form/schema";
 
 // Mock data for search results
 interface SearchResult {
@@ -86,7 +84,7 @@ export function SearchTab() {
   const [selectedVehicle, setSelectedVehicle] = useState<SearchResult | null>(null);
   const [showMessageComposer, setShowMessageComposer] = useState(false);
 
-  const handleSearch = async (data: SearchVehiclePlateFormData) => {
+  const handleSearch = async (data: LicensePlateFormData) => {
     setIsSearching(true);
     setHasSearched(true);
 
@@ -152,7 +150,7 @@ export function SearchTab() {
 
       <View className="flex-1 gap-4">
         {/* Search Form */}
-        <SearchVehiclePlateForm onSubmit={handleSearch} />
+        <LicensePlateForm onSubmit={handleSearch} />
 
         {/* Search Results */}
         {hasSearched && (

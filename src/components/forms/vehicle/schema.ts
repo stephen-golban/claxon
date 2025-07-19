@@ -1,9 +1,10 @@
+import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { stringifyObjectValidate } from "@/lib/utils";
 import type { Vehicle } from "@/services/api/vehicles";
 
 // Vehicle form validation schema
-export const upsertVehicleSchema = z.object({
+export const schema = z.object({
   brand: z.string().min(1, stringifyObjectValidate({ keyT: "errors:required" })),
   model: z.string().min(1, stringifyObjectValidate({ keyT: "errors:required" })),
   manufacture_year: z
@@ -18,9 +19,9 @@ export const upsertVehicleSchema = z.object({
     .regex(/^[A-HJ-NPR-Z0-9]{17}$/, "VIN code contains invalid characters"),
 });
 
-export type UpsertVehicleFormData = z.infer<typeof upsertVehicleSchema>;
+export type VehicleFormData = z.infer<typeof schema>;
 
-export const defaultValues: UpsertVehicleFormData = {
+const defaultValues: VehicleFormData = {
   brand: "",
   model: "",
   manufacture_year: new Date().getFullYear(),
@@ -32,7 +33,7 @@ export const defaultValues: UpsertVehicleFormData = {
  * @param vehicle - The vehicle record from the database
  * @returns Form data object
  */
-export const transformVehicleToFormData = (vehicle?: Vehicle | null): UpsertVehicleFormData => {
+export const createDefaultValues = (vehicle?: Vehicle | null): VehicleFormData => {
   if (!vehicle) {
     return defaultValues;
   }
@@ -45,3 +46,5 @@ export const transformVehicleToFormData = (vehicle?: Vehicle | null): UpsertVehi
     vin_code: vehicle.vin_code || "",
   };
 };
+
+export const resolver = zodResolver(schema);

@@ -9,7 +9,7 @@ import type { TabInfo } from "./type";
 
 const tabs: TabInfo[] = [
   { name: "index", title: "Search", icon: Search },
-  { name: "my-cars", title: "My Car", icon: Car },
+  { name: "garage", title: "Garage", icon: Car },
   { name: "claxons", title: "Claxons", icon: Megaphone },
 ];
 

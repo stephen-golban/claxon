@@ -2,7 +2,7 @@ import { useRouter } from "expo-router";
 import { Alert } from "react-native";
 import { useDeleteVehicle, useGetMyVehicles, useUpdateVehicle } from "@/services/api/vehicles";
 
-export function useMyCarsTab() {
+export function useGarageTab() {
   const router = useRouter();
 
   // Query vehicles data
@@ -12,13 +12,26 @@ export function useMyCarsTab() {
   const updateVehicleMutation = useUpdateVehicle();
   const deleteVehicleMutation = useDeleteVehicle();
 
+  const findVehicle = (vehicleId: string) => {
+    return vehicles.find((v) => v.id === vehicleId);
+  };
+
   const handleAddVehicle = () => {
-    router.push("/(protected)/vehicle/create");
+    router.push("/vehicle/create");
   };
 
   const handleVehiclePress = (vehicleId: string) => {
-    // Navigate to vehicle details or edit
-    router.push(`/(protected)/vehicle/${vehicleId}`);
+    const vehicle = findVehicle(vehicleId);
+
+    if (!vehicle) return;
+
+    const pending = vehicle.phase === "pending";
+
+    if (pending) {
+      router.push(`/vehicle/update/license-plate?id=${vehicleId}`);
+    } else {
+      router.push(`/vehicle/update?id=${vehicleId}`);
+    }
   };
 
   const handleToggleActive = async (vehicleId: string) => {

@@ -1,3 +1,3 @@
 export * from "./claxons";
-export * from "./my-cars";
+export * from "./garage";
 export * from "./search";

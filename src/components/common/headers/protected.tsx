@@ -5,51 +5,85 @@ import type { StyleProp, TextStyle } from "react-native";
 import { View } from "react-native";
 import { MoveLeftIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import { useGetMe } from "@/services/api/accounts";
+import { useGoBackStore } from "@/stores/go-back";
 import { ProfileAvatar } from "../profile-avatar";
 import { ThemeSwitcher } from "../theme-switcher";
 
-// Configuration for header visibility
-const HEADER_CONFIG = {
-  HIDE_GO_BACK: new Set(["/(tabs)/[name]"]),
-  HIDE_HEADER: new Set(),
+type HeaderConfig = {
+  ADD_PX: Set<string>;
+  HIDE_GO_BACK: Set<string>;
+};
+
+const HEADER_CONFIG: HeaderConfig = {
+  ADD_PX: new Set(["/tabs/[name]", "/tabs"]),
+  HIDE_GO_BACK: new Set(["/tabs/[name]"]),
 } as const;
 
-const getGoBackShouldHide = (pathname: string): boolean => {
-  // Check exact matches first
-  if (HEADER_CONFIG.HIDE_GO_BACK.has(pathname)) {
-    return true;
-  }
+const createRoutePatternMatcher = (routes: Set<string>) => {
+  return (pathname: string): boolean => {
+    for (const route of routes) {
+      if (route === pathname) return true;
 
-  // Check pattern matches for routes with [name] wildcards
-  for (const route of HEADER_CONFIG.HIDE_GO_BACK) {
-    if (route.includes("[") && route.includes("]")) {
-      // Convert route pattern to regex by replacing [name] with [^/]+
-      const regexPattern = route.replace(/\[([^\]]+)\]/g, "[^/]+");
-      const regex = new RegExp(`^${regexPattern}$`);
-      if (regex.test(pathname)) {
-        return true;
+      if (route.includes("[") && route.includes("]")) {
+        const regexPattern = route.replace(/\[([^\]]+)\]/g, "[^/]+");
+        const regex = new RegExp(`^${regexPattern}$`);
+        if (regex.test(pathname)) return true;
       }
     }
-  }
+    return false;
+  };
+};
 
-  return false;
+const useRouteMatchers = () => {
+  return useMemo(
+    () => ({
+      shouldAddPadding: createRoutePatternMatcher(HEADER_CONFIG.ADD_PX),
+      shouldHideGoBack: createRoutePatternMatcher(HEADER_CONFIG.HIDE_GO_BACK),
+    }),
+    [],
+  );
+};
+
+const useHeaderState = () => {
+  const pathname = usePathname();
+  const { shouldHideGoBack, shouldAddPadding } = useRouteMatchers();
+
+  return useMemo(
+    () => ({
+      pathname,
+      shouldHideGoBack: shouldHideGoBack(pathname),
+      shouldAddPadding: shouldAddPadding(pathname),
+    }),
+    [pathname, shouldHideGoBack, shouldAddPadding],
+  );
 };
 
 const HeaderLeft = memo((): ReactNode => {
-  const pathname = usePathname();
   const canGoBack = router.canGoBack();
+  const { shouldHideGoBack, shouldAddPadding } = useHeaderState();
+  const { goBack, hideGoBack } = useGoBackStore();
 
-  const shouldShow = useMemo(() => {
-    return canGoBack && !getGoBackShouldHide(pathname);
-  }, [pathname, canGoBack]);
+  const shouldShow = canGoBack && !shouldHideGoBack && !hideGoBack;
 
-  if (!shouldShow) {
-    return null;
-  }
+  if (!shouldShow) return null;
+
+  const handleGoBack = () => {
+    if (goBack && typeof goBack === "function") {
+      goBack();
+    } else {
+      router.back();
+    }
+  };
 
   return (
-    <Button onPress={() => router.back()} size="icon" variant="ghost" className="ml-3.5 mt-5">
+    <Button
+      size="icon"
+      variant="ghost"
+      onPress={handleGoBack}
+      className={cn("mt-5", shouldAddPadding ? "ml-3.5" : "-ml-2")}
+    >
       <MoveLeftIcon size={24} className="text-foreground" />
     </Button>
   );
@@ -57,47 +91,38 @@ const HeaderLeft = memo((): ReactNode => {
 
 HeaderLeft.displayName = "HeaderLeft";
 
-const headerTitleStyle: StyleProp<
-  Pick<TextStyle, "fontFamily" | "fontSize" | "fontWeight"> & {
-    color?: string;
-  }
-> = {
-  color: "transparent",
-};
+const HEADER_STYLES = {
+  title: {
+    color: "transparent",
+  } as StyleProp<Pick<TextStyle, "fontFamily" | "fontSize" | "fontWeight"> & { color?: string }>,
+} as const;
 
-const headerBackground = () => <View className="bg-background" />;
+const HeaderBackground = () => <View className="bg-background" />;
 
 const HeaderRight = memo((): ReactNode => {
   const me = useGetMe();
+  const { shouldAddPadding } = useHeaderState();
 
   return (
-    <View>
-      <View className="flex-row items-center gap-x-4 mt-4 mr-5">
-        <ThemeSwitcher />
-        {me.data && (
-          <ProfileAvatar
-            last_name={me.data?.last_name}
-            first_name={me.data?.first_name}
-            avatar_url={me.data?.avatar_url}
-            isMeLoading={me.isPending || me.isLoading}
-          />
-        )}
-      </View>
+    <View className={cn("flex-row items-center gap-x-4 mt-4", shouldAddPadding ? "mr-5" : "mr-0")}>
+      <ThemeSwitcher />
+      {me.data && (
+        <ProfileAvatar
+          last_name={me.data.last_name}
+          first_name={me.data.first_name}
+          avatar_url={me.data.avatar_url}
+          isMeLoading={me.isPending || me.isLoading}
+        />
+      )}
     </View>
   );
 });
 
 HeaderRight.displayName = "HeaderRight";
 
-// Memoized header components to prevent recreation
-const memoizedHeaderLeft = () => <HeaderLeft />;
-const memoizedHeaderRight = () => <HeaderRight />;
-
-export const getProtectedHeader = () => {
-  return {
-    headerLeft: memoizedHeaderLeft,
-    headerRight: memoizedHeaderRight,
-    headerTitleStyle,
-    headerBackground,
-  };
-};
+export const getProtectedHeader = () => ({
+  headerLeft: () => <HeaderLeft />,
+  headerRight: () => <HeaderRight />,
+  headerTitleStyle: HEADER_STYLES.title,
+  headerBackground: HeaderBackground,
+});

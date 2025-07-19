@@ -10,14 +10,14 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Text } from "@/components/ui/text";
 import { VEHICLE_COLORS } from "@/lib/constants";
 import { cn } from "@/lib/utils";
-import { useMyCarsTab } from "@/screens/protected/tabs/my-cars/hook";
 
 import type { Vehicle } from "@/services/api/vehicles";
+import { useGarageTab } from "./hook";
 
-export function MyCarsTab() {
+export function GarageTab() {
   const [selectedFilter, setSelectedFilter] = useState<"all" | "active" | "incomplete">("all");
 
-  const { vehicles, isLoading, error, handleAddVehicle, handleVehiclePress, handleToggleActive } = useMyCarsTab();
+  const { vehicles, isLoading, error, handleAddVehicle, handleVehiclePress, handleToggleActive } = useGarageTab();
 
   // Show error state if vehicles failed to load
   if (error) {
