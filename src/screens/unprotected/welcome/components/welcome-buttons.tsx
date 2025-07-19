@@ -1,3 +1,4 @@
+import * as Haptics from "expo-haptics";
 import { useRouter } from "expo-router";
 import React from "react";
 import { useWindowDimensions, View } from "react-native";
@@ -121,6 +122,7 @@ export function WelcomeButtons({ currentIndex, onBack, onNext, totalSlides }: We
   });
 
   const handleNext = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     if (isLastSlide) {
       router.push("/(unprotected)/get-started");
     } else {
@@ -129,6 +131,7 @@ export function WelcomeButtons({ currentIndex, onBack, onNext, totalSlides }: We
   };
 
   const handleBackAction = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     onBack();
   };
 

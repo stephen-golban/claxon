@@ -2,9 +2,8 @@ import type { NativeStackHeaderRightProps } from "@react-navigation/native-stack
 import { usePathname, useRouter } from "expo-router";
 import { memo, type ReactNode, useMemo } from "react";
 import type { StyleProp, TextStyle } from "react-native";
-import { View } from "react-native";
+import { Pressable, View } from "react-native";
 import { MoveLeftIcon } from "@/components/icons";
-import { Button } from "@/components/ui/button";
 import { ThemeSwitcher } from "../theme-switcher";
 
 // Configuration for header visibility
@@ -29,9 +28,9 @@ const HeaderLeft = memo(() => {
   }
 
   return (
-    <Button size="icon" variant="ghost" onPress={() => router.back()} className="my-3 items-start">
+    <Pressable onPress={() => router.back()} className="mt-5">
       <MoveLeftIcon className="text-primary" size={24} />
-    </Button>
+    </Pressable>
   );
 });
 

@@ -6,8 +6,7 @@
     "jsx": "react-jsx",
     "paths": {
       "@/*": ["src/*"],
-      "@/assets/*": ["assets/*"],
-      "@/convex/*": ["convex/*"]
+      "@/assets/*": ["assets/*"]
     }
   },
   "include": ["**/*.ts", "**/*.tsx", ".expo/types/**/*.ts", "expo-env.d.ts", "nativewind-env.d.ts"]

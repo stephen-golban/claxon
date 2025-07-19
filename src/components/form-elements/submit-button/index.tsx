@@ -1,3 +1,4 @@
+import * as Haptics from "expo-haptics";
 import type React from "react";
 import { LoadingSpinner } from "@/components/common";
 import { Button } from "@/components/ui/button";
@@ -22,9 +23,16 @@ const SubmitButton: React.FC<ISubmitButton> = ({
 }) => {
   const { t } = useTranslation();
 
+  const handleSubmit = () => {
+    if (!isSubmitting && !isDisabled) {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+      onSubmit();
+    }
+  };
+
   return (
     <Button
-      onPress={onSubmit}
+      onPress={handleSubmit}
       disabled={isSubmitting || isDisabled}
       className={cn("rounded-full", className)}
       size="lg"

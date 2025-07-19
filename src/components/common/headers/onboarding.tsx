@@ -1,3 +1,4 @@
+import * as Haptics from "expo-haptics";
 import type { NativeStackHeaderRightProps } from "@react-navigation/native-stack";
 import type { ReactNode } from "react";
 import type { StyleProp, TextStyle } from "react-native";
@@ -11,8 +12,13 @@ const HeaderLeft = (showBackButton = true, onBack = () => {}): ReactNode => {
     return <View />;
   }
 
+  const handleBackPress = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    onBack();
+  };
+
   return (
-    <Button size="icon" variant="ghost" onPress={onBack} className="my-3">
+    <Button size="icon" variant="ghost" onPress={handleBackPress} className="my-3">
       <MoveLeftIcon className="text-primary" size={24} />
     </Button>
   );

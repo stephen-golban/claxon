@@ -18,26 +18,26 @@ export const BasePlate: React.FC<BaseRenderPlateProps> = (props) => {
         })}
       >
         <PlateInputBox
+          side="left"
           type={props.type}
           value={props.left}
+          autoFocus={false}
           ref={hook.leftInputRef}
-          disabled={props.disabled || (props.type.includes("cars.special") && props.type !== "cars.special.diplomatic")}
           mask={hook.formattedMaskLeft}
-          autoFocus={!(props.type.includes("cars.special") && props.type !== "cars.special.diplomatic")}
           placeholder={props.maskLeft?.value}
           onChangeText={hook.handleLeftChange}
           nonEditableText={props.maskLeft?.nonEditableText}
-          side="left"
+          disabled={props.disabled || (props.type.includes("cars.special") && props.type !== "cars.special.diplomatic")}
         />
 
         {(props.type === "cars.standard.default" || props.type === "cars.standard.public_transport") && <PlateHoles />}
         <PlateInputBox
           type={props.type}
+          autoFocus={false}
           value={props.right}
           ref={hook.rightInputRef}
           disabled={props.disabled}
           mask={hook.formattedMaskRight}
-          autoFocus={props.type.includes("cars.special") && props.type !== "cars.special.diplomatic"}
           placeholder={props.maskRight?.value}
           onChangeText={hook.handleRightChange}
           onKeyPress={hook.handleRightKeyPress}
