@@ -10,7 +10,6 @@ interface IPlateInputBox extends MaskedTextInputProps {
   disabled?: boolean;
   nonEditableText?: string;
   removePaddingLeft?: boolean;
-  compact?: boolean;
 }
 
 const getInputConfig = (type: LicensePlateType, isLeft: boolean) => {
@@ -67,7 +66,7 @@ const getInputConfig = (type: LicensePlateType, isLeft: boolean) => {
 };
 
 export const PlateInputBox = React.forwardRef<TextInput, IPlateInputBox>((props, ref) => {
-  const { mask, type, value, disabled, nonEditableText, side, compact, ...rest } = props;
+  const { mask, type, value, disabled, nonEditableText, side, ...rest } = props;
 
   // Ensure mask is a valid string and calculate maxLength safely
   const safeMask = mask || "";
@@ -80,23 +79,19 @@ export const PlateInputBox = React.forwardRef<TextInput, IPlateInputBox>((props,
   const color = config.color;
   const placeholderTextColor = type === "cars.standard.public_transport" ? "rgba(0,0,0,0.2)" : "lightgray";
 
-  // Choose the appropriate style based on compact prop
-  const inputStyle = compact ? styles.inputCompact : styles.input;
-  const lineHeight = compact ? 25 : 45;
-
   // For special plates (except diplomatic) on the left side, show only non-editable text
   const isSpecialPlateLeft = type.includes("cars.special") && type !== "cars.special.diplomatic" && side === "left";
 
   return (
     <View className="flex-1 flex-row items-center">
       {isSpecialPlateLeft ? (
-        <Text style={[inputStyle, { lineHeight, color }]} className={config.className}>
+        <Text style={[styles.input, { lineHeight: 45, color }]} className={config.className}>
           {nonEditableText}
         </Text>
       ) : (
         <>
           {nonEditableText && (
-            <Text style={[inputStyle, { lineHeight, color }]} className={config.className}>
+            <Text style={[styles.input, { lineHeight: 45, color }]} className={config.className}>
               {nonEditableText}
             </Text>
           )}
@@ -114,7 +109,7 @@ export const PlateInputBox = React.forwardRef<TextInput, IPlateInputBox>((props,
             textAlign={config.textAlign as "left" | "center" | "right"}
             selectionColor={color}
             style={[
-              inputStyle,
+              styles.input,
               {
                 color,
                 paddingLeft: config.paddingLeft,
@@ -136,10 +131,5 @@ const styles = StyleSheet.create({
     fontSize: 35,
     fontWeight: "800",
     letterSpacing: 2,
-  },
-  inputCompact: {
-    fontSize: 18,
-    fontWeight: "800",
-    letterSpacing: 1,
   },
 });

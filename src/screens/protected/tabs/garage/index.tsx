@@ -2,15 +2,10 @@ import { View } from "react-native";
 import { Container, ErrorScreen } from "@/components/common";
 import { Button } from "@/components/ui/button";
 import { Text } from "@/components/ui/text";
-import { VehicleList, EmptyState } from "./components";
-import { useGarageTab } from "./hook";
+import EmptyState from "./empty-state";
+import useGarageTab from "./hook";
+import VehicleList from "./vehicle-list";
 
-/**
- * GarageTab component following SOLID principles
- * Single Responsibility: Only responsible for layout and orchestration
- * Open/Closed: Extensible through component composition
- * Dependency Inversion: Depends on abstractions (hooks and components)
- */
 export function GarageTab() {
   const {
     vehicles,
@@ -18,7 +13,8 @@ export function GarageTab() {
     error,
     isVehicleLoading,
     handleAddVehicle,
-    handleVehiclePress,
+    handleEditLicensePlate,
+    handleEditVehicleDetails,
     handleToggleActive,
     handleDeleteVehicle,
   } = useGarageTab();
@@ -51,7 +47,8 @@ export function GarageTab() {
             <VehicleList
               vehicles={vehicles}
               isVehicleLoading={isVehicleLoading}
-              onVehiclePress={handleVehiclePress}
+              onEditLicensePlate={handleEditLicensePlate}
+              onEditVehicleDetails={handleEditVehicleDetails}
               onToggleActive={handleToggleActive}
               onDelete={handleDeleteVehicle}
             />

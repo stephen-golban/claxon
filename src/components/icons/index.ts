@@ -22,6 +22,7 @@ import {
   PowerOff,
   Rows3Icon,
   SearchIcon,
+  SettingsIcon,
   SmartphoneIcon,
   SunIcon,
   TrashIcon,
@@ -73,6 +74,7 @@ import { SwipeRightIcon } from "./swipe-right";
   MessageSquareIcon,
   PowerOff,
   Zap,
+  SettingsIcon,
 ].forEach(iconWithClassName);
 
 export {
@@ -112,4 +114,5 @@ export {
   SmartphoneIcon,
   PowerOff,
   Zap,
+  SettingsIcon,
 };

@@ -246,7 +246,7 @@ export const useUpdateVehicleActiveState = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ id, isActive }: { id: string; isActive: boolean }) => 
+    mutationFn: ({ id, isActive }: { id: string; isActive: boolean }) =>
       vehicleService.update(id, { is_active: isActive }),
     mutationKey: ["vehicles", "updateActiveState"],
     onSuccess: () => {

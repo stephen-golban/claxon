@@ -8,9 +8,9 @@ export const BasePlate: React.FC<BaseRenderPlateProps> = (props) => {
   const hook = useBasePlate(props);
 
   return (
-    <PlateFrame type={props.type} compact={props.compact}>
-      <PlateFlagWrapper type={props.type} compact={props.compact}>
-        <PlateFlag type={props.type} compact={props.compact} />
+    <PlateFrame type={props.type}>
+      <PlateFlagWrapper type={props.type}>
+        <PlateFlag type={props.type} />
       </PlateFlagWrapper>
       <View
         className={cn("flex-1 flex-row px-8 justify-center", {
@@ -28,12 +28,9 @@ export const BasePlate: React.FC<BaseRenderPlateProps> = (props) => {
           onChangeText={hook.handleLeftChange}
           nonEditableText={props.maskLeft?.nonEditableText}
           disabled={props.disabled || (props.type.includes("cars.special") && props.type !== "cars.special.diplomatic")}
-          compact={props.compact}
         />
 
-        {(props.type === "cars.standard.default" || props.type === "cars.standard.public_transport") && (
-          <PlateHoles compact={props.compact} />
-        )}
+        {(props.type === "cars.standard.default" || props.type === "cars.standard.public_transport") && <PlateHoles />}
         <PlateInputBox
           type={props.type}
           autoFocus={false}
@@ -45,7 +42,6 @@ export const BasePlate: React.FC<BaseRenderPlateProps> = (props) => {
           onChangeText={hook.handleRightChange}
           onKeyPress={hook.handleRightKeyPress}
           side="right"
-          compact={props.compact}
         />
       </View>
     </PlateFrame>

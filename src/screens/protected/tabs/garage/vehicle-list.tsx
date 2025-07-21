@@ -1,42 +1,30 @@
 import React from "react";
 import { FlatList, View } from "react-native";
 import type { Vehicle } from "@/services/api/vehicles";
-import { VehicleCard, type VehicleCardProps } from "./VehicleCard";
+import type { OperationType } from "./hook";
+import { VehicleCard } from "./vehicle-card";
 
-/**
- * Props interface for VehicleList component
- */
-export interface VehicleListProps {
+const VehicleList = React.memo<{
   vehicles: Vehicle[];
-  isVehicleLoading: (vehicleId: string) => boolean;
-  onVehiclePress: (vehicleId: string) => void;
+  isVehicleLoading: (vehicleId: string, operation?: OperationType) => boolean;
+  onEditLicensePlate: (vehicleId: string) => void;
+  onEditVehicleDetails: (vehicleId: string) => void;
   onToggleActive: (vehicleId: string) => void;
   onDelete: (vehicleId: string) => void;
-}
-
-/**
- * VehicleList component following Single Responsibility Principle
- * Only responsible for rendering the list of vehicles
- * Optimized with React.memo and proper keyExtractor
- */
-export const VehicleList = React.memo<VehicleListProps>(({
-  vehicles,
-  isVehicleLoading,
-  onVehiclePress,
-  onToggleActive,
-  onDelete,
-}) => {
+}>(({ vehicles, isVehicleLoading, onEditLicensePlate, onEditVehicleDetails, onToggleActive, onDelete }) => {
   const renderVehicle = React.useCallback(
     ({ item }: { item: Vehicle }) => (
       <VehicleCard
         vehicle={item}
-        isLoading={isVehicleLoading(item.id)}
-        onPress={onVehiclePress}
+        isToggleLoading={isVehicleLoading(item.id, "toggle")}
+        isDeleteLoading={isVehicleLoading(item.id, "delete")}
+        onEditLicensePlate={onEditLicensePlate}
+        onEditVehicleDetails={onEditVehicleDetails}
         onToggleActive={onToggleActive}
         onDelete={onDelete}
       />
     ),
-    [isVehicleLoading, onVehiclePress, onToggleActive, onDelete]
+    [isVehicleLoading, onEditLicensePlate, onEditVehicleDetails, onToggleActive, onDelete],
   );
 
   const keyExtractor = React.useCallback((item: Vehicle) => item.id, []);
@@ -54,4 +42,4 @@ export const VehicleList = React.memo<VehicleListProps>(({
   );
 });
 
-VehicleList.displayName = "VehicleList";
+export default VehicleList;

@@ -4,7 +4,6 @@ import type { LicensePlateType } from "@/lib/constants";
 
 interface IPlateFrame extends React.PropsWithChildren {
   type: LicensePlateType;
-  compact?: boolean;
 }
 const COLORS = {
   white: "white",
@@ -28,17 +27,11 @@ const getBgColor = (type: LicensePlateType) => {
   }
 };
 
-export const PlateFrame: React.FC<IPlateFrame> = ({ children, type, compact }) => {
+export const PlateFrame: React.FC<IPlateFrame> = ({ children, type }) => {
   const backgroundColor = getBgColor(type);
-  const heightClass = compact ? "h-10" : "h-16"; // 40px vs 64px
-  const borderWidth = compact ? "border-[3px]" : "border-[5px]";
-  const borderRadius = compact ? "rounded-lg" : "rounded-xl";
 
   return (
-    <View
-      className={`overflow-hidden ${heightClass} ${borderRadius} ${borderWidth} border-black flex-row`}
-      style={{ backgroundColor }}
-    >
+    <View className="overflow-hidden h-16 rounded-xl border-[5px] border-black flex-row" style={{ backgroundColor }}>
       {children}
     </View>
   );

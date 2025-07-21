@@ -1,5 +1,5 @@
-import * as Haptics from "expo-haptics";
 import type { NativeStackHeaderRightProps } from "@react-navigation/native-stack";
+import * as Haptics from "expo-haptics";
 import type { ReactNode } from "react";
 import type { StyleProp, TextStyle } from "react-native";
 import { View } from "react-native";
