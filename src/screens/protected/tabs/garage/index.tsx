@@ -1,11 +1,11 @@
 import { View } from "react-native";
 import { Container, ErrorScreen } from "@/components/common";
+import { PlusIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Text } from "@/components/ui/text";
 import EmptyState from "./empty-state";
 import useGarageTab from "./hook";
 import VehicleList from "./vehicle-list";
-import { PlusIcon } from "@/components/icons";
 
 export function GarageTab() {
   const {
@@ -31,9 +31,9 @@ export function GarageTab() {
 
         {/* Add vehicle button */}
         <View className="mb-6">
-          <Button 
-            onPress={handleAddVehicle} 
-            className="rounded-full flex-row items-center gap-2" 
+          <Button
+            onPress={handleAddVehicle}
+            className="rounded-full flex-row items-center gap-2"
             size="lg"
             disabled={vehicles.length >= 5}
           >

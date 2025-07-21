@@ -56,13 +56,11 @@ const _Container: React.FC<IContainer> = ({
     return children;
   }, [isEmpty, hasTopText, topTextChild, children]);
 
-  if (loading) {
-    return <FullScreenLoader />;
-  }
-
   return (
     <SafeAreaView edges={edges} style={style} className="flex-1">
-      <View className={cn("flex-1 pt-10 bg-background px-5 pb-2", className, removePX && "px-0")}>{content}</View>
+      <View className={cn("flex-1 pt-10 bg-background px-5 pb-2", className, removePX && "px-0")}>
+        {loading ? <FullScreenLoader /> : content}
+      </View>
     </SafeAreaView>
   );
 };

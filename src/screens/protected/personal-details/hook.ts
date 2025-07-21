@@ -46,6 +46,7 @@ export default function usePersonalDetailsScreen() {
         dto: {
           ...accountData,
           avatar_url: avatarUrl,
+          is_setup_finished: true,
           dob: accountData.dob.toISOString(),
         },
       },
@@ -58,8 +59,6 @@ export default function usePersonalDetailsScreen() {
   return {
     onSubmit,
     isUploading,
-    currentUser: me.data,
-    error: updateAccount.error,
     isLoading: me.isPending || me.isLoading,
   };
 }

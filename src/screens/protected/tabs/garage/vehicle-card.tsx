@@ -8,8 +8,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Text } from "@/components/ui/text";
 import type { LicensePlateType } from "@/lib/constants";
-import { cn } from "@/lib/utils";
 import { VEHICLE_COLORS } from "@/lib/constants";
+import { cn } from "@/lib/utils";
 import type { Vehicle } from "@/services/api/vehicles";
 
 interface VehicleCardProps {
@@ -32,9 +32,9 @@ const VehicleCard: React.FC<VehicleCardProps> = ({
   onDelete,
 }) => {
   const isComplete = vehicle.phase === "done";
-  
+
   // Find the vehicle color from constants
-  const vehicleColor = VEHICLE_COLORS.find(color => color.code === vehicle.color);
+  const vehicleColor = VEHICLE_COLORS.find((color) => color.code === vehicle.color);
   const carColor = vehicleColor?.rgba || "rgba(128, 128, 128, 1)"; // Default to gray if no color found
 
   const handleEditAction = () => {
@@ -89,12 +89,9 @@ const VehicleCard: React.FC<VehicleCardProps> = ({
           <View className="flex-row items-center flex-1 gap-3">
             {/* Car color preview */}
             <View className="bg-muted/30 rounded-full p-2">
-              <CarIcon 
-                size={24} 
-                color={carColor}
-              />
+              <CarIcon size={24} color={carColor} />
             </View>
-            
+
             <View className="flex-1">
               <Text className="text-lg font-semibold text-foreground">
                 {vehicle.brand} {vehicle.model}

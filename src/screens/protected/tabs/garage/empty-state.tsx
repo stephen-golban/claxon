@@ -1,9 +1,8 @@
-import React from "react";
+import type React from "react";
 import { View } from "react-native";
 import { CarIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Text } from "@/components/ui/text";
-
 
 const EmptyState: React.FC<{ onAddVehicle: () => void }> = ({ onAddVehicle }) => (
   <View className="flex-1 items-center justify-center px-8">
