@@ -2,7 +2,7 @@ import React from "react";
 import { FlatList, View } from "react-native";
 import type { Vehicle } from "@/services/api/vehicles";
 import type { OperationType } from "./hook";
-import { VehicleCard } from "./vehicle-card";
+import VehicleCard from "./vehicle-card";
 
 const VehicleList = React.memo<{
   vehicles: Vehicle[];
