@@ -4,16 +4,8 @@ import { CarIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Text } from "@/components/ui/text";
 
-/**
- * GarageTab component following SOLID principles
- * Single Responsibility: Only responsible for layout and orchestration
- * Open/Closed: Extensible through component composition
- * Dependency Inversion: Depends on abstractions (hooks and components)
- */
-/**
- * Inline EmptyState component
- */
-const EmptyState = React.memo<{ onAddVehicle: () => void }>(({ onAddVehicle }) => (
+
+const EmptyState: React.FC<{ onAddVehicle: () => void }> = ({ onAddVehicle }) => (
   <View className="flex-1 items-center justify-center px-8">
     <View className="items-center mb-8">
       <View className="h-20 w-20 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800 mb-4">
@@ -28,6 +20,6 @@ const EmptyState = React.memo<{ onAddVehicle: () => void }>(({ onAddVehicle }) =
       <Text className="font-semibold">Add Your First Vehicle</Text>
     </Button>
   </View>
-));
+);
 
 export default EmptyState;

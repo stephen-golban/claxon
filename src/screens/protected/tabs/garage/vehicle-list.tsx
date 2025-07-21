@@ -4,14 +4,22 @@ import type { Vehicle } from "@/services/api/vehicles";
 import type { OperationType } from "./hook";
 import VehicleCard from "./vehicle-card";
 
-const VehicleList = React.memo<{
+interface VehicleListProps {
   vehicles: Vehicle[];
   isVehicleLoading: (vehicleId: string, operation?: OperationType) => boolean;
   onEditLicensePlate: (vehicleId: string) => void;
   onEditVehicleDetails: (vehicleId: string) => void;
   onToggleActive: (vehicleId: string) => void;
   onDelete: (vehicleId: string) => void;
-}>(({ vehicles, isVehicleLoading, onEditLicensePlate, onEditVehicleDetails, onToggleActive, onDelete }) => {
+}
+const VehicleList: React.FC<VehicleListProps> = ({
+  vehicles,
+  isVehicleLoading,
+  onEditLicensePlate,
+  onEditVehicleDetails,
+  onToggleActive,
+  onDelete,
+}) => {
   const renderVehicle = React.useCallback(
     ({ item }: { item: Vehicle }) => (
       <VehicleCard
@@ -40,6 +48,6 @@ const VehicleList = React.memo<{
       />
     </View>
   );
-});
+};
 
-export default VehicleList;
+export default React.memo(VehicleList);

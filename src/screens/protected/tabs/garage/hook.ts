@@ -9,11 +9,6 @@ import { useDeleteVehicle, useGetMyVehicles, useUpdateVehicleActiveState } from 
 export type OperationType = "toggle" | "delete";
 
 /**
- * Edit types for vehicle navigation
- */
-export type EditType = "license-plate" | "details";
-
-/**
  * Main hook for garage tab following the simplified account pattern
  * Consolidates all vehicle operations, loading states, and haptic feedback
  */
