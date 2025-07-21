@@ -5,6 +5,7 @@ import { Text } from "@/components/ui/text";
 import EmptyState from "./empty-state";
 import useGarageTab from "./hook";
 import VehicleList from "./vehicle-list";
+import { PlusIcon } from "@/components/icons";
 
 export function GarageTab() {
   const {
@@ -26,16 +27,18 @@ export function GarageTab() {
   return (
     <Container loading={isLoading}>
       <View className="flex-1">
-        {/* Header */}
-        <View className="mb-8">
-          <Text className="text-3xl font-bold text-foreground mb-2">My Cars</Text>
-          <Text className="text-base text-muted-foreground">Manage your registered vehicles</Text>
-        </View>
+        <Container.TopText title="My Cars" subtitle="Manage your registered vehicles (max 5)" />
 
         {/* Add vehicle button */}
         <View className="mb-6">
-          <Button onPress={handleAddVehicle} className="rounded-2xl h-14" size="lg">
-            <Text className="text-base font-semibold">Add New Vehicle</Text>
+          <Button 
+            onPress={handleAddVehicle} 
+            className="rounded-full flex-row items-center gap-2" 
+            size="lg"
+            disabled={vehicles.length >= 5}
+          >
+            <PlusIcon className="text-primary-foreground" />
+            <Text>Add New Vehicle</Text>
           </Button>
         </View>
 

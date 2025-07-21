@@ -2,19 +2,17 @@ import React from "react";
 import { Alert, View } from "react-native";
 import { LoadingSpinner } from "@/components/common";
 import { LicensePlateField } from "@/components/form-elements/license-plate";
-import { SettingsIcon, TrashIcon } from "@/components/icons";
+import { CarIcon, SettingsIcon, TrashIcon } from "@/components/icons";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Text } from "@/components/ui/text";
 import type { LicensePlateType } from "@/lib/constants";
 import { cn } from "@/lib/utils";
+import { VEHICLE_COLORS } from "@/lib/constants";
 import type { Vehicle } from "@/services/api/vehicles";
 
-/**
- * Props interface for VehicleCard component following Interface Segregation Principle
- */
-export interface VehicleCardProps {
+interface VehicleCardProps {
   vehicle: Vehicle;
   isToggleLoading?: boolean;
   isDeleteLoading?: boolean;
@@ -34,6 +32,10 @@ const VehicleCard: React.FC<VehicleCardProps> = ({
   onDelete,
 }) => {
   const isComplete = vehicle.phase === "done";
+  
+  // Find the vehicle color from constants
+  const vehicleColor = VEHICLE_COLORS.find(color => color.code === vehicle.color);
+  const carColor = vehicleColor?.rgba || "rgba(128, 128, 128, 1)"; // Default to gray if no color found
 
   const handleEditAction = () => {
     if (!isComplete) {
@@ -84,13 +86,23 @@ const VehicleCard: React.FC<VehicleCardProps> = ({
       <CardContent className="p-5">
         {/* Header */}
         <View className="flex-row items-center justify-between mb-4">
-          <View className="flex-1">
-            <Text className="text-lg font-semibold text-foreground">
-              {vehicle.brand} {vehicle.model}
-            </Text>
-            {vehicle.manufacture_year && (
-              <Text className="text-sm text-muted-foreground mt-0.5">{vehicle.manufacture_year}</Text>
-            )}
+          <View className="flex-row items-center flex-1 gap-3">
+            {/* Car color preview */}
+            <View className="bg-muted/30 rounded-full p-2">
+              <CarIcon 
+                size={24} 
+                color={carColor}
+              />
+            </View>
+            
+            <View className="flex-1">
+              <Text className="text-lg font-semibold text-foreground">
+                {vehicle.brand} {vehicle.model}
+              </Text>
+              {vehicle.manufacture_year && (
+                <Text className="text-sm text-muted-foreground mt-0.5">{vehicle.manufacture_year}</Text>
+              )}
+            </View>
           </View>
 
           <View className="flex-row gap-2">
