@@ -2,12 +2,12 @@ import { create } from "zustand";
 
 interface AppState {
   pathname: string;
-  goBack: () => void;
+  goBack: (() => void) | null;
   hideGoBack: boolean;
 }
 
 export const useGoBackStore = create<AppState>(() => ({
   pathname: "",
-  goBack: () => {},
+  goBack: null,
   hideGoBack: false,
 }));

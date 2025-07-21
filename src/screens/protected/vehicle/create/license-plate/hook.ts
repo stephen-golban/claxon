@@ -25,7 +25,7 @@ export default function useCreateLicensePlateScreen(id: string) {
       {
         onSuccess: () => {
           // Navigate back to the vehicles list or main screen
-          router.replace("/(protected)/tabs/my-cars");
+          router.replace("/tabs/garage");
         },
       },
     );

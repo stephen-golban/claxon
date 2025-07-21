@@ -1,79 +1,38 @@
-import { useRouter } from "expo-router";
-import { Alert } from "react-native";
-import { useDeleteVehicle, useGetMyVehicles, useUpdateVehicle } from "@/services/api/vehicles";
+import { useGetMyVehicles } from "@/services/api/vehicles";
+import { useHapticFeedback } from "./hooks/useHapticFeedback";
+import { usePerVehicleLoadingState } from "./hooks/usePerVehicleLoadingState";
+import { useVehicleOperations } from "./hooks/useVehicleOperations";
 
+/**
+ * Main hook for garage tab following Dependency Inversion Principle
+ * Orchestrates smaller, focused hooks and provides a clean interface
+ */
 export function useGarageTab() {
-  const router = useRouter();
-
-  // Query vehicles data
+  // Data fetching
   const { data: vehicles = [], isLoading, error } = useGetMyVehicles();
 
-  // Mutations
-  const updateVehicleMutation = useUpdateVehicle();
-  const deleteVehicleMutation = useDeleteVehicle();
-
-  const findVehicle = (vehicleId: string) => {
-    return vehicles.find((v) => v.id === vehicleId);
-  };
-
-  const handleAddVehicle = () => {
-    router.push("/vehicle/create");
-  };
-
-  const handleVehiclePress = (vehicleId: string) => {
-    const vehicle = findVehicle(vehicleId);
-
-    if (!vehicle) return;
-
-    const pending = vehicle.phase === "pending";
-
-    if (pending) {
-      router.push(`/vehicle/update/license-plate?id=${vehicleId}`);
-    } else {
-      router.push(`/vehicle/update?id=${vehicleId}`);
-    }
-  };
-
-  const handleToggleActive = async (vehicleId: string) => {
-    const vehicle = vehicles.find((v) => v.id === vehicleId);
-    if (!vehicle) return;
-
-    await updateVehicleMutation.mutateAsync({
-      id: vehicleId,
-      dto: { is_active: !vehicle.is_active },
-    });
-  };
-
-  const handleDeleteVehicle = (vehicleId: string) => {
-    const vehicle = vehicles.find((v) => v.id === vehicleId);
-    if (!vehicle) return;
-
-    Alert.alert("Delete Vehicle", `Are you sure you want to delete ${vehicle.brand} ${vehicle.model}?`, [
-      { text: "Cancel", style: "cancel" },
-      {
-        text: "Delete",
-        style: "destructive",
-        onPress: async () => {
-          await deleteVehicleMutation.mutateAsync(vehicleId);
-        },
-      },
-    ]);
-  };
+  // Focused hooks following Single Responsibility Principle
+  const haptics = useHapticFeedback();
+  const loadingState = usePerVehicleLoadingState();
+  const vehicleOperations = useVehicleOperations({
+    vehicles,
+    haptics,
+    loadingState,
+  });
 
   return {
     // Data
     vehicles,
-
-    // Loading states
     isLoading,
     error,
-    isUpdating: updateVehicleMutation.isPending,
-    isDeleting: deleteVehicleMutation.isPending,
 
-    // Handlers
-    handleAddVehicle,
-    handleVehiclePress,
-    handleToggleActive,
-    handleDeleteVehicle,
+    // Per-vehicle loading state (fixes the global loading issue)
+    isVehicleLoading: loadingState.isLoading,
+
+    // Operations
+    handleAddVehicle: vehicleOperations.addVehicle,
+    handleVehiclePress: vehicleOperations.navigateToVehicle,
+    handleToggleActive: vehicleOperations.toggleActive,
+    handleDeleteVehicle: vehicleOperations.deleteVehicle,
   };
 }

@@ -241,3 +241,19 @@ export const useDeleteVehicle = () => {
     },
   });
 };
+
+export const useUpdateVehicleActiveState = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ id, isActive }: { id: string; isActive: boolean }) => 
+      vehicleService.update(id, { is_active: isActive }),
+    mutationKey: ["vehicles", "updateActiveState"],
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["vehicles"] });
+    },
+    onError: (error) => {
+      toast.error(translateError(error.message));
+    },
+  });
+};

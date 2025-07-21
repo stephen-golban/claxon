@@ -11,6 +11,7 @@ export type BaseRenderPlateProps = {
     value: string;
   };
   disabled?: boolean;
+  compact?: boolean;
   type: LicensePlateType;
   onLeftChange: (text: string) => void;
   onRightChange: (text: string) => void;

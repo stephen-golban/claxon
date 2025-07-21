@@ -19,6 +19,7 @@ import {
   MoveLeftIcon,
   PaletteIcon,
   PlusIcon,
+  PowerOff,
   Rows3Icon,
   SearchIcon,
   SmartphoneIcon,
@@ -26,6 +27,7 @@ import {
   TrashIcon,
   UploadIcon,
   XIcon,
+  Zap,
 } from "lucide-react-native";
 import { CarIcon } from "./car";
 import { EnFlag, MoldovaStema, RoFlag, RuFlag, TransnistriaFlag } from "./flags";
@@ -69,6 +71,8 @@ import { SwipeRightIcon } from "./swipe-right";
   TrashIcon,
   SmartphoneIcon,
   MessageSquareIcon,
+  PowerOff,
+  Zap,
 ].forEach(iconWithClassName);
 
 export {
@@ -106,4 +110,6 @@ export {
   MoveLeftIcon,
   MessageSquareIcon,
   SmartphoneIcon,
+  PowerOff,
+  Zap,
 };

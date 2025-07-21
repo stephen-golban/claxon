@@ -5,15 +5,21 @@ import type { LicensePlateType } from "@/lib/constants";
 
 interface IPlateFlagWrapper extends React.PropsWithChildren {
   type: LicensePlateType;
+  compact?: boolean;
 }
 
-export const PlateFlagWrapper: React.FC<IPlateFlagWrapper> = ({ type, children }) => {
+export const PlateFlagWrapper: React.FC<IPlateFlagWrapper> = ({ type, children, compact }) => {
+  const textSize = compact ? "text-[8px]" : "text-xs";
+  const textSizeLarge = compact ? "text-[10px]" : "text-sm";
+  const padding = compact ? "py-0.5" : "py-1";
+  const paddingTop = compact ? "pt-0.5" : "pt-1.5";
+  const marginTop = compact ? "mt-0.5" : "mt-1";
   switch (type) {
     case "cars.standard.old_four":
       return (
-        <View className="h-full w-[10%] items-center bg-[#0028a1] py-1">
+        <View className={`h-full w-[10%] items-center bg-[#0028a1] ${padding}`}>
           {children}
-          <Text className="text-white text-xs mt-1">MD</Text>
+          <Text className={`text-white ${textSize} ${marginTop}`}>MD</Text>
         </View>
       );
 
@@ -22,7 +28,7 @@ export const PlateFlagWrapper: React.FC<IPlateFlagWrapper> = ({ type, children }
       return (
         <View className="h-full w-[10%] border-r-2 border-black items-center justify-center">
           {children}
-          <Text className="text-black mt-1 text-xs">MD</Text>
+          <Text className={`text-black ${marginTop} ${textSize}`}>MD</Text>
         </View>
       );
 
@@ -31,16 +37,16 @@ export const PlateFlagWrapper: React.FC<IPlateFlagWrapper> = ({ type, children }
 
     case "cars.standard.neutral":
       return (
-        <View className="h-full w-1/12 items-center py-1.5">
+        <View className={`h-full w-1/12 items-center ${padding}`}>
           {children}
-          <Text className="text-transparent mt-2">MD</Text>
+          <Text className={`text-transparent mt-2`}>MD</Text>
         </View>
       );
     default:
       return (
-        <View className="h-full w-[15%] items-center justify-center bg-[#02359a] pt-1.5">
+        <View className={`h-full w-[15%] items-center justify-center bg-[#02359a] ${paddingTop}`}>
           {children}
-          <Text className="text-white font-semibold text-sm mt-1">MD</Text>
+          <Text className={`text-white font-semibold ${textSizeLarge} ${marginTop}`}>MD</Text>
         </View>
       );
   }
