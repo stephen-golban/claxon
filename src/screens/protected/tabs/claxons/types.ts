@@ -1,3 +1,11 @@
+// Re-export types from the API service for backward compatibility
+export type {
+  ClaxonRow,
+  ClaxonTemplateRow,
+  ClaxonWithRelations,
+} from "@/services/api/claxons";
+
+// Legacy type - deprecated, use ClaxonWithRelations instead
 export interface ClaxonMessage {
   _id: string;
   _creationTime: number;
