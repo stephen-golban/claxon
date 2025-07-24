@@ -6,24 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Text } from "@/components/ui/text";
 import { VEHICLE_COLORS } from "@/lib/constants";
-
-interface SearchResult {
-  vehicle: {
-    _id: string;
-    brand: string;
-    model: string;
-    manufacture_year: number;
-    color: string;
-    plate_number: string;
-    is_active: boolean;
-  };
-  owner: {
-    _id: string;
-    first_name?: string;
-    last_name?: string;
-    share_phone: boolean;
-  };
-}
+import type { SearchResult } from "@/services/api/vehicles";
 
 interface SearchResultsProps {
   results: SearchResult[];

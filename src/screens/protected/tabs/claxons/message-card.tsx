@@ -19,12 +19,7 @@ interface MessageCardProps {
   onMarkAsRead?: (messageId: string) => void;
 }
 
-const MessageCard: React.FC<MessageCardProps> = ({ 
-  message, 
-  isMarkAsReadLoading = false,
-  onPress, 
-  onMarkAsRead 
-}) => {
+const MessageCard: React.FC<MessageCardProps> = ({ message, isMarkAsReadLoading = false, onPress, onMarkAsRead }) => {
   const isReceived = message.isReceived;
   const displayContact = isReceived ? message.sender : message.recipient;
   const displayName =
@@ -49,7 +44,7 @@ const MessageCard: React.FC<MessageCardProps> = ({
   // Get category icon and color
   const getCategoryInfo = () => {
     if (!message.template) return { icon: "💬", color: "bg-blue-100 dark:bg-blue-900" };
-    
+
     switch (message.template.category) {
       case "compliment":
         return { icon: "👍", color: "bg-green-100 dark:bg-green-900" };
@@ -72,7 +67,7 @@ const MessageCard: React.FC<MessageCardProps> = ({
       className={cn(
         "flex-row items-start gap-3 p-4 transition-colors",
         !message.read && isReceived && "bg-primary/5",
-        "active:bg-muted/40"
+        "active:bg-muted/40",
       )}
     >
       {/* Avatar with category indicator */}
@@ -96,12 +91,8 @@ const MessageCard: React.FC<MessageCardProps> = ({
             <Text className={cn("font-medium text-sm", !message.read && isReceived && "font-semibold")}>
               {displayName}
             </Text>
-            <Text className="text-xs text-muted-foreground">
-              {isReceived ? "→" : "←"}
-            </Text>
-            {!message.read && isReceived && (
-              <View className="h-2 w-2 bg-primary rounded-full" />
-            )}
+            <Text className="text-xs text-muted-foreground">{isReceived ? "→" : "←"}</Text>
+            {!message.read && isReceived && <View className="h-2 w-2 bg-primary rounded-full" />}
           </View>
           <Text className="text-xs text-muted-foreground">{timeAgo}</Text>
         </View>
@@ -124,11 +115,8 @@ const MessageCard: React.FC<MessageCardProps> = ({
         </View>
 
         {/* Message Preview */}
-        <Text 
-          className={cn(
-            "text-sm text-foreground leading-5", 
-            !message.read && isReceived && "font-medium"
-          )} 
+        <Text
+          className={cn("text-sm text-foreground leading-5", !message.read && isReceived && "font-medium")}
           numberOfLines={2}
         >
           {message.displayMessage}
@@ -144,9 +132,7 @@ const MessageCard: React.FC<MessageCardProps> = ({
               disabled={isMarkAsReadLoading}
               className="rounded-full px-3 py-1"
             >
-              <Text className="text-xs">
-                {isMarkAsReadLoading ? "Marking..." : "Mark as read"}
-              </Text>
+              <Text className="text-xs">{isMarkAsReadLoading ? "Marking..." : "Mark as read"}</Text>
             </Button>
           </View>
         )}

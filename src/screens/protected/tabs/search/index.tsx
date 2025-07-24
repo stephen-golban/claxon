@@ -5,109 +5,48 @@ import { Container, EmptyState } from "@/components/common";
 import LicensePlateForm, { type LicensePlateFormData } from "@/components/forms/license-plate";
 import { Card, CardContent } from "@/components/ui/card";
 import { Text } from "@/components/ui/text";
+import { useAddRecentSearch, useGetRecentSearches } from "@/hooks/use-recent-searches";
+import { type SearchResult, useSearchVehicleByPlate } from "@/services/api/vehicles";
+// Import RecentSearch type from the service
+import type { RecentSearch } from "@/services/storage/recent-searches";
 import { MessageComposer } from "./components/message-composer";
 import { RecentSearches } from "./components/recent-searches";
 import { SearchResults } from "./components/search-results";
 
-// Mock data for search results
-interface SearchResult {
-  vehicle: {
-    _id: string;
-    brand: string;
-    model: string;
-    manufacture_year: number;
-    color: string;
-    plate_number: string;
-    is_active: boolean;
-  };
-  owner: {
-    _id: string;
-    first_name?: string;
-    last_name?: string;
-    share_phone: boolean;
-  };
-}
-
-interface RecentSearch {
-  _id: string;
-  plate_number: string;
-  searched_at: number;
-  found: boolean;
-}
-
-const mockSearchResults: SearchResult[] = [
-  {
-    vehicle: {
-      _id: "vehicle_1",
-      brand: "Dacia",
-      model: "Logan",
-      manufacture_year: 2019,
-      color: "BLU",
-      plate_number: "C 123 ABC",
-      is_active: true,
-    },
-    owner: {
-      _id: "owner_1",
-      first_name: "Maria",
-      last_name: "Popescu",
-      share_phone: true,
-    },
-  },
-];
-
-const mockRecentSearches: RecentSearch[] = [
-  {
-    _id: "search_1",
-    plate_number: "C 123 ABC",
-    searched_at: Date.now() - 2 * 60 * 60 * 1000, // 2 hours ago
-    found: true,
-  },
-  {
-    _id: "search_2",
-    plate_number: "B 456 DEF",
-    searched_at: Date.now() - 1 * 24 * 60 * 60 * 1000, // 1 day ago
-    found: false,
-  },
-  {
-    _id: "search_3",
-    plate_number: "M 789 GHI",
-    searched_at: Date.now() - 3 * 24 * 60 * 60 * 1000, // 3 days ago
-    found: true,
-  },
-];
-
 export function SearchTab() {
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
-  const [recentSearches, setRecentSearches] = useState<RecentSearch[]>(mockRecentSearches);
-  const [isSearching, setIsSearching] = useState(false);
   const [hasSearched, setHasSearched] = useState(false);
   const [selectedVehicle, setSelectedVehicle] = useState<SearchResult | null>(null);
   const [showMessageComposer, setShowMessageComposer] = useState(false);
 
+  // API hooks
+  const searchVehicle = useSearchVehicleByPlate();
+  const addRecentSearch = useAddRecentSearch();
+  const { data: recentSearches = [], isLoading: isLoadingRecentSearches } = useGetRecentSearches();
+
   const handleSearch = async (data: LicensePlateFormData) => {
-    setIsSearching(true);
     setHasSearched(true);
+    const plateNumber = `${data.plate.left} ${data.plate.right}`;
 
-    // Simulate API call
-    setTimeout(() => {
-      const plateNumber = `${data.plate.left} ${data.plate.right}`;
-
-      // Mock search logic - in real app this would be an API call
-      const results = mockSearchResults.filter((result) => result.vehicle.plate_number === plateNumber);
-
+    try {
+      const results = await searchVehicle.mutateAsync(plateNumber);
       setSearchResults(results);
 
       // Add to recent searches
-      const newSearch: RecentSearch = {
-        _id: `search_${Date.now()}`,
-        plate_number: plateNumber,
-        searched_at: Date.now(),
+      await addRecentSearch.mutateAsync({
+        plateNumber,
         found: results.length > 0,
-      };
+      });
+    } catch (error) {
+      console.error("Search failed:", error);
+      setSearchResults([]);
 
-      setRecentSearches((prev) => [newSearch, ...prev.slice(0, 4)]); // Keep last 5
-      setIsSearching(false);
-    }, 1500);
+      // Still add to recent searches even if search failed
+      await addRecentSearch.mutateAsync({
+        plateNumber,
+        found: false,
+      });
+    }
   };
 
   const handleSendMessage = (vehicle: SearchResult) => {
@@ -127,9 +66,15 @@ export function SearchTab() {
     setSelectedVehicle(null);
   };
 
-  const handleRecentSearchSelect = (recentSearch: RecentSearch) => {
-    // Auto-fill the form with the recent search
-    console.log("Selected recent search:", recentSearch.plate_number);
+  const handleRecentSearchSelect = async (recentSearch: RecentSearch) => {
+    // Trigger search with the recent search plate number
+    const [left, right] = recentSearch.plate_number.split(" ");
+    if (left && right) {
+      await handleSearch({
+        plate: { left, right },
+        type: "cars.standard.default", // Default type for recent searches
+      });
+    }
   };
 
   if (showMessageComposer && selectedVehicle) {
@@ -141,8 +86,10 @@ export function SearchTab() {
     );
   }
 
+  const isLoading = searchVehicle.isPending || addRecentSearch.isPending;
+
   return (
-    <Container loading={isSearching}>
+    <Container>
       <Container.TopText
         title="Search License Plate"
         subtitle="Enter a license plate number to send a message to the car owner"
@@ -150,7 +97,7 @@ export function SearchTab() {
 
       <View className="flex-1 gap-4">
         {/* Search Form */}
-        <LicensePlateForm onSubmit={handleSearch} />
+        <LicensePlateForm onSubmit={handleSearch} isLoading={isLoading} />
 
         {/* Search Results */}
         {hasSearched && (
@@ -177,7 +124,7 @@ export function SearchTab() {
         )}
 
         {/* Empty State - Only show if no recent searches and no search performed */}
-        {!hasSearched && recentSearches.length === 0 && (
+        {!hasSearched && recentSearches.length === 0 && !isLoadingRecentSearches && (
           <View className="flex-1 items-center justify-center">
             <EmptyState
               title="Ready to search"

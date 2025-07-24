@@ -9,6 +9,25 @@ export type Vehicle = Database["public"]["Tables"]["vehicles"]["Row"];
 export type UpdateVehicleBody = Database["public"]["Tables"]["vehicles"]["Update"];
 export type CreateVehicleBody = Database["public"]["Tables"]["vehicles"]["Insert"];
 
+// Types for search functionality
+export interface SearchResult {
+  vehicle: {
+    _id: string;
+    brand: string;
+    model: string;
+    manufacture_year: number;
+    color: string;
+    plate_number: string;
+    is_active: boolean;
+  };
+  owner: {
+    _id: string;
+    first_name?: string;
+    last_name?: string;
+    share_phone: boolean;
+  };
+}
+
 export class VehicleService {
   /**
    * Creates a new vehicle for the current user
@@ -139,6 +158,68 @@ export class VehicleService {
   }
 
   /**
+   * Searches for vehicles by plate number (only active vehicles)
+   * @param plateNumber The plate number to search for
+   * @returns Array of search results with vehicle and owner info
+   * @throws Error if the search fails
+   */
+  async searchByPlateNumber(plateNumber: string): Promise<SearchResult[]> {
+    const {
+      data: { user },
+      error: userError,
+    } = await supabase.auth.getUser();
+
+    if (userError || !user) {
+      printError("vehicle-searchByPlateNumber-user-error", userError || new Error("No user found"));
+      throw getSupabaseErrorCode(userError as AuthError, "auth");
+    }
+
+    const { data, error } = await supabase
+      .from("vehicles")
+      .select(`
+        id,
+        brand,
+        model,
+        manufacture_year,
+        color,
+        plate_number,
+        is_active,
+        accounts!vehicles_user_id_fkey(
+          id,
+          first_name,
+          last_name,
+          is_phone_public
+        )
+      `)
+      .eq("plate_number", plateNumber)
+      .eq("is_active", true); // Only search active vehicles
+
+    if (error) {
+      printError("vehicle-searchByPlateNumber-error", error);
+      throw getSupabaseErrorCode(error, "database");
+    }
+
+    // Transform the data to match the expected SearchResult format
+    return data.map((item) => ({
+      vehicle: {
+        _id: item.id,
+        brand: item.brand || "",
+        model: item.model || "",
+        manufacture_year: item.manufacture_year || 0,
+        color: item.color || "",
+        plate_number: item.plate_number || "",
+        is_active: item.is_active ?? true,
+      },
+      owner: {
+        _id: item.accounts.id,
+        first_name: item.accounts.first_name || undefined,
+        last_name: item.accounts.last_name || undefined,
+        share_phone: item.accounts.is_phone_public ?? false,
+      },
+    }));
+  }
+
+  /**
    * Deletes a vehicle by ID (must belong to current user)
    * @param id The vehicle ID to delete
    * @throws Error if the vehicle deletion fails
@@ -222,6 +303,16 @@ export const useGetVehicleById = (id: string) => {
     throwOnError: (error) => {
       toast.error(translateError(error.message));
       return true;
+    },
+  });
+};
+
+export const useSearchVehicleByPlate = () => {
+  return useMutation({
+    mutationFn: vehicleService.searchByPlateNumber,
+    mutationKey: ["vehicles", "searchByPlateNumber"],
+    onError: (error) => {
+      toast.error(translateError(error.message));
     },
   });
 };

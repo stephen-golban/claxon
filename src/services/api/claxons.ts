@@ -62,7 +62,7 @@ export class ClaxonService {
     // Transform the data to match our UI expectations
     return data.map((claxon) => {
       const isReceived = claxon.recipient_id === user.user.id;
-      
+
       // Determine display message based on type and language
       let displayMessage = "";
       if (claxon.type === "custom" && claxon.custom_message) {
@@ -92,9 +92,9 @@ export class ClaxonService {
 
     const { error } = await supabase
       .from("claxons")
-      .update({ 
-        read: true, 
-        read_at: new Date().toISOString() 
+      .update({
+        read: true,
+        read_at: new Date().toISOString(),
       })
       .eq("id", messageId)
       .eq("recipient_id", user.user.id); // Only allow marking own received messages as read
@@ -116,9 +116,9 @@ export class ClaxonService {
 
     const { error } = await supabase
       .from("claxons")
-      .update({ 
-        read: true, 
-        read_at: new Date().toISOString() 
+      .update({
+        read: true,
+        read_at: new Date().toISOString(),
       })
       .eq("recipient_id", user.user.id)
       .eq("read", false); // Only update unread messages
@@ -133,11 +133,7 @@ export class ClaxonService {
    * Get claxon templates for sending messages
    */
   async getActiveTemplates(): Promise<ClaxonTemplateRow[]> {
-    const { data, error } = await supabase
-      .from("claxon_templates")
-      .select("*")
-      .eq("is_active", true)
-      .order("category");
+    const { data, error } = await supabase.from("claxon_templates").select("*").eq("is_active", true).order("category");
 
     if (error) {
       printError("claxons-getActiveTemplates-error", error);

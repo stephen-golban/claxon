@@ -1,7 +1,7 @@
 import * as Haptics from "expo-haptics";
 import { useRouter } from "expo-router";
 import { useCallback, useMemo, useState } from "react";
-import { useGetMyClaxons, useMarkAsRead, useMarkAllAsRead, type ClaxonWithRelations } from "@/services/api/claxons";
+import { type ClaxonWithRelations, useGetMyClaxons, useMarkAllAsRead, useMarkAsRead } from "@/services/api/claxons";
 
 /**
  * Filter types for claxon messages

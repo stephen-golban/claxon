@@ -12,12 +12,7 @@ interface MessageListProps {
   onMarkAsRead: (messageId: string) => void;
 }
 
-const MessageList: React.FC<MessageListProps> = ({
-  messages,
-  isMessageLoading,
-  onMessagePress,
-  onMarkAsRead,
-}) => {
+const MessageList: React.FC<MessageListProps> = ({ messages, isMessageLoading, onMessagePress, onMarkAsRead }) => {
   const renderMessage = React.useCallback(
     ({ item, index }: { item: ClaxonWithRelations; index: number }) => (
       <View>

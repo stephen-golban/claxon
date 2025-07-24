@@ -31,7 +31,10 @@ export const PlateFrame: React.FC<IPlateFrame> = ({ children, type }) => {
   const backgroundColor = getBgColor(type);
 
   return (
-    <View className="overflow-hidden h-16 rounded-xl border-[5px] border-black flex-row" style={{ backgroundColor }}>
+    <View
+      className="overflow-hidden h-16 rounded-xl border-[5px] border-black dark:border-input flex-row"
+      style={{ backgroundColor }}
+    >
       {children}
     </View>
   );

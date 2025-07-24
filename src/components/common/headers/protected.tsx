@@ -104,7 +104,7 @@ const HeaderRight = memo((): ReactNode => {
   const { shouldAddPadding } = useHeaderState();
 
   return (
-    <View className={cn("flex-row items-center gap-x-4 mt-4", shouldAddPadding ? "mr-5" : "mr-0")}>
+    <View className={cn("flex-row items-center gap-x-4 mt-4", shouldAddPadding ? "mr-4" : "mr-0")}>
       <ThemeSwitcher />
       {me.data && (
         <ProfileAvatar
