@@ -38,7 +38,6 @@ yarn-error.*
 *.tsbuildinfo
 
 bun.lock
-ios/
 android/
 
 convex/_generated

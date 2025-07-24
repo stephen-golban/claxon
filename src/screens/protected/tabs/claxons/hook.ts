@@ -1,4 +1,5 @@
 import * as Haptics from "expo-haptics";
+import { useRouter } from "expo-router";
 import { useCallback, useMemo, useState } from "react";
 import { useGetMyClaxons, useMarkAsRead, useMarkAllAsRead, type ClaxonWithRelations } from "@/services/api/claxons";
 
@@ -17,6 +18,8 @@ export type OperationType = "markAsRead";
  * Consolidates all claxon operations, filtering, search, loading states, and haptic feedback
  */
 export default function useClaxonsTab() {
+  const router = useRouter();
+
   // Data fetching
   const { data: claxons = [], isLoading, error } = useGetMyClaxons();
 
@@ -182,10 +185,9 @@ export default function useClaxonsTab() {
 
   const handleSendMessage = useCallback(() => {
     hapticLight();
-    // TODO: Navigate to send message screen when implemented
-    // router.push("/send-claxon");
-    console.log("Send message pressed - navigation not implemented yet");
-  }, [hapticLight]);
+    // Navigate to the search tab to send a claxon
+    router.push("/(protected)/tabs");
+  }, [hapticLight, router]);
 
   // Empty state props based on current filter and search
   const getEmptyStateProps = useCallback(() => {
