@@ -58,12 +58,6 @@ const AccountForm: React.FC<IAccountForm> = ({
           onChange={handlePhoneToggle}
           description="Allow other users to see your phone number"
         />
-        <View className="flex-row items-center justify-between">
-          <View className="flex-1">
-            <Text className="font-medium">Share Phone Number</Text>
-            <Text className="text-sm text-muted-foreground">Allow other users to see your phone number</Text>
-          </View>
-        </View>
         <Separator />
         <View className="flex-row items-center justify-between">
           <View className="flex-1">

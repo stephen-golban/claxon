@@ -8,5 +8,10 @@ export default function ProtectedLayout() {
     return <Redirect href="/(unprotected)" />;
   }
 
-  return <Stack screenOptions={{ headerShown: false }} />;
+  return (
+    <Stack screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="account" options={{ presentation: "modal" }} />
+      <Stack.Screen name="vehicle" options={{ presentation: "modal" }} />
+    </Stack>
+  );
 }
