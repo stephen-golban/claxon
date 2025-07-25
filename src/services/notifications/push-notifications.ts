@@ -1,3 +1,4 @@
+import Constants from 'expo-constants';
 import * as Device from 'expo-device';
 import * as Notifications from "expo-notifications";
 import { Platform } from 'react-native';
@@ -9,77 +10,77 @@ import { supabase } from "../api/client";
  */
 export class PushNotificationService {
   /**
-   * Requests push notification permissions from the user
-   * @returns Permission status
+   * Handle registration errors
    */
-  async requestPermissions(): Promise<boolean> {
-    try {
+  private handleRegistrationError(errorMessage: string): void {
+    console.error('Push notification registration error:', errorMessage);
+    printError("push-notifications-registration-error", new Error(errorMessage));
+  }
+
+  /**
+   * Register for push notifications following Expo official docs pattern
+   * @returns The push token string or null if registration fails
+   */
+  async registerForPushNotificationsAsync(): Promise<string | null> {
+    // Set up Android notification channel
+    if (Platform.OS === 'android') {
+      await Notifications.setNotificationChannelAsync('default', {
+        name: 'default',
+        importance: Notifications.AndroidImportance.MAX,
+        vibrationPattern: [0, 250, 250, 250],
+        lightColor: '#FF231F7C',
+      });
+    }
+
+    // Check if running on physical device
+    if (Device.isDevice) {
       const { status: existingStatus } = await Notifications.getPermissionsAsync();
       let finalStatus = existingStatus;
-
-      if (existingStatus !== "granted") {
+      
+      if (existingStatus !== 'granted') {
         const { status } = await Notifications.requestPermissionsAsync();
         finalStatus = status;
       }
-
-      return finalStatus === "granted";
-    } catch (error) {
-      printError("push-notifications-permissions-error", error as Error);
-      return false;
+      
+      if (finalStatus !== 'granted') {
+        this.handleRegistrationError('Permission not granted to get push token for push notification!');
+        return null;
+      }
+      
+      // Get project ID from expo config
+      const projectId =
+        Constants?.expoConfig?.extra?.eas?.projectId ?? Constants?.easConfig?.projectId;
+      
+      if (!projectId) {
+        this.handleRegistrationError('Project ID not found');
+        return null;
+      }
+      
+      try {
+        const pushTokenString = (
+          await Notifications.getExpoPushTokenAsync({
+            projectId,
+          })
+        ).data;
+        
+        console.log('Push token generated:', pushTokenString);
+        return pushTokenString;
+      } catch (e: unknown) {
+        this.handleRegistrationError(`${e}`);
+        return null;
+      }
+    } else {
+      this.handleRegistrationError('Must use physical device for push notifications');
+      return null;
     }
   }
 
   /**
-   * Gets the Expo push token for the current device
+   * Gets the Expo push token for the current device (wrapper for registerForPushNotificationsAsync)
    * @returns The push token or null if not available
    */
   async getExpoPushToken(): Promise<string | null> {
-    try {
-      // Check if running on physical device
-      if (!Device.isDevice) {
-        console.log('Push notifications only work on physical devices, not simulators');
-        return null;
-      }
-
-      const hasPermissions = await this.requestPermissions();
-      if (!hasPermissions) {
-        console.log("Push notification permissions not granted");
-        return null;
-      }
-
-      // For Android, set up notification channel
-      if (Platform.OS === 'android') {
-        await Notifications.setNotificationChannelAsync('default', {
-          name: 'default',
-          importance: Notifications.AndroidImportance.MAX,
-          vibrationPattern: [0, 250, 250, 250],
-          lightColor: '#FF231F7C',
-        });
-      }
-
-      const token = await Notifications.getExpoPushTokenAsync({
-        projectId: 'bmpzdawnsopcgbwqxsfe', // Your Supabase project ID
-      });
-
-      console.log('Push token generated successfully:', token.data);
-      return token.data;
-    } catch (error) {
-      printError("push-notifications-token-error", error as Error);
-      
-      // More specific error logging
-      if (error instanceof Error) {
-        console.log('Push token error details:', error.message);
-        
-        if (error.message.includes('ERR_UNEXPECTED')) {
-          console.log('ERR_UNEXPECTED - this usually means:');
-          console.log('1. Running on simulator (use physical device)');
-          console.log('2. Project not properly configured for push notifications');
-          console.log('3. Need to run "expo prebuild" or "eas build" for development build');
-        }
-      }
-      
-      return null;
-    }
+    return await this.registerForPushNotificationsAsync();
   }
 
   /**

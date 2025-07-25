@@ -8,9 +8,8 @@ export const configureNotifications = () => {
   // Configure how notifications are displayed when app is in foreground
   Notifications.setNotificationHandler({
     handleNotification: async () => ({
-      shouldShowAlert: true,
       shouldPlaySound: true,
-      shouldSetBadge: false,
+      shouldSetBadge: true,
       shouldShowBanner: true,
       shouldShowList: true,
     }),
@@ -39,13 +38,13 @@ export const configureNotifications = () => {
 };
 
 /**
- * Set up notification listeners for the app
+ * Set up notification listeners for the app following official Expo pattern
  */
 export const setupNotificationListeners = () => {
   // Handle notifications received while app is in foreground
   const notificationListener = Notifications.addNotificationReceivedListener((notification) => {
-    console.log("Notification received in foreground:", notification);
-    // You can add custom handling here, like updating app state
+    console.log("Notification received:", notification);
+    // Store notification state or update app UI here if needed
   });
 
   // Handle notification responses (when user taps notification)
@@ -62,7 +61,7 @@ export const setupNotificationListeners = () => {
     }
   });
 
-  // Return cleanup function
+  // Return cleanup function following official pattern
   return () => {
     notificationListener.remove();
     responseListener.remove();
