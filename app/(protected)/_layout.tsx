@@ -10,6 +10,8 @@ export default function ProtectedLayout() {
 
   return (
     <Stack screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="index" />
+      <Stack.Screen name="tabs" />
       <Stack.Screen name="account" options={{ presentation: "modal" }} />
       <Stack.Screen name="vehicle" options={{ presentation: "modal" }} />
     </Stack>

@@ -20,6 +20,7 @@ export type Database = {
           created_at: string
           dob: string | null
           email: string | null
+          expo_push_token: string | null
           first_name: string | null
           gender: string | null
           id: string
@@ -36,6 +37,7 @@ export type Database = {
           created_at?: string
           dob?: string | null
           email?: string | null
+          expo_push_token?: string | null
           first_name?: string | null
           gender?: string | null
           id: string
@@ -52,6 +54,7 @@ export type Database = {
           created_at?: string
           dob?: string | null
           email?: string | null
+          expo_push_token?: string | null
           first_name?: string | null
           gender?: string | null
           id?: string
@@ -174,6 +177,50 @@ export type Database = {
             columns: ["vehicle_id"]
             isOneToOne: false
             referencedRelation: "vehicles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      push_notifications: {
+        Row: {
+          body: string
+          created_at: string | null
+          data: Json | null
+          id: string
+          sent_at: string | null
+          status: string
+          title: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          body: string
+          created_at?: string | null
+          data?: Json | null
+          id?: string
+          sent_at?: string | null
+          status?: string
+          title: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          body?: string
+          created_at?: string | null
+          data?: Json | null
+          id?: string
+          sent_at?: string | null
+          status?: string
+          title?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "push_notifications_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "accounts"
             referencedColumns: ["id"]
           },
         ]

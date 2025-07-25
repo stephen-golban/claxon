@@ -39,3 +39,6 @@ yarn-error.*
 
 bun.lock
 android/
+
+# MCP configuration (contains sensitive tokens)
+.mcp.json
