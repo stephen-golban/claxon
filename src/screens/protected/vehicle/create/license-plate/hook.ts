@@ -32,5 +32,6 @@ export default function useCreateLicensePlateScreen(id: string) {
 
   return {
     onSubmit,
+    isLoading: updateVehicle.isPending,
   };
 }

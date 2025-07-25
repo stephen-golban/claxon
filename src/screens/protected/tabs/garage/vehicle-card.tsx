@@ -81,15 +81,24 @@ const VehicleCard: React.FC<VehicleCardProps> = ({
         {/* Header */}
         <View className="flex-row items-center justify-between mb-4">
           <View className="flex-row items-center flex-1 gap-3">
-            {/* Car color preview */}
-            <View className="bg-muted/30 rounded-full p-2">
-              <CarIcon size={24} color={carColor} />
+            {/* Car color preview with completion indicator */}
+            <View className="relative">
+              <View className="bg-muted/30 rounded-full p-2">
+                <CarIcon size={24} color={carColor} />
+              </View>
             </View>
 
             <View className="flex-1">
-              <Text className="text-lg font-semibold text-foreground">
-                {vehicle.brand} {vehicle.model}
-              </Text>
+              <View className="flex-row items-center gap-2">
+                <Text className="text-lg font-semibold text-foreground">
+                  {vehicle.brand} {vehicle.model}
+                </Text>
+                {isComplete && (
+                  <View className="bg-green-100 dark:bg-green-900/30 rounded-full px-2 py-0.5">
+                    <Text className="text-xs font-medium text-green-700 dark:text-green-300">Complete</Text>
+                  </View>
+                )}
+              </View>
               {vehicle.manufacture_year && (
                 <Text className="text-sm text-muted-foreground mt-0.5">{vehicle.manufacture_year}</Text>
               )}
@@ -98,8 +107,8 @@ const VehicleCard: React.FC<VehicleCardProps> = ({
 
           <View className="flex-row gap-2">
             {!isComplete && (
-              <Badge variant="outline" className="rounded-full px-2.5 py-1">
-                <Text className="text-xs">Setup needed</Text>
+              <Badge variant="outline" className="rounded-full px-2.5 py-1 border-orange-300 dark:border-orange-700">
+                <Text className="text-xs text-orange-600 dark:text-orange-400">Setup needed</Text>
               </Badge>
             )}
           </View>
@@ -107,17 +116,15 @@ const VehicleCard: React.FC<VehicleCardProps> = ({
 
         {/* License plate - only show if complete */}
         {isComplete && (
-          <View className="mb-4">
-            <View className="bg-muted/50 rounded-lg p-3 items-center">
-              <LicensePlateField
-                type={vehicle.plate_type as LicensePlateType}
-                left={vehicle.plate_left_part || ""}
-                right={vehicle.plate_right_part || ""}
-                onLeftChange={() => {}}
-                onRightChange={() => {}}
-                disabled={true}
-              />
-            </View>
+          <View className="mb-4 mt-2">
+            <LicensePlateField
+              type={vehicle.plate_type as LicensePlateType}
+              left={vehicle.plate_left_part || ""}
+              right={vehicle.plate_right_part || ""}
+              onLeftChange={() => {}}
+              onRightChange={() => {}}
+              disabled={true}
+            />
           </View>
         )}
 
