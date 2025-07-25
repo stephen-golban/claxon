@@ -33,10 +33,6 @@ const TanstackQueryClientProvider: React.FC<ITanstackQueryClientProvider> = ({ c
             // Don't refetch on reconnect unless data is stale
             refetchOnReconnect: "always",
           },
-          mutations: {
-            // Retry failed mutations once
-            retry: 1,
-          },
         },
       }),
   );

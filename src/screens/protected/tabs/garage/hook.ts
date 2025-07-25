@@ -1,12 +1,7 @@
 import * as Haptics from "expo-haptics";
 import { useRouter } from "expo-router";
 import { useCallback, useState } from "react";
-import { useDeleteVehicle, useGetMyVehicles, useUpdateVehicleActiveState } from "@/services/api/vehicles";
-
-/**
- * Operation types for per-vehicle loading states
- */
-export type OperationType = "toggle" | "delete";
+import { useDeleteVehicle, useGetMyVehicles } from "@/services/api/vehicles";
 
 /**
  * Main hook for garage tab following the simplified account pattern
@@ -19,41 +14,29 @@ export default function useGarageTab() {
   const { data: vehicles = [], isLoading, error } = useGetMyVehicles();
 
   // Mutations
-  const updateVehicleActiveStateMutation = useUpdateVehicleActiveState();
   const deleteVehicleMutation = useDeleteVehicle();
 
-  // Per-vehicle, per-operation loading state
-  const [loadingStates, setLoadingStates] = useState<Record<string, Record<OperationType, boolean>>>({});
+  // Per-vehicle delete loading state
+  const [deleteLoadingStates, setDeleteLoadingStates] = useState<Record<string, boolean>>({});
 
   // Loading state management
-  const setVehicleLoading = useCallback((vehicleId: string, operation: OperationType, loading: boolean) => {
-    setLoadingStates((prev) => ({
+  const setVehicleDeleteLoading = useCallback((vehicleId: string, loading: boolean) => {
+    setDeleteLoadingStates((prev) => ({
       ...prev,
-      [vehicleId]: {
-        ...prev[vehicleId],
-        [operation]: loading,
-      },
+      [vehicleId]: loading,
     }));
   }, []);
 
-  const isVehicleLoading = useCallback(
-    (vehicleId: string, operation?: OperationType): boolean => {
-      if (!operation) {
-        // If no operation specified, return true if ANY operation is loading
-        return Object.values(loadingStates[vehicleId] || {}).some(Boolean);
-      }
-      return loadingStates[vehicleId]?.[operation] || false;
+  const isVehicleDeleteLoading = useCallback(
+    (vehicleId: string): boolean => {
+      return deleteLoadingStates[vehicleId] || false;
     },
-    [loadingStates],
+    [deleteLoadingStates],
   );
 
   // Haptic feedback functions
   const hapticLight = useCallback(() => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-  }, []);
-
-  const hapticMedium = useCallback(() => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
   }, []);
 
   const hapticSuccess = useCallback(() => {
@@ -96,40 +79,20 @@ export default function useGarageTab() {
     [findVehicle, hapticLight, router],
   );
 
-  const handleToggleActive = useCallback(
-    async (vehicleId: string) => {
-      const vehicle = findVehicle(vehicleId);
-      if (!vehicle) return;
-
-      try {
-        setVehicleLoading(vehicleId, "toggle", true);
-        hapticMedium();
-
-        await updateVehicleActiveStateMutation.mutateAsync({
-          id: vehicleId,
-          isActive: !vehicle.is_active,
-        });
-      } finally {
-        setVehicleLoading(vehicleId, "toggle", false);
-      }
-    },
-    [findVehicle, setVehicleLoading, hapticMedium, updateVehicleActiveStateMutation],
-  );
-
   const handleDeleteVehicle = useCallback(
     async (vehicleId: string) => {
       const vehicle = findVehicle(vehicleId);
       if (!vehicle) return;
 
       try {
-        setVehicleLoading(vehicleId, "delete", true);
+        setVehicleDeleteLoading(vehicleId, true);
         hapticSuccess();
         await deleteVehicleMutation.mutateAsync(vehicleId);
       } finally {
-        setVehicleLoading(vehicleId, "delete", false);
+        setVehicleDeleteLoading(vehicleId, false);
       }
     },
-    [findVehicle, hapticSuccess, setVehicleLoading, deleteVehicleMutation],
+    [findVehicle, hapticSuccess, setVehicleDeleteLoading, deleteVehicleMutation],
   );
 
   return {
@@ -139,13 +102,12 @@ export default function useGarageTab() {
     error,
 
     // Loading state function
-    isVehicleLoading,
+    isVehicleDeleteLoading,
 
     // Operations
     handleAddVehicle,
     handleEditLicensePlate,
     handleEditVehicleDetails,
-    handleToggleActive,
     handleDeleteVehicle,
   };
 }

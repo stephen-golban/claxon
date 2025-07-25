@@ -6,6 +6,7 @@ import Animated, { FadeIn } from "react-native-reanimated";
 import { CustomSplashScreen } from "@/components/common";
 import { useAppInit } from "@/hooks";
 import AppProviders from "@/providers";
+import { initializeNotifications } from "@/services/notifications/notifications-config";
 import { useAppStore } from "@/stores/app";
 import { initI18n } from "@/translations";
 
@@ -22,7 +23,7 @@ export default function RootLayout() {
 
   const { isReady, handleLayoutReady } = useAppInit({
     dependencies: [loaded],
-    initializationTasks: [() => initI18n(currentLanguage)],
+    initializationTasks: [() => initI18n(currentLanguage), initializeNotifications],
   });
 
   React.useEffect(() => {

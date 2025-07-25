@@ -6,7 +6,14 @@ export default function ProtectedTabsLayout() {
   const header = getProtectedHeader();
 
   return (
-    <Tabs tabBar={(props) => <TabBar {...props} />} screenOptions={header}>
+    <Tabs
+      tabBar={(props) => <TabBar {...props} />}
+      screenOptions={{
+        ...header,
+        headerLeftContainerStyle: { paddingLeft: 7 },
+        headerRightContainerStyle: { paddingRight: 10 },
+      }}
+    >
       <Tabs.Screen name="index" options={{ title: "Search" }} />
       <Tabs.Screen name="garage" options={{ title: "Garage" }} />
       <Tabs.Screen name="claxons" options={{ title: "Claxons" }} />

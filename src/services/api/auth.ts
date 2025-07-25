@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "@/components/ui/toast";
 import { getSupabaseErrorCode, printError, translateError } from "@/lib/utils";
+import { pushNotificationService } from "../notifications/push-notifications";
 import { supabase } from "./client";
 
 export class AuthService {
@@ -60,6 +61,14 @@ export class AuthService {
     if (error) {
       printError("auth-verifyCode-error", error);
       throw getSupabaseErrorCode(error);
+    }
+
+    // Register push token after successful authentication
+    if (data.user?.id) {
+      // Run push token registration in background - don't block auth flow
+      pushNotificationService.storePushToken(data.user.id).catch((error) => {
+        printError("auth-verifyCode-pushToken-error", error);
+      });
     }
 
     return data;

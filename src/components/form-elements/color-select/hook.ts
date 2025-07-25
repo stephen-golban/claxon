@@ -61,6 +61,7 @@ export const useSwipeGesture = (onNavigate: (direction: ColorNavigationDirection
   const swipeTranslateX = useSharedValue(0);
 
   const swipeGesture = Gesture.Pan()
+    .minDistance(10) // Require minimum distance before recognizing as swipe
     .onUpdate((event) => {
       if (!disabled) {
         swipeTranslateX.value = event.translationX;

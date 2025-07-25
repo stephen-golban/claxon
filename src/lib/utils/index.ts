@@ -88,7 +88,7 @@ export const getSupabaseErrorCode = (error: AuthError | PostgrestError, type: "a
 };
 
 export const isProfileComplete = (account: Account): boolean => {
-  const requiredFields = ["email", "first_name", "last_name", "dob", "gender", "avatar_url"] as const;
+  const requiredFields = ["email", "first_name", "last_name", "gender", "avatar_url"] as const;
   const hasRequiredFields = requiredFields.every((field) => !!account[field]);
   const isSetupFinished = account.is_setup_finished === true;
   return hasRequiredFields && isSetupFinished;

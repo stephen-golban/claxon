@@ -1,6 +1,6 @@
 import { noop } from "lodash";
 import type React from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { View } from "react-native";
 import { BaseSwitchField } from "@/components/form-elements";
 import { Button } from "@/components/ui/button";
@@ -8,6 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { type Option, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { Text } from "@/components/ui/text";
+import { isProfileComplete } from "@/lib/utils";
 import { useGetMe } from "@/services/api/accounts";
 import { getLanguageDisplayName, getLanguageOptions } from "../language-utils";
 
@@ -26,10 +27,21 @@ const AccountForm: React.FC<IAccountForm> = ({
 }) => {
   const { data: accountData } = useGetMe();
 
+  // Check if user profile is complete
+  const profileComplete = accountData ? isProfileComplete(accountData) : false;
+
   // Track the width of the language select trigger for consistent dropdown width
   const [languageSelectWidth, setLanguageSelectWidth] = useState(0);
   const [selectedLanguage, setSelectedLanguage] = useState(accountData?.language || "ro");
   const [isPhonePublic, setIsPhonePublic] = useState(accountData?.is_phone_public || false);
+
+  // Sync state with account data when it changes
+  useEffect(() => {
+    if (accountData) {
+      setSelectedLanguage(accountData.language || "ro");
+      setIsPhonePublic(accountData.is_phone_public || false);
+    }
+  }, [accountData]);
 
   const handlePhoneToggle = (checked: boolean) => {
     setIsPhonePublic(checked);
@@ -51,14 +63,18 @@ const AccountForm: React.FC<IAccountForm> = ({
         <CardDescription>Control your privacy and data sharing</CardDescription>
       </CardHeader>
       <CardContent className="gap-y-4">
-        <BaseSwitchField
-          onBlur={noop}
-          value={isPhonePublic}
-          label="Share Phone Number"
-          onChange={handlePhoneToggle}
-          description="Allow other users to see your phone number"
-        />
-        <Separator />
+        {profileComplete && (
+          <>
+            <BaseSwitchField
+              onBlur={noop}
+              value={isPhonePublic}
+              label="Share Phone Number"
+              onChange={handlePhoneToggle}
+              description="Allow other users to see your phone number"
+            />
+            <Separator />
+          </>
+        )}
         <View className="flex-row items-center justify-between">
           <View className="flex-1">
             <Text className="font-medium">Notification Preferences</Text>
@@ -68,7 +84,7 @@ const AccountForm: React.FC<IAccountForm> = ({
             <Text>Configure</Text>
           </Button>
         </View>
-        <Separator />
+        {!profileComplete && <Separator />}
         <View className="gap-y-3">
           <View className="flex-1">
             <Text className="font-medium">App Language</Text>

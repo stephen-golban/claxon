@@ -245,12 +245,11 @@ export class AccountStatisticsService {
         throw new Error(ERROR_CODES.USER.RETRIEVAL_FAILED);
       }
 
-      // Get vehicle count for current user (active vehicles only)
+      // Get vehicle count for current user
       const { count: vehicleCount, error: vehicleError } = await supabase
         .from("vehicles")
         .select("*", { count: "exact", head: true })
-        .eq("user_id", user.id)
-        .eq("is_active", true);
+        .eq("user_id", user.id);
 
       if (vehicleError) {
         printError("account-statistics-vehicles-error", vehicleError);

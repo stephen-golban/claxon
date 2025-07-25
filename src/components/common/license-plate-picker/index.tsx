@@ -10,6 +10,7 @@ import { LICENSE_PLATE_TYPES, type LicensePlateType } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import { usePlateSections } from "./hook";
 import type { ILicensePlatePicker, PlateItem, PlateSection } from "./type";
+import { FullWindowOverlay } from "react-native-screens";
 
 const LicensePlatePicker: React.FC<ILicensePlatePicker> = ({ children, onTypeChange, type }) => {
   const { ref: bottomSheetRef, open: openBottomSheet, close: closeBottomSheet } = useBottomSheet();
@@ -95,6 +96,10 @@ const LicensePlatePicker: React.FC<ILicensePlatePicker> = ({ children, onTypeCha
   );
 
   const renderSectionSeparator = useCallback(() => <View className="h-4" />, []);
+  const containerComponent = useCallback(
+    (props: React.PropsWithChildren) => <FullWindowOverlay>{props.children}</FullWindowOverlay>,
+    [],
+  );
 
   return (
     <>
@@ -105,7 +110,12 @@ const LicensePlatePicker: React.FC<ILicensePlatePicker> = ({ children, onTypeCha
         </Button>
       </View>
       <BottomSheet>
-        <BottomSheetContent ref={bottomSheetRef} snapPoints={["80%"]} enablePanDownToClose>
+        <BottomSheetContent
+          ref={bottomSheetRef}
+          snapPoints={["80%"]}
+          enablePanDownToClose
+          containerComponent={containerComponent}
+        >
           <View className="px-4 pb-4 border-b border-border">
             <Text className="text-xl font-bold text-center">Choose Plate Type</Text>
             <Text className="text-sm text-muted-foreground text-center mt-1">

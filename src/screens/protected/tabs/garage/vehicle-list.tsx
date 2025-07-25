@@ -1,38 +1,33 @@
 import React from "react";
 import { FlatList, View } from "react-native";
 import type { Vehicle } from "@/services/api/vehicles";
-import type { OperationType } from "./hook";
 import VehicleCard from "./vehicle-card";
 
 interface VehicleListProps {
   vehicles: Vehicle[];
-  isVehicleLoading: (vehicleId: string, operation?: OperationType) => boolean;
+  isVehicleDeleteLoading: (vehicleId: string) => boolean;
   onEditLicensePlate: (vehicleId: string) => void;
   onEditVehicleDetails: (vehicleId: string) => void;
-  onToggleActive: (vehicleId: string) => void;
   onDelete: (vehicleId: string) => void;
 }
 const VehicleList: React.FC<VehicleListProps> = ({
   vehicles,
-  isVehicleLoading,
+  isVehicleDeleteLoading,
   onEditLicensePlate,
   onEditVehicleDetails,
-  onToggleActive,
   onDelete,
 }) => {
   const renderVehicle = React.useCallback(
     ({ item }: { item: Vehicle }) => (
       <VehicleCard
         vehicle={item}
-        isToggleLoading={isVehicleLoading(item.id, "toggle")}
-        isDeleteLoading={isVehicleLoading(item.id, "delete")}
+        isDeleteLoading={isVehicleDeleteLoading(item.id)}
         onEditLicensePlate={onEditLicensePlate}
         onEditVehicleDetails={onEditVehicleDetails}
-        onToggleActive={onToggleActive}
         onDelete={onDelete}
       />
     ),
-    [isVehicleLoading, onEditLicensePlate, onEditVehicleDetails, onToggleActive, onDelete],
+    [isVehicleDeleteLoading, onEditLicensePlate, onEditVehicleDetails, onDelete],
   );
 
   const keyExtractor = React.useCallback((item: Vehicle) => item.id, []);

@@ -1,5 +1,5 @@
 import * as Haptics from "expo-haptics";
-import React from "react";
+import React, { useCallback } from "react";
 import { View } from "react-native";
 import Animated from "react-native-reanimated";
 import { CarIcon } from "@/components/icons";
@@ -11,6 +11,7 @@ import { ColorOption } from "./color-option";
 import { useCarScaleAnimation } from "./hook";
 import type { ColorBottomSheetProps } from "./types";
 import { getCarColor, getColorName, getGradientColors } from "./util";
+import { FullWindowOverlay } from "react-native-screens";
 
 /**
  * Bottom sheet component for full color selection
@@ -49,9 +50,15 @@ export const ColorBottomSheet = React.memo<ColorBottomSheetProps>(
     const carColor = getCarColor(selectedColor);
     const mainFieldGradientColors = selectedColor ? getGradientColors(selectedColor.code) : null;
 
+    const containerComponent = useCallback(
+      (props: React.PropsWithChildren) => <FullWindowOverlay>{props.children}</FullWindowOverlay>,
+      [],
+    );
+
     return (
       <BottomSheet>
         <BottomSheetContent
+          containerComponent={containerComponent}
           ref={bottomSheet.ref}
           snapPoints={["70%"]}
           backdropProps={{

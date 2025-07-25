@@ -5,7 +5,7 @@ import { Container, EmptyState } from "@/components/common";
 import LicensePlateForm, { type LicensePlateFormData } from "@/components/forms/license-plate";
 import { Card, CardContent } from "@/components/ui/card";
 import { Text } from "@/components/ui/text";
-import { useAddRecentSearch, useGetRecentSearches } from "@/hooks/use-recent-searches";
+import { useAddRecentSearch, useClearRecentSearches, useGetRecentSearches } from "@/hooks/use-recent-searches";
 import { type SearchResult, useSearchVehicleByPlate } from "@/services/api/vehicles";
 // Import RecentSearch type from the service
 import type { RecentSearch } from "@/services/storage/recent-searches";
@@ -22,6 +22,7 @@ export function SearchTab() {
   // API hooks
   const searchVehicle = useSearchVehicleByPlate();
   const addRecentSearch = useAddRecentSearch();
+  const clearRecentSearches = useClearRecentSearches();
   const { data: recentSearches = [], isLoading: isLoadingRecentSearches } = useGetRecentSearches();
 
   const handleSearch = async (data: LicensePlateFormData) => {
@@ -77,6 +78,14 @@ export function SearchTab() {
     }
   };
 
+  const handleClearRecentSearches = async () => {
+    try {
+      await clearRecentSearches.mutateAsync();
+    } catch (error) {
+      console.error("Failed to clear recent searches:", error);
+    }
+  };
+
   if (showMessageComposer && selectedVehicle) {
     return (
       <Container>
@@ -120,7 +129,12 @@ export function SearchTab() {
 
         {/* Recent Searches - Only show if no search has been performed */}
         {!hasSearched && recentSearches.length > 0 && (
-          <RecentSearches searches={recentSearches} onSearchSelect={handleRecentSearchSelect} />
+          <RecentSearches
+            searches={recentSearches}
+            onSearchSelect={handleRecentSearchSelect}
+            onClearAll={handleClearRecentSearches}
+            isClearingAll={clearRecentSearches.isPending}
+          />
         )}
 
         {/* Empty State - Only show if no recent searches and no search performed */}
