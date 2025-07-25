@@ -12,11 +12,10 @@ export function GarageTab() {
     vehicles,
     isLoading,
     error,
-    isVehicleLoading,
+    isVehicleDeleteLoading,
     handleAddVehicle,
     handleEditLicensePlate,
     handleEditVehicleDetails,
-    handleToggleActive,
     handleDeleteVehicle,
   } = useGarageTab();
 
@@ -49,10 +48,9 @@ export function GarageTab() {
           ) : (
             <VehicleList
               vehicles={vehicles}
-              isVehicleLoading={isVehicleLoading}
+              isVehicleDeleteLoading={isVehicleDeleteLoading}
               onEditLicensePlate={handleEditLicensePlate}
               onEditVehicleDetails={handleEditVehicleDetails}
-              onToggleActive={handleToggleActive}
               onDelete={handleDeleteVehicle}
             />
           )}

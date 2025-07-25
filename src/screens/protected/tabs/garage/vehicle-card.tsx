@@ -14,21 +14,17 @@ import type { Vehicle } from "@/services/api/vehicles";
 
 interface VehicleCardProps {
   vehicle: Vehicle;
-  isToggleLoading?: boolean;
   isDeleteLoading?: boolean;
   onEditLicensePlate: (vehicleId: string) => void;
   onEditVehicleDetails: (vehicleId: string) => void;
-  onToggleActive: (vehicleId: string) => void;
   onDelete: (vehicleId: string) => void;
 }
 
 const VehicleCard: React.FC<VehicleCardProps> = ({
   vehicle,
-  isToggleLoading = false,
   isDeleteLoading = false,
   onEditLicensePlate,
   onEditVehicleDetails,
-  onToggleActive,
   onDelete,
 }) => {
   const isComplete = vehicle.phase === "done";
@@ -64,8 +60,6 @@ const VehicleCard: React.FC<VehicleCardProps> = ({
       );
     }
   };
-
-  const handleToggleActive = () => onToggleActive(vehicle.id);
 
   const handleDelete = () => {
     Alert.alert("Delete Vehicle", `Are you sure you want to delete ${vehicle.brand} ${vehicle.model}?`, [
@@ -103,9 +97,6 @@ const VehicleCard: React.FC<VehicleCardProps> = ({
           </View>
 
           <View className="flex-row gap-2">
-            <Badge variant={vehicle.is_active ? "default" : "secondary"} className="rounded-full px-2.5 py-1">
-              <Text className="text-xs font-medium">{vehicle.is_active ? "Active" : "Inactive"}</Text>
-            </Badge>
             {!isComplete && (
               <Badge variant="outline" className="rounded-full px-2.5 py-1">
                 <Text className="text-xs">Setup needed</Text>
@@ -132,21 +123,6 @@ const VehicleCard: React.FC<VehicleCardProps> = ({
 
         {/* Action buttons */}
         <View className="flex-row gap-2 items-center">
-          {isComplete && (
-            <Button
-              variant={vehicle.is_active ? "secondary" : "default"}
-              size="sm"
-              onPress={handleToggleActive}
-              disabled={isToggleLoading}
-            >
-              {isToggleLoading ? (
-                <LoadingSpinner size={14} />
-              ) : (
-                <Text className="text-sm font-medium">{vehicle.is_active ? "Turn Off" : "Turn On"}</Text>
-              )}
-            </Button>
-          )}
-
           <Button
             size="sm"
             onPress={handleEditAction}

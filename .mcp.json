@@ -1,0 +1,25 @@
+{
+  "mcpServers": {
+    "supabase": {
+      "command": "bunx",
+      "args": ["-y", "@supabase/mcp-server-supabase@latest", "--project-ref=bmpzdawnsopcgbwqxsfe"],
+      "env": {
+        "SUPABASE_ACCESS_TOKEN": "sbp_0acd7c6258a8713082ed2c093c6ca83c7f54e586"
+      }
+    },
+    "serena": {
+      "type": "stdio",
+      "command": "uvx",
+      "args": [
+        "--from",
+        "git+https://github.com/oraios/serena",
+        "serena-mcp-server",
+        "--context",
+        "ide-assistant",
+        "--project",
+        "/Users/stephen/Development/claxon"
+      ],
+      "env": {}
+    }
+  }
+}

@@ -1,7 +1,6 @@
 import { FlatList, View } from "react-native";
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Text } from "@/components/ui/text";
@@ -46,9 +45,6 @@ export function SearchResults({ results, onSendMessage }: SearchResultsProps) {
                 <Text className="font-semibold text-base">
                   {result.vehicle.brand} {result.vehicle.model}
                 </Text>
-                <Badge variant={result.vehicle.is_active ? "default" : "secondary"}>
-                  <Text className="text-xs">{result.vehicle.is_active ? "Active" : "Inactive"}</Text>
-                </Badge>
               </View>
 
               <Text className="text-sm text-muted-foreground">

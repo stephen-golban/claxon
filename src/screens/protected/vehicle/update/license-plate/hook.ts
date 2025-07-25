@@ -19,7 +19,6 @@ export default function useUpdateLicensePlateScreen(id: string) {
           plate_number: `${dto.plate.left}${dto.plate.right}`, // Combined plate number
           plate_country: "MD", // Default to Moldova
           phase: "done", // Mark vehicle setup as completed
-          is_active: true,
         },
       },
       {

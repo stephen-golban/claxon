@@ -183,7 +183,6 @@ export class VehicleService {
         manufacture_year,
         color,
         plate_number,
-        is_active,
         accounts!vehicles_user_id_fkey(
           id,
           first_name,
@@ -191,8 +190,7 @@ export class VehicleService {
           is_phone_public
         )
       `)
-      .eq("plate_number", plateNumber)
-      .eq("is_active", true); // Only search active vehicles
+      .eq("plate_number", plateNumber);
 
     if (error) {
       printError("vehicle-searchByPlateNumber-error", error);
@@ -208,7 +206,6 @@ export class VehicleService {
         manufacture_year: item.manufacture_year || 0,
         color: item.color || "",
         plate_number: item.plate_number || "",
-        is_active: item.is_active ?? true,
       },
       owner: {
         _id: item.accounts.id,
@@ -326,22 +323,6 @@ export const useDeleteVehicle = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["vehicles"] });
       queryClient.invalidateQueries({ queryKey: ["accounts", "statistics"] }); // Update vehicle count
-    },
-    onError: (error) => {
-      toast.error(translateError(error.message));
-    },
-  });
-};
-
-export const useUpdateVehicleActiveState = () => {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: ({ id, isActive }: { id: string; isActive: boolean }) =>
-      vehicleService.update(id, { is_active: isActive }),
-    mutationKey: ["vehicles", "updateActiveState"],
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["vehicles"] });
     },
     onError: (error) => {
       toast.error(translateError(error.message));
