@@ -3,6 +3,7 @@ export * from "./checkbox";
 export * from "./color-select";
 export * from "./date-picker";
 export * from "./email";
+export * from "./gender-select";
 export * from "./license-plate";
 export * from "./otp";
 export * from "./password";

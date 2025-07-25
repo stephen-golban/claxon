@@ -4,7 +4,6 @@ import { useEffect, useMemo, useRef } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { View } from "react-native";
 import * as FormElements from "@/components/form-elements";
-import { useTranslation } from "@/hooks";
 import { useGetMe } from "@/services/api/accounts";
 import { createPersonalDetailsSchema, type PersonalDetailsFormData, transformAccountToFormData } from "./schema";
 import { hasFormDataChanged } from "./util";
@@ -15,7 +14,6 @@ interface IPersonalDetailsForm {
 }
 
 const PersonalDetailsForm: React.FC<IPersonalDetailsForm> = ({ onSubmit, isUploading }) => {
-  const { t } = useTranslation();
   const { data: accountData } = useGetMe();
 
   // Transform account data to form data format
@@ -78,16 +76,7 @@ const PersonalDetailsForm: React.FC<IPersonalDetailsForm> = ({ onSubmit, isUploa
           </View>
 
           <View>
-            <FormElements.SelectField
-              control={hook.control}
-              label="Gender"
-              name="gender"
-              placeholder="Select Gender"
-              options={[
-                { value: "male", label: t("options:gender:male") },
-                { value: "female", label: t("options:gender:female") },
-              ]}
-            />
+            <FormElements.GenderSelectField control={hook.control} label="Gender" name="gender" />
           </View>
 
           <View>
