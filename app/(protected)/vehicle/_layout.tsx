@@ -1,5 +1,10 @@
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { Slot } from "expo-router";
 
 export default function VehicleLayout() {
-  return <Slot />;
+  return (
+    <BottomSheetModalProvider>
+      <Slot />
+    </BottomSheetModalProvider>
+  );
 }

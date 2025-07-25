@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Text } from "@/components/ui/text";
+import { isProfileComplete } from "@/lib/utils";
 import AccountForm from "./form";
 import useAccountScreen from "./hook";
 
@@ -29,46 +30,66 @@ export function AccountTab() {
     return <ErrorScreen message="Failed to load profile data" />;
   }
 
+  // Check if user profile is complete
+  const profileComplete = isProfileComplete(user);
+
   return (
     <Container loading={isPending || isLoading}>
-      <Container.TopText title="Account" subtitle="Manage your profile and preferences" />
+      <Container.TopText
+        title="Account"
+        subtitle={
+          profileComplete ? "Manage your profile and preferences" : "Complete your profile to access all features"
+        }
+      />
 
       <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
         <View className="gap-y-6">
-          {/* Profile Card */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Profile Information</CardTitle>
-              <CardDescription>Your personal details and preferences</CardDescription>
-            </CardHeader>
-            <CardContent className="gap-y-4">
-              <View className="flex-row items-center gap-x-4">
-                <ProfileAvatar
-                  avatar_url={user.avatar_url}
-                  first_name={user.first_name}
-                  last_name={user.last_name}
-                  isMeLoading={isLoading}
-                />
-                <View className="flex-1">
-                  <Text className="font-medium">
-                    {user.first_name && user.last_name ? `${user.first_name} ${user.last_name}` : "No name set"}
-                  </Text>
-                  <Text className="text-sm text-muted-foreground">{user.email || "No email set"}</Text>
-                  <Text className="text-sm text-muted-foreground">
-                    {user.gender && user.dob
-                      ? `${user.gender} • Born ${new Date(user.dob).getFullYear()}`
-                      : "Personal details not set"}
-                  </Text>
-                  <Text className="text-sm text-muted-foreground">
-                    Language: {user.language === "ro" ? "Romanian" : user.language === "ru" ? "Russian" : "English"}
-                  </Text>
+          {/* Profile Card - Conditional rendering based on profile completion */}
+          {profileComplete ? (
+            <Card>
+              <CardHeader>
+                <CardTitle>Profile Information</CardTitle>
+                <CardDescription>Your personal details and preferences</CardDescription>
+              </CardHeader>
+              <CardContent className="gap-y-4">
+                <View className="flex-row items-center gap-x-4">
+                  <ProfileAvatar
+                    avatar_url={user.avatar_url}
+                    first_name={user.first_name}
+                    last_name={user.last_name}
+                    isMeLoading={isLoading}
+                  />
+                  <View className="flex-1">
+                    <Text className="font-medium">
+                      {user.first_name && user.last_name ? `${user.first_name} ${user.last_name}` : "No name set"}
+                    </Text>
+                    <Text className="text-sm text-muted-foreground">{user.email || "No email set"}</Text>
+                    <Text className="text-sm text-muted-foreground">
+                      {user.gender ? user.gender : "Personal details not set"}
+                    </Text>
+                    <Text className="text-sm text-muted-foreground">
+                      Language: {user.language === "ro" ? "Romanian" : user.language === "ru" ? "Russian" : "English"}
+                    </Text>
+                  </View>
                 </View>
-              </View>
-              <Button onPress={handleEditProfile}>
-                <Text>Edit Profile</Text>
-              </Button>
-            </CardContent>
-          </Card>
+                <Button onPress={handleEditProfile}>
+                  <Text>Edit Profile</Text>
+                </Button>
+              </CardContent>
+            </Card>
+          ) : (
+            <Card>
+              <CardHeader>
+                <CardTitle>Complete Your Profile</CardTitle>
+                <CardDescription>Finish setting up your account to access all features</CardDescription>
+              </CardHeader>
+              <CardContent className="gap-y-4">
+                <Button onPress={handleEditProfile} className="rounded-full">
+                  <Text>Complete Profile Setup</Text>
+                </Button>
+              </CardContent>
+            </Card>
+          )}
 
           {/* Privacy Settings */}
           <AccountForm

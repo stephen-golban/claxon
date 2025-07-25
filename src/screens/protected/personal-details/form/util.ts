@@ -14,21 +14,11 @@ export const hasFormDataChanged = (original: PersonalDetailsFormData, current: P
     "first_name",
     "last_name",
     "gender",
-    "dob",
   ];
 
   for (const field of fieldsToCompare) {
-    if (field === "dob") {
-      // Compare dates by their time value
-      const originalTime = original[field]?.getTime();
-      const currentTime = current[field]?.getTime();
-      if (originalTime !== currentTime) {
-        return true;
-      }
-    } else {
-      if (original[field] !== current[field]) {
-        return true;
-      }
+    if (original[field] !== current[field]) {
+      return true;
     }
   }
 
@@ -44,14 +34,7 @@ export const hasFormDataChanged = (original: PersonalDetailsFormData, current: P
  * @returns true if the data is valid for submission
  */
 export const isPersonalDetailsFormDataValid = (data: PersonalDetailsFormData): boolean => {
-  return !!(
-    data.email &&
-    data.first_name &&
-    data.last_name &&
-    data.gender &&
-    data.dob &&
-    (data.image.uri || data.image.path)
-  );
+  return !!(data.email && data.first_name && data.last_name && data.gender && (data.image.uri || data.image.path));
 };
 
 /**
@@ -68,26 +51,14 @@ export const getFormDataChanges = (original: PersonalDetailsFormData, current: P
     "first_name",
     "last_name",
     "gender",
-    "dob",
   ];
 
   for (const field of fieldsToCompare) {
-    if (field === "dob") {
-      const originalTime = original[field]?.getTime();
-      const currentTime = current[field]?.getTime();
-      if (originalTime !== currentTime) {
-        changes[field] = {
-          from: original[field],
-          to: current[field],
-        };
-      }
-    } else {
-      if (original[field] !== current[field]) {
-        changes[field] = {
-          from: original[field],
-          to: current[field],
-        };
-      }
+    if (original[field] !== current[field]) {
+      changes[field] = {
+        from: original[field],
+        to: current[field],
+      };
     }
   }
 
@@ -115,12 +86,6 @@ export const hasFieldChanged = (
   current: PersonalDetailsFormData,
   fieldName: keyof PersonalDetailsFormData,
 ): boolean => {
-  if (fieldName === "dob") {
-    const originalTime = original[fieldName]?.getTime();
-    const currentTime = current[fieldName]?.getTime();
-    return originalTime !== currentTime;
-  }
-
   if (fieldName === "image") {
     return !!(current.image.uri && current.image.uri.length > 0);
   }

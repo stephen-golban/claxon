@@ -80,9 +80,6 @@ const PersonalDetailsForm: React.FC<IPersonalDetailsForm> = ({ onSubmit, isUploa
           </View>
 
           <View>
-            <FormElements.DatePickerField control={hook.control} name="dob" label="Date of Birth" />
-          </View>
-          <View>
             <FormElements.AvatarField name="image" control={hook.control} existingAvatarUrl={accountData?.avatar_url} />
           </View>
         </View>

@@ -47,7 +47,6 @@ export default function usePersonalDetailsScreen() {
           ...accountData,
           avatar_url: avatarUrl,
           is_setup_finished: true,
-          dob: accountData.dob.toISOString(),
         },
       },
       {

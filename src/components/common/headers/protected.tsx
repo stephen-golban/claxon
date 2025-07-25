@@ -12,12 +12,10 @@ import { ProfileAvatar } from "../profile-avatar";
 import { ThemeSwitcher } from "../theme-switcher";
 
 type HeaderConfig = {
-  ADD_PX: Set<string>;
   HIDE_GO_BACK: Set<string>;
 };
 
 const HEADER_CONFIG: HeaderConfig = {
-  ADD_PX: new Set(["/tabs/[name]", "/tabs"]),
   HIDE_GO_BACK: new Set(["/tabs/[name]"]),
 } as const;
 
@@ -39,7 +37,6 @@ const createRoutePatternMatcher = (routes: Set<string>) => {
 const useRouteMatchers = () => {
   return useMemo(
     () => ({
-      shouldAddPadding: createRoutePatternMatcher(HEADER_CONFIG.ADD_PX),
       shouldHideGoBack: createRoutePatternMatcher(HEADER_CONFIG.HIDE_GO_BACK),
     }),
     [],
@@ -48,21 +45,20 @@ const useRouteMatchers = () => {
 
 const useHeaderState = () => {
   const pathname = usePathname();
-  const { shouldHideGoBack, shouldAddPadding } = useRouteMatchers();
+  const { shouldHideGoBack } = useRouteMatchers();
 
   return useMemo(
     () => ({
       pathname,
       shouldHideGoBack: shouldHideGoBack(pathname),
-      shouldAddPadding: shouldAddPadding(pathname),
     }),
-    [pathname, shouldHideGoBack, shouldAddPadding],
+    [pathname, shouldHideGoBack],
   );
 };
 
 const HeaderLeft = memo((): ReactNode => {
   const canGoBack = router.canGoBack();
-  const { shouldHideGoBack, shouldAddPadding } = useHeaderState();
+  const { shouldHideGoBack } = useHeaderState();
   const { goBack, hideGoBack } = useGoBackStore();
 
   const shouldShow = canGoBack && !shouldHideGoBack && !hideGoBack;
@@ -78,12 +74,7 @@ const HeaderLeft = memo((): ReactNode => {
   };
 
   return (
-    <Button
-      size="icon"
-      variant="ghost"
-      onPress={handleGoBack}
-      className={cn("mt-5", shouldAddPadding ? "ml-3.5" : "-ml-2")}
-    >
+    <Button size="icon" variant="ghost" onPress={handleGoBack} className="mt-5 -ml-2">
       <MoveLeftIcon size={24} className="text-foreground" />
     </Button>
   );
@@ -101,10 +92,9 @@ const HeaderBackground = () => <View className="bg-background" />;
 
 const HeaderRight = memo((): ReactNode => {
   const me = useGetMe();
-  const { shouldAddPadding } = useHeaderState();
 
   return (
-    <View className={cn("flex-row items-center gap-x-4 mt-4", shouldAddPadding ? "mr-4" : "mr-0")}>
+    <View className={cn("flex-row items-center gap-x-4 mt-4 mr-0")}>
       <ThemeSwitcher />
       {me.data && (
         <ProfileAvatar
