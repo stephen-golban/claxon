@@ -33,6 +33,13 @@
       "expo-image-picker",
       "expo-localization",
       [
+        "expo-notifications",
+        {
+          "icon": "./assets/icon.png",
+          "color": "#000000"
+        }
+      ],
+      [
         "expo-splash-screen",
         {
           "resizeMode": "contain",

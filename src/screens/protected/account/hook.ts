@@ -3,6 +3,7 @@ import { useRouter } from "expo-router";
 import { Alert } from "react-native";
 import { useGetAccountStatistics, useGetMe, useUpdateAccount } from "@/services/api/accounts";
 import { supabase } from "@/services/api/client";
+import { pushNotificationService } from "@/services/notifications/push-notifications";
 
 export default function useAccountScreen() {
   const router = useRouter();
@@ -22,6 +23,10 @@ export default function useAccountScreen() {
         text: "Sign Out",
         style: "destructive",
         onPress: async () => {
+          // Clean up push token before signing out
+          if (user?.id) {
+            await pushNotificationService.removePushToken(user.id);
+          }
           queryClient.clear();
           await supabase.auth.signOut();
           router.replace("/");
